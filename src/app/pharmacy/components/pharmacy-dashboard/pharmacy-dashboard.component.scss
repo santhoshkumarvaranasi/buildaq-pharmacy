@@ -1,0 +1,179 @@
+.pharmacy-dashboard {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+
+  .dashboard-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+
+      h1 {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin: 0 0 15px 0;
+        font-size: 32px;
+        font-weight: 600;
+
+        mat-icon {
+          font-size: 40px;
+          width: 40px;
+          height: 40px;
+        }
+      }
+
+      p {
+        margin: 0;
+        font-size: 16px;
+        opacity: 0.9;
+        line-height: 1.6;
+      }
+    }
+  }
+
+  .dashboard-tabs {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+
+    .tab-icon {
+      margin-right: 8px;
+      color: #667eea;
+    }
+
+    ::ng-deep {
+      .mat-tab-labels {
+        background: #f5f5f5;
+        border-radius: 8px 8px 0 0;
+      }
+
+      .mat-tab-label {
+        min-width: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+
+        &.mat-tab-label-active {
+          background: #667eea;
+          color: white;
+
+          .tab-icon {
+            color: white;
+          }
+        }
+      }
+
+      .mat-tab-body {
+        min-height: 600px;
+      }
+    }
+  }
+
+  .quick-start-section {
+    max-width: 1200px;
+    margin: 0 auto;
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+
+      .nav-card {
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+        background: white;
+
+        &:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        mat-card-header {
+          display: flex;
+          align-items: flex-start;
+          gap: 15px;
+          margin-bottom: 15px;
+
+          .card-icon {
+            font-size: 32px;
+            width: 32px;
+            height: 32px;
+            color: #667eea;
+          }
+
+          mat-card-title {
+            margin: 0;
+            color: #333;
+            font-size: 18px;
+          }
+        }
+
+        mat-card-content {
+          p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .dashboard-header {
+      padding: 20px;
+
+      .header-content {
+        h1 {
+          font-size: 24px;
+
+          mat-icon {
+            font-size: 28px;
+            width: 28px;
+            height: 28px;
+          }
+        }
+
+        p {
+          font-size: 14px;
+        }
+      }
+    }
+
+    .dashboard-tabs {
+      ::ng-deep {
+        .mat-tab-label {
+          min-width: 120px;
+          padding: 8px !important;
+
+          span {
+            display: none;
+          }
+        }
+      }
+    }
+
+    .quick-start-section {
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}

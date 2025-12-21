@@ -1,0 +1,302 @@
+.shelf-management-container {
+  padding: 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+
+  .management-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  mat-card {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    mat-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+
+      mat-card-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+      }
+    }
+  }
+
+  .spaces-card {
+    mat-icon {
+      color: #d32f2f;
+    }
+  }
+
+  .shelves-card {
+    mat-icon {
+      color: #ff9800;
+    }
+  }
+
+  .medicines-card {
+    grid-column: 1 / -1;
+
+    mat-icon {
+      color: #00c853;
+    }
+  }
+
+  .space-item,
+  .shelf-item {
+    cursor: pointer;
+    border-left: 4px solid transparent;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #f5f5f5;
+      border-left-color: #1976d2;
+    }
+
+    &[selected="true"] {
+      background: #e3f2fd;
+      border-left-color: #1976d2;
+    }
+
+    .timestamp {
+      font-size: 12px;
+      color: #999;
+    }
+  }
+
+  .empty-card {
+    background: #f5f5f5;
+    border-left: 4px solid #999;
+    text-align: center;
+
+    mat-card-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 40px 20px;
+
+      mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        opacity: 0.3;
+      }
+
+      p {
+        margin: 0;
+        color: #999;
+      }
+    }
+  }
+
+  .statistics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+
+    .stat-card {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      border-radius: 8px;
+
+      .stat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #f5f5f5;
+
+        mat-icon {
+          color: #1976d2;
+        }
+      }
+
+      .stat-content {
+        flex: 1;
+
+        h3 {
+          margin: 0;
+          font-size: 12px;
+          color: #999;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        p {
+          margin: 5px 0 0 0;
+          font-size: 24px;
+          font-weight: 600;
+          color: #1976d2;
+        }
+      }
+    }
+  }
+
+  .medicines-table-wrapper {
+    margin-bottom: 20px;
+
+    mat-table {
+      width: 100%;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+
+      mat-header-cell {
+        font-weight: 600;
+        color: #1976d2;
+        background: #f5f5f5;
+        border-bottom: 2px solid #e0e0e0;
+      }
+
+      mat-row {
+        border-bottom: 1px solid #e0e0e0;
+
+        &:hover {
+          background: #f9f9f9;
+        }
+      }
+
+      .position-code {
+        font-family: monospace;
+        font-size: 12px;
+        background: #f5f5f5;
+        padding: 4px 8px;
+        border-radius: 4px;
+        color: #333;
+      }
+
+      .confidence-bar {
+        margin-bottom: 8px;
+        height: 6px;
+      }
+
+      .confidence-text {
+        font-size: 12px;
+        font-weight: 500;
+        color: #1976d2;
+      }
+    }
+
+    .empty-table {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      color: #999;
+      background: white;
+      border-radius: 8px;
+
+      mat-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        opacity: 0.3;
+        margin-bottom: 20px;
+      }
+
+      p {
+        font-size: 16px;
+        margin: 0;
+      }
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+
+    button {
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .selection-prompt {
+    grid-column: 1 / -1;
+    text-align: center;
+    background: #e3f2fd;
+    border-left: 4px solid #1976d2;
+
+    mat-card-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      padding: 60px 20px;
+
+      mat-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        color: #1976d2;
+      }
+
+      p {
+        margin: 0;
+        color: #1976d2;
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .shelf-management-container {
+    grid-template-columns: 1fr;
+
+    .medicines-card {
+      grid-column: 1;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .shelf-management-container {
+    padding: 10px;
+
+    .statistics {
+      grid-template-columns: 1fr;
+    }
+
+    mat-table {
+      font-size: 12px !important;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

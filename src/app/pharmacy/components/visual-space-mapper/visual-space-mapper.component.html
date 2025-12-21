@@ -1,0 +1,302 @@
+<div class="visual-space-container">
+  <mat-card class="main-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>landscape</mat-icon>
+        Visual Space Mapper
+      </mat-card-title>
+      <mat-card-subtitle>Create and manage pharmacy shelf layouts with medicine detection</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Image Upload Section -->
+      <mat-tab-group>
+        <!-- Upload Tab -->
+        <mat-tab label="Upload Image">
+          <div class="tab-content">
+            <h3>Step 1: Upload Pharmacy Image</h3>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Visual Space Name</mat-label>
+              <input matInput formControlName="spaceName" placeholder="e.g., Main Shelf 01">
+              <mat-error *ngIf="form.get('spaceName')?.hasError('required')">
+                Space name is required
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Location</mat-label>
+              <input matInput formControlName="location" placeholder="e.g., Aisle 5, Store A">
+              <mat-error *ngIf="form.get('location')?.hasError('required')">
+                Location is required
+              </mat-error>
+            </mat-form-field>
+
+            <div class="image-upload-section">
+              <input
+                #imageInput
+                type="file"
+                accept="image/*"
+                (change)="onImageSelected($event)"
+                style="display: none"
+              />
+              <button mat-raised-button color="primary" (click)="imageInput.click()">
+                <mat-icon>photo_camera</mat-icon>
+                Choose Image
+              </button>
+            </div>
+
+            <!-- Canvas for displaying detected objects -->
+            <div *ngIf="currentImage" class="canvas-container">
+              <h3>Detected Objects</h3>
+              <canvas #imageCanvas class="detection-canvas"></canvas>
+              <button mat-button (click)="clearImage()" class="clear-btn">
+                <mat-icon>clear</mat-icon>
+                Clear Image
+              </button>
+            </div>
+
+            <!-- Detection Results -->
+            <div *ngIf="detectionResult" class="detection-results">
+              <h3>Detection Results</h3>
+              <mat-list>
+                <mat-list-item *ngFor="let obj of detectionResult.objects">
+                  <mat-icon matListItemIcon>inventory_2</mat-icon>
+                  <div matListItemTitle>
+                    {{ obj.matchedMedicine || obj.class }}
+                  </div>
+                  <div matListItemLine>
+                    Object: {{ obj.class }} | Detection: {{ (obj.score * 100).toFixed(1) }}%
+                    <span *ngIf="obj.matchedMedicine">| Match: {{ (obj.confidence! * 100).toFixed(0) }}%</span>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </div>
+
+            <button
+              mat-raised-button
+              color="accent"
+              (click)="createVisualSpace()"
+              [disabled]="!currentImage || form.invalid"
+              class="full-width margin-top"
+            >
+              <mat-icon>add</mat-icon>
+              Create Visual Space
+            </button>
+          </div>
+        </mat-tab>
+
+        <!-- Camera Tab -->
+        <mat-tab label="Take Photo from Camera">
+          <div class="tab-content">
+            <h3>Step 1: Capture Pharmacy Image with Camera</h3>
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Visual Space Name</mat-label>
+              <input matInput formControlName="spaceName" placeholder="e.g., Main Shelf 01">
+              <mat-error *ngIf="form.get('spaceName')?.hasError('required')">
+                Space name is required
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Location</mat-label>
+              <input matInput formControlName="location" placeholder="e.g., Aisle 5, Store A">
+              <mat-error *ngIf="form.get('location')?.hasError('required')">
+                Location is required
+              </mat-error>
+            </mat-form-field>
+
+            <div class="camera-section">
+              <button 
+                mat-raised-button 
+                color="primary" 
+                (click)="startCamera()"
+                [disabled]="cameraActive"
+                class="camera-btn"
+              >
+                <mat-icon>videocam</mat-icon>
+                Start Camera
+              </button>
+
+              <button 
+                mat-raised-button 
+                color="warn" 
+                (click)="stopCamera()"
+                [disabled]="!cameraActive"
+                class="camera-btn"
+              >
+                <mat-icon>videocam_off</mat-icon>
+                Stop Camera
+              </button>
+
+              <button 
+                mat-raised-button 
+                color="accent" 
+                (click)="capturePhoto()"
+                [disabled]="!cameraActive"
+                class="camera-btn"
+              >
+                <mat-icon>camera</mat-icon>
+                Capture Photo
+              </button>
+            </div>
+
+            <!-- Camera Video Stream -->
+            <div *ngIf="cameraActive" class="camera-container">
+              <h3>Camera Preview</h3>
+              <video 
+                #cameraVideo 
+                autoplay 
+                muted
+                playsinline 
+                class="camera-video"
+                (loadedmetadata)="onVideoLoaded()"
+              ></video>
+              <p class="camera-hint">Position the camera over the pharmacy shelf and tap "Capture Photo" when ready</p>
+            </div>
+
+            <!-- Canvas for displaying detected objects -->
+            <div *ngIf="currentImage" class="canvas-container">
+              <h3>Detected Objects</h3>
+              <canvas #imageCanvas class="detection-canvas"></canvas>
+              <button mat-button (click)="clearImage()" class="clear-btn">
+                <mat-icon>clear</mat-icon>
+                Clear Image
+              </button>
+            </div>
+
+            <!-- Detection Results -->
+            <div *ngIf="detectionResult" class="detection-results">
+              <h3>Detection Results</h3>
+              <mat-list>
+                <mat-list-item *ngFor="let obj of detectionResult.objects">
+                  <mat-icon matListItemIcon>inventory_2</mat-icon>
+                  <div matListItemTitle>
+                    {{ obj.matchedMedicine || obj.class }}
+                  </div>
+                  <div matListItemLine>
+                    Object: {{ obj.class }} | Detection: {{ (obj.score * 100).toFixed(1) }}%
+                    <span *ngIf="obj.matchedMedicine">| Match: {{ (obj.confidence! * 100).toFixed(0) }}%</span>
+                  </div>
+                </mat-list-item>
+              </mat-list>
+            </div>
+
+            <button
+              mat-raised-button
+              color="accent"
+              (click)="createVisualSpace()"
+              [disabled]="!currentImage || form.invalid"
+              class="full-width margin-top"
+            >
+              <mat-icon>add</mat-icon>
+              Create Visual Space
+            </button>
+          </div>
+        </mat-tab>
+
+        <!-- Shelves Tab -->
+        <mat-tab label="Manage Shelves">
+          <div class="tab-content">
+            <h3>Step 2: Create and Manage Shelves</h3>
+
+            <mat-card *ngIf="!selectedSpace" class="info-card">
+              <mat-card-content>
+                <p>
+                  <mat-icon>info</mat-icon>
+                  Please select or create a visual space first
+                </p>
+              </mat-card-content>
+            </mat-card>
+
+            <div *ngIf="selectedSpace">
+              <h4>{{ selectedSpace.name }} - {{ selectedSpace.location }}</h4>
+
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Shelf Name</mat-label>
+                <input matInput formControlName="shelfName" placeholder="e.g., Shelf A1">
+              </mat-form-field>
+
+              <div class="form-row">
+                <mat-form-field appearance="fill">
+                  <mat-label>Width (cm)</mat-label>
+                  <input matInput type="number" formControlName="shelfWidth" min="10">
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                  <mat-label>Height (cm)</mat-label>
+                  <input matInput type="number" formControlName="shelfHeight" min="10">
+                </mat-form-field>
+              </div>
+
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="createShelf()"
+                [disabled]="form.get('shelfName')?.invalid"
+              >
+                <mat-icon>add_box</mat-icon>
+                Add Shelf
+              </button>
+
+              <!-- Shelves List -->
+              <div class="shelves-list">
+                <h4>Shelves in this Space</h4>
+                <mat-list>
+                  <mat-list-item *ngFor="let shelf of selectedSpace.shelves">
+                    <mat-icon matListItemIcon>inventory</mat-icon>
+                    <div matListItemTitle>{{ shelf.name }}</div>
+                    <div matListItemLine>
+                      Size: {{ shelf.width }} x {{ shelf.height }} cm |
+                      Medicines: {{ shelf.medicines.length }}
+                    </div>
+                  </mat-list-item>
+                </mat-list>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Visual Spaces Overview -->
+  <mat-card class="spaces-card">
+    <mat-card-header>
+      <mat-card-title>All Visual Spaces</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item 
+          *ngFor="let space of visualSpaces"
+          [class.active]="space.id === selectedSpace?.id"
+        >
+          <mat-icon matListItemIcon>store</mat-icon>
+          <div matListItemTitle>{{ space.name }}</div>
+          <div matListItemLine>{{ space.location }} | Shelves: {{ space.shelves.length }}</div>
+          <button
+            mat-icon-button
+            (click)="selectVisualSpace(space)"
+            matListItemMeta
+            matTooltip="Select"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            (click)="deleteVisualSpace(space.id)"
+            matTooltip="Delete"
+            matListItemMeta
+          >
+            <mat-icon color="warn">delete</mat-icon>
+          </button>
+        </mat-list-item>
+      </mat-list>
+
+      <mat-card *ngIf="visualSpaces.length === 0" class="empty-card">
+        <mat-card-content>
+          <p><mat-icon>folder_open</mat-icon> No visual spaces created yet</p>
+        </mat-card-content>
+      </mat-card>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,76 @@
+<div class="pharmacy-dashboard">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1>
+        <mat-icon>medication</mat-icon>
+        {{ title }}
+      </h1>
+      <p>Identify medicines and manage their placement in pharmacy shelves using AI-powered visual detection</p>
+    </div>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <mat-tab-group class="dashboard-tabs" animationDuration="300">
+    <!-- Visual Space Mapper Tab -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">landscape</mat-icon>
+        <span>Visual Mapper</span>
+      </ng-template>
+      <app-visual-space-mapper></app-visual-space-mapper>
+    </mat-tab>
+
+    <!-- Medicine Detection Tab -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">local_pharmacy</mat-icon>
+        <span>Medicine Detection</span>
+      </ng-template>
+      <app-medicine-detection></app-medicine-detection>
+    </mat-tab>
+
+    <!-- Shelf Management Tab -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">inventory</mat-icon>
+        <span>Shelf Management</span>
+      </ng-template>
+      <app-shelf-management></app-shelf-management>
+    </mat-tab>
+
+    <!-- Products Tab -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">shopping_cart</mat-icon>
+        <span>Products</span>
+      </ng-template>
+      <app-product-list></app-product-list>
+    </mat-tab>
+
+    <!-- Orders Tab -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">receipt</mat-icon>
+        <span>Orders</span>
+      </ng-template>
+      <app-order-management></app-order-management>
+    </mat-tab>
+  </mat-tab-group>
+
+  <!-- Quick Start Cards -->
+  <div class="quick-start-section" *ngIf="false">
+    <h2>Quick Start</h2>
+    <div class="cards-grid">
+      <mat-card *ngFor="let item of navItems" class="nav-card" (click)="navigateTo(item.route)">
+        <mat-card-header>
+          <mat-icon class="card-icon">{{ item.icon }}</mat-icon>
+          <mat-card-title>{{ item.label }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ item.description }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

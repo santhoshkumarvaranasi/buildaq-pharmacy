@@ -1,0 +1,447 @@
+<div class="product-list-container">
+  <div class="header-section">
+    <h2>Pharmacy Products</h2>
+    <div class="model-status" [class.ready]="modelReady" [class.error]="!modelReady && modelStatus.includes('Failed')">
+      <mat-icon>{{ modelReady ? 'check_circle' : 'autorenew' }}</mat-icon>
+      <span>{{ modelStatus }}</span>
+    </div>
+    <div class="ocr-status" [class.ready]="ocrAvailable">
+      <mat-icon>{{ ocrAvailable ? 'check_circle' : 'hourglass_empty' }}</mat-icon>
+      <span title="OCR for text extraction from medicine images">{{ ocrAvailable ? '✅ OCR Ready' : '⏳ OCR Loading...' }}</span>
+    </div>
+  </div>
+  
+  <!-- Debug Console -->
+  <div class="console-toggle-btn">
+    <button mat-mini-fab (click)="toggleConsole()" title="Toggle Debug Console">
+      <mat-icon>{{ showConsole ? 'unfold_less' : 'unfold_more' }}</mat-icon>
+    </button>
+  </div>
+  
+  <div *ngIf="showConsole" class="debug-console">
+    <div class="console-header">
+      <h4>Debug Console</h4>
+      <div class="console-controls">
+        <button mat-icon-button (click)="clearConsole()" title="Clear logs">
+          <mat-icon>clear_all</mat-icon>
+        </button>
+        <button mat-icon-button (click)="toggleConsole()" title="Close">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="console-output">
+      <div *ngFor="let log of consoleLogs" [ngClass]="getLogClass(log)" class="log-line">
+        {{ log }}
+      </div>
+      <div *ngIf="consoleLogs.length === 0" class="log-empty">
+        No logs yet...
+      </div>
+    </div>
+  </div>
+  
+  <div class="action-buttons-row">
+    <button class="btn-add" (click)="onAddProduct()">
+      <mat-icon>add_photo_alternate</mat-icon>
+      Add Medicines by Image
+    </button>
+    <button class="btn-add" (click)="startBarcodeScanner()">
+      <mat-icon>qr_code_2</mat-icon>
+      Scan Barcode
+    </button>
+    <button class="btn-add" (click)="openManualMedicineForm()" style="background-color: #ff9800;">
+      <mat-icon>add_circle</mat-icon>
+      Add New Medicine
+    </button>
+  </div>
+  
+  <!-- Image Upload Section -->
+  <div class="image-upload-section" *ngIf="showImageUpload">
+    <div class="upload-area">
+      <input 
+        #imageInput
+        type="file" 
+        accept="image/*" 
+        (change)="onImageSelected($event)"
+        hidden
+      />
+      
+      <div class="upload-controls">
+        <button mat-raised-button (click)="imageInput.click()" color="primary">
+          <mat-icon>upload_file</mat-icon>
+          Upload Image File
+        </button>
+        <button mat-raised-button color="primary" (click)="toggleCameraView()">
+          <mat-icon>camera_alt</mat-icon>
+          {{ showCamera ? 'Hide Camera' : 'Take from Camera' }}
+        </button>
+        <button mat-raised-button (click)="toggleImageUpload()">
+          <mat-icon>close</mat-icon>
+          Cancel
+        </button>
+      </div>
+      
+      <!-- Camera Section -->
+      <div *ngIf="showCamera" class="camera-section">
+        <div class="camera-controls">
+          <button 
+            mat-raised-button 
+            color="primary" 
+            (click)="startCamera()"
+            [disabled]="cameraActive"
+          >
+            <mat-icon>videocam</mat-icon>
+            Start Camera
+          </button>
+          <button 
+            mat-raised-button 
+            color="warn" 
+            (click)="stopCamera()"
+            [disabled]="!cameraActive"
+          >
+            <mat-icon>videocam_off</mat-icon>
+            Stop Camera
+          </button>
+          <button 
+            mat-raised-button 
+            color="accent" 
+            (click)="capturePhoto()"
+            [disabled]="!cameraActive"
+          >
+            <mat-icon>camera</mat-icon>
+            Capture Photo
+          </button>
+        </div>
+        
+        <div *ngIf="cameraActive" class="camera-container">
+          <video 
+            #cameraVideo 
+            autoplay 
+            muted
+            playsinline 
+            class="camera-video"
+            (loadedmetadata)="onVideoLoaded()"
+          ></video>
+          <p class="camera-hint">Position camera over pharmacy shelf and tap "Capture Photo"</p>
+        </div>
+      </div>
+      
+      <!-- Uploaded Image Preview -->
+      <div *ngIf="uploadedImageUrl" class="image-preview">
+        <h3>Captured Image</h3>
+        <img [src]="uploadedImageUrl" alt="Selected pharmacy image">
+      </div>
+      
+      <!-- OCR Processing Status -->
+      <div *ngIf="isOcrProcessing" class="ocr-processing">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Extracting text from image (OCR)...</p>
+        <small>This may take a moment...</small>
+      </div>
+      
+      <!-- OCR Extracted Text Results -->
+      <div *ngIf="ocrExtractedText && !isOcrProcessing" class="ocr-results">
+        <h4>📝 Text Extracted from Image:</h4>
+        <div class="extracted-text-box">
+          <p>{{ ocrExtractedText | slice:0:300 }}{{ ocrExtractedText.length > 300 ? '...' : '' }}</p>
+        </div>
+        <p class="ocr-hint">✅ Medicine details have been auto-detected. Check the form above and adjust if needed.</p>
+      </div>
+      
+      <!-- Detection Results -->
+      <div *ngIf="detectedMedicines && !isDetecting" class="detection-results">
+        <h3>Detected Objects ({{ detectedMedicines.objects.length }})</h3>
+        <div class="detection-hint">
+          <strong>📋 Identify your medicines:</strong>
+          <ul>
+            <li>Click the <strong>✏️ pencil</strong> icon to manually type the medicine name</li>
+            <li>Click the <strong>📚 books</strong> icon to select from the existing catalog</li>
+            <li>Check the boxes for medicines you want to add</li>
+            <li>Click "Add Selected Medicines" to save them</li>
+          </ul>
+        </div>
+        <div class="medicines-list">
+          <div *ngFor="let obj of detectedMedicines.objects; let i = index" class="medicine-item">
+            <mat-checkbox [(ngModel)]="selectedMedicines[i]"></mat-checkbox>
+            <div class="medicine-info">
+              <div class="medicine-name">
+                <strong>{{ obj.matchedMedicine || obj.class }}</strong>
+                <span class="object-type">({{ obj.class }})</span>
+              </div>
+              <div class="medicine-actions">
+                <button mat-icon-button (click)="editMedicineName(i)" title="Edit medicine name">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="selectFromCatalog(i)" title="Select from catalog">
+                  <mat-icon>library_books</mat-icon>
+                </button>
+              </div>
+              <span class="confidence">Confidence: {{ (obj.score * 100).toFixed(1) }}%</span>
+            </div>
+          </div>
+          
+          <!-- Dialogs Overlay -->
+          <div *ngIf="editingIndex !== null || selectingIndex !== null" class="dialog-overlay"></div>
+          
+          <!-- Edit Medicine Dialog -->
+          <div *ngIf="editingIndex !== null" class="edit-medicine-dialog">
+            <h4>Identify Medicine #{{ editingIndex + 1 }}</h4>
+            <div class="edit-controls">
+              <mat-form-field appearance="outline">
+                <mat-label>Medicine Name</mat-label>
+                <input matInput [(ngModel)]="editingMedicineName" placeholder="Enter medicine name">
+              </mat-form-field>
+              <div class="edit-buttons">
+                <button mat-raised-button color="primary" (click)="confirmEditMedicine()">
+                  <mat-icon>check</mat-icon>
+                  Confirm
+                </button>
+                <button mat-button (click)="cancelEditMedicine()">
+                  <mat-icon>close</mat-icon>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Catalog Selection Dialog -->
+          <div *ngIf="selectingIndex !== null" class="catalog-selection-dialog">
+            <h4>Select from Catalog for #{{ selectingIndex + 1 }} ({{ detectedMedicines.objects[selectingIndex].class }})</h4>
+            <div class="catalog-list">
+              <button 
+                *ngFor="let med of catalogMedicines" 
+                mat-raised-button 
+                class="catalog-item"
+                (click)="selectMedicineFromCatalog(selectingIndex!, med.name)"
+              >
+                {{ med.name }}
+              </button>
+            </div>
+            <div class="catalog-close-btn">
+              <button mat-button (click)="cancelSelectMedicine()">
+                <mat-icon>close</mat-icon>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="action-buttons">
+          <button 
+            mat-raised-button 
+            color="accent" 
+            (click)="addDetectedMedicines()"
+            [disabled]="!hasSelectedMedicines()"
+          >
+            <mat-icon>add_box</mat-icon>
+            Add Selected Medicines
+          </button>
+          <button mat-button (click)="resetImageUpload()">
+            <mat-icon>clear</mat-icon>
+            Clear
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barcode Scanner Section -->
+  <div *ngIf="showBarcodeScanner" class="barcode-scanner-section">
+    <h3>📱 Barcode Scanner - Add Medicine to Catalog</h3>
+    
+    <!-- Instructions Box -->
+    <div class="barcode-instructions">
+      <h4>How to use:</h4>
+      <ol>
+        <li><strong>Find the barcode</strong> on your medicine package (usually a long number with lines)</li>
+        <li><strong>Enter the barcode number</strong> in the field below (e.g., 5012254500012)</li>
+        <li><strong>Click Search</strong> to look up the medicine</li>
+        <li><strong>Review the medicine details</strong> and click "Add to Catalog"</li>
+      </ol>
+    </div>
+    
+    <!-- Status Messages -->
+    <div *ngIf="barcodeScannerError" class="barcode-status-error">
+      {{ barcodeScannerError }}
+    </div>
+    
+    <div *ngIf="cameraInitialized && !barcodeScannerError && !isBarcodeScanning" class="barcode-status-success">
+      ✅ Camera ready (optional - primary method is manual input below)
+    </div>
+    
+    <div *ngIf="isBarcodeScanning" class="barcode-status-info">
+      <mat-spinner diameter="30"></mat-spinner>
+      <p>Initializing camera...</p>
+    </div>
+    
+    <!-- Camera Container -->
+    <div class="barcode-container" *ngIf="cameraInitialized || isBarcodeScanning">
+      <video 
+        #barcodeScanner
+        autoplay 
+        muted
+        playsinline 
+        class="barcode-video"
+      ></video>
+      <p class="barcode-hint">📷 Camera Active (Optional)</p>
+      
+      <div *ngIf="isBarcodeScanning && !scannedMedicine" class="camera-loading-overlay">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Initializing camera...</p>
+      </div>
+    </div>
+
+    <!-- Main: Manual Barcode Input (PRIMARY METHOD) -->
+    <div class="barcode-input-section barcode-primary">
+      <h4>🔍 Search for Medicine by Barcode</h4>
+      <p class="barcode-info"><strong>Primary Method:</strong> Type or paste the barcode number from the medicine packaging</p>
+      
+      <div class="barcode-input-group">
+        <mat-form-field appearance="outline" class="barcode-input-field">
+          <mat-label>Barcode Number</mat-label>
+          <input 
+            matInput 
+            [(ngModel)]="manualBarcodeInput" 
+            placeholder="e.g., 5012254500012" 
+            (keyup.enter)="scanManualBarcode()" 
+            [disabled]="isBarcodeScanning"
+            autofocus
+          >
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="scanManualBarcode()" [disabled]="!manualBarcodeInput.trim() || isBarcodeScanning">
+          <mat-icon>search</mat-icon>
+          Search
+        </button>
+      </div>
+      
+      <div class="example-barcodes">
+        <p><strong>📌 Example barcodes to try:</strong></p>
+        <ul>
+          <li><code>5012254500012</code> → Aspirin</li>
+          <li><code>5014496014175</code> → Ibuprofen</li>
+          <li><code>5000017000049</code> → Paracetamol</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Scanned Medicine Display -->
+    <div *ngIf="scannedMedicine" class="scanned-medicine-info">
+      <h4>✅ Medicine Found</h4>
+      <div class="medicine-details">
+        <p><strong>Name:</strong> {{ scannedMedicine.name }}</p>
+        <p><strong>Barcode:</strong> {{ scannedBarcode }}</p>
+        <p><strong>Strength:</strong> {{ scannedMedicine.strength }}</p>
+        <p><strong>Manufacturer:</strong> {{ scannedMedicine.manufacturer }}</p>
+      </div>
+      <div class="barcode-actions">
+        <button mat-raised-button color="primary" (click)="addScannedMedicine()">
+          <mat-icon>add_box</mat-icon>
+          Add to Catalog
+        </button>
+        <button mat-button (click)="cancelBarcodeScanning()">
+          <mat-icon>close</mat-icon>
+          Cancel
+        </button>
+      </div>
+    </div>
+
+    <!-- Close Button -->
+    <div class="barcode-close">
+      <button mat-button (click)="stopBarcodeScanner()">
+        <mat-icon>close</mat-icon>
+        Close Scanner
+      </button>
+    </div>
+  </div>
+  
+  <!-- Hidden canvas for photo capture -->
+  <canvas #captureCanvas hidden></canvas>
+  
+  <table class="products-table" *ngIf="products.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Product Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Expiry Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products">
+        <td>{{ product.id }}</td>
+        <td>{{ product.name }}</td>
+        <td>{{ product.category }}</td>
+        <td>${{ product.price }}</td>
+        <td>{{ product.quantity }}</td>
+        <td>{{ product.expiryDate }}</td>
+        <td>
+          <button class="btn-edit" (click)="onEditProduct(product)">Edit</button>
+          <button class="btn-delete" (click)="onDeleteProduct(product.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div class="no-products" *ngIf="products.length === 0">
+    <p>No products found.</p>
+  </div>
+
+  <!-- Manual Medicine Entry Form -->
+  <div *ngIf="showManualMedicineForm" class="manual-medicine-overlay">
+    <div class="manual-medicine-dialog">
+      <h3>➕ Add New Medicine to Catalog</h3>
+      
+      <div class="form-group">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Medicine Name *</mat-label>
+          <input matInput [(ngModel)]="newMedicine.name" placeholder="e.g., Paracetamol">
+        </mat-form-field>
+      </div>
+
+      <div class="form-group">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Generic Name</mat-label>
+          <input matInput [(ngModel)]="newMedicine.genericName" placeholder="e.g., Acetaminophen">
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Strength</mat-label>
+          <input matInput [(ngModel)]="newMedicine.strength" placeholder="e.g., 500mg">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Manufacturer</mat-label>
+          <input matInput [(ngModel)]="newMedicine.manufacturer" placeholder="e.g., Generic Inc.">
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Category</mat-label>
+          <input matInput [(ngModel)]="newMedicine.category" placeholder="e.g., Medicine">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Initial Quantity</mat-label>
+          <input matInput type="number" [(ngModel)]="newMedicine.quantity" placeholder="50">
+        </mat-form-field>
+      </div>
+
+      <div class="dialog-actions">
+        <button mat-raised-button color="primary" (click)="saveManualMedicine()">
+          <mat-icon>save</mat-icon>
+          Add to Catalog
+        </button>
+        <button mat-button (click)="cancelManualMedicine()">
+          <mat-icon>close</mat-icon>
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

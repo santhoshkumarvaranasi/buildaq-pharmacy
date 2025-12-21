@@ -1,0 +1,209 @@
+<div class="shelf-management-container">
+  <!-- Visual Spaces Section -->
+  <div class="management-section">
+    <mat-card class="spaces-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>store</mat-icon>
+          Pharmacy Locations
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item
+            *ngFor="let space of visualSpaces"
+            (click)="selectVisualSpace(space)"
+            class="space-item"
+            [class.active]="space.id === selectedSpace?.id"
+          >
+            <mat-icon matListItemIcon>location_on</mat-icon>
+            <div matListItemTitle>{{ space.name }}</div>
+            <div matListItemLine>{{ space.location }} | {{ space.shelves.length }} shelves</div>
+            <div matListItemLine class="timestamp">
+              Updated: {{ space.lastUpdated | date:'short' }}
+            </div>
+          </mat-list-item>
+        </mat-list>
+
+        <mat-card *ngIf="visualSpaces.length === 0" class="empty-card">
+          <mat-card-content>
+            <mat-icon>folder_open</mat-icon>
+            <p>No pharmacy locations found</p>
+          </mat-card-content>
+        </mat-card>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Shelves Section -->
+  <div class="management-section" *ngIf="selectedSpace">
+    <mat-card class="shelves-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>inventory</mat-icon>
+          Shelves in {{ selectedSpace.name }}
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item
+            *ngFor="let shelf of selectedSpace.shelves"
+            (click)="selectShelf(shelf)"
+            class="shelf-item"
+            [class.active]="shelf.id === selectedShelf?.id"
+          >
+            <mat-icon matListItemIcon>inventory_2</mat-icon>
+            <div matListItemTitle>{{ shelf.name }}</div>
+            <div matListItemLine>
+              Size: {{ shelf.width }} × {{ shelf.height }} cm | Medicines: {{ shelf.medicines.length }}
+            </div>
+            <button
+              mat-icon-button
+              (click)="deleteShelf(selectedSpace!.id, shelf.id); $event.stopPropagation()"
+              matTooltip="Delete shelf"
+              matListItemMeta
+            >
+              <mat-icon color="warn">delete</mat-icon>
+            </button>
+          </mat-list-item>
+        </mat-list>
+
+        <mat-card *ngIf="selectedSpace.shelves.length === 0" class="empty-card">
+          <mat-card-content>
+            <mat-icon>inbox</mat-icon>
+            <p>No shelves in this location</p>
+          </mat-card-content>
+        </mat-card>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Medicines Section -->
+  <div class="management-section" *ngIf="selectedShelf">
+    <mat-card class="medicines-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>local_pharmacy</mat-icon>
+          Medicines on Shelf: {{ selectedShelf.name }}
+        </mat-card-title>
+        <mat-card-subtitle>
+          Total: {{ medicines.length }} | Avg Confidence: {{ (getAverageConfidence() * 100).toFixed(1) }}%
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <!-- Statistics -->
+        <div class="statistics">
+          <mat-card class="stat-card">
+            <div class="stat-icon">
+              <mat-icon>inventory_2</mat-icon>
+            </div>
+            <div class="stat-content">
+              <h3>Total Medicines</h3>
+              <p>{{ medicines.length }}</p>
+            </div>
+          </mat-card>
+
+          <mat-card class="stat-card">
+            <div class="stat-icon">
+              <mat-icon>check_circle</mat-icon>
+            </div>
+            <div class="stat-content">
+              <h3>Avg Confidence</h3>
+              <p>{{ (getAverageConfidence() * 100).toFixed(1) }}%</p>
+            </div>
+          </mat-card>
+
+          <mat-card class="stat-card">
+            <div class="stat-icon">
+              <mat-icon>aspect_ratio</mat-icon>
+            </div>
+            <div class="stat-content">
+              <h3>Shelf Size</h3>
+              <p>{{ selectedShelf.width }} × {{ selectedShelf.height }} cm</p>
+            </div>
+          </mat-card>
+        </div>
+
+        <!-- Medicines Table -->
+        <div class="medicines-table-wrapper">
+          <mat-table [dataSource]="medicines" *ngIf="medicines.length > 0">
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef>Medicine Name</mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <strong>{{ element.name }}</strong>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="position">
+              <mat-header-cell *matHeaderCellDef>Position (X, Y)</mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <code class="position-code">{{ element.x }}, {{ element.y }}</code>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Confidence Column -->
+            <ng-container matColumnDef="confidence">
+              <mat-header-cell *matHeaderCellDef>Confidence</mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <mat-progress-bar
+                  mode="determinate"
+                  [value]="element.confidence * 100"
+                  class="confidence-bar"
+                ></mat-progress-bar>
+                <span class="confidence-text">{{ (element.confidence * 100).toFixed(1) }}%</span>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <button
+                  mat-icon-button
+                  (click)="removeMedicine(element.id)"
+                  matTooltip="Remove medicine"
+                  color="warn"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedMedicineColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedMedicineColumns;"></mat-row>
+          </mat-table>
+
+          <div *ngIf="medicines.length === 0" class="empty-table">
+            <mat-icon>shopping_cart</mat-icon>
+            <p>No medicines on this shelf</p>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button mat-raised-button color="primary" (click)="exportShelfData()" [disabled]="!selectedShelf">
+            <mat-icon>download</mat-icon>
+            Export Data
+          </button>
+          <button mat-button (click)="printShelfData()" [disabled]="!selectedShelf">
+            <mat-icon>print</mat-icon>
+            Print
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Empty State -->
+  <mat-card *ngIf="!selectedShelf && visualSpaces.length > 0" class="selection-prompt">
+    <mat-card-content>
+      <mat-icon>touch_app</mat-icon>
+      <p>Select a location and shelf to view and manage medicines</p>
+    </mat-card-content>
+  </mat-card>
+</div>
