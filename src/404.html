@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Pharmacy - Remote Module</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Tesseract.js for OCR - Load core library -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.0/dist/tesseract.min.js"></script>
+</head>
+<body>
+  <app-root></app-root>
+  <script>
+    // Verify Tesseract loaded
+    window.addEventListener('load', function() {
+      if (typeof Tesseract !== 'undefined') {
+        console.log('✅ Tesseract.js loaded successfully');
+      } else {
+        console.warn('⚠️ Tesseract.js failed to load');
+      }
+    });
+  </script>
+</body>
+</html>
+
+
