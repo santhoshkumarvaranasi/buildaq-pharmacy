@@ -1416,8 +1416,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
   }
 
   private promptBoxName(): string {
-    const name = window.prompt('Box name?') || '';
-    return name.trim() || 'Box';
+    return 'Box';
   }
 
   private createBoxLabel(
