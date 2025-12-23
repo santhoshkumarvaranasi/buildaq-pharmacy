@@ -213,8 +213,8 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
 
     this.transformControls = new TransformControls(this.camera, this.renderer.domElement);
     this.transformControls.setMode(this.transformMode);
-    this.transformControls.addEventListener('dragging-changed', (event: { value: boolean }) => {
-      this.controls.enabled = !event.value;
+    this.transformControls.addEventListener('dragging-changed', (event) => {
+      this.controls.enabled = !Boolean(event.value);
     });
     this.transformControls.addEventListener('objectChange', () => {
       this.syncSelectedMesh();
