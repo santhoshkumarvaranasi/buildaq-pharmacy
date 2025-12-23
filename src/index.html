@@ -13,6 +13,13 @@
 <body>
   <app-root></app-root>
   <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var redirect = params.get('p');
+      if (redirect) {
+        window.history.replaceState(null, '', decodeURIComponent(redirect));
+      }
+    })();
     // Verify Tesseract loaded
     window.addEventListener('load', function() {
       if (typeof Tesseract !== 'undefined') {
