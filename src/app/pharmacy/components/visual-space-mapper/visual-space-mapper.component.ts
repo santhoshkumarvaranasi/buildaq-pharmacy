@@ -69,6 +69,8 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
   private drawStart = new THREE.Vector3();
   private drawActive = false;
   private drawTarget: { mesh: THREE.Mesh; type: LayoutType } | null = null;
+  private wallDrawStartY = 0;
+  private wallDrawHeight = 0;
 
   private layoutItems: LayoutItem[] = [];
   private layoutMap = new Map<string, LayoutItem>();
@@ -287,6 +289,8 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
       this.drawActive = true;
       this.controls.enabled = false;
       this.drawStart.copy(hit.point);
+      this.wallDrawStartY = event.clientY;
+      this.wallDrawHeight = 0.6;
       this.createPreviewWall();
       return;
     }
@@ -321,7 +325,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     if (this.mode === 'drawWall') {
       const hit = this.raycaster.intersectObject(this.floorMesh!)[0];
       if (!hit) return;
-      this.updatePreviewWall(hit.point);
+      this.updatePreviewWall(hit.point, event);
       return;
     }
 
@@ -365,25 +369,29 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
   };
 
   private createPreviewWall(): void {
-    const geometry = new THREE.BoxGeometry(0.1, this.wallHeight, this.wallThickness);
+    const geometry = new THREE.BoxGeometry(0.1, this.wallDrawHeight || this.wallHeight, this.wallThickness);
     const material = new THREE.MeshStandardMaterial({
       color: this.getActiveColor(),
       opacity: 0.6,
       transparent: true
     });
     this.previewMesh = new THREE.Mesh(geometry, material);
-    this.previewMesh.position.set(this.drawStart.x, this.wallHeight / 2, this.drawStart.z);
+    const height = this.wallDrawHeight || this.wallHeight;
+    this.previewMesh.position.set(this.drawStart.x, height / 2, this.drawStart.z);
     this.scene.add(this.previewMesh);
   }
 
-  private updatePreviewWall(endPoint: THREE.Vector3): void {
+  private updatePreviewWall(endPoint: THREE.Vector3, event: PointerEvent): void {
     const length = this.drawStart.distanceTo(endPoint);
     if (length < 0.2) return;
+    const deltaY = this.wallDrawStartY - event.clientY;
+    const height = Math.min(6, Math.max(0.4, Math.abs(deltaY) * 0.02));
+    this.wallDrawHeight = height;
     const center = new THREE.Vector3().addVectors(this.drawStart, endPoint).multiplyScalar(0.5);
     const angle = Math.atan2(endPoint.z - this.drawStart.z, endPoint.x - this.drawStart.x);
     this.previewMesh!.geometry.dispose();
-    this.previewMesh!.geometry = new THREE.BoxGeometry(length, this.wallHeight, this.wallThickness);
-    this.previewMesh!.position.set(center.x, this.wallHeight / 2, center.z);
+    this.previewMesh!.geometry = new THREE.BoxGeometry(length, height, this.wallThickness);
+    this.previewMesh!.position.set(center.x, height / 2, center.z);
     this.previewMesh!.rotation.set(0, -angle, 0);
   }
 
