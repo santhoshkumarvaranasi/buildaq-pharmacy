@@ -54,6 +54,28 @@
       Add New Medicine
     </button>
   </div>
+
+  <div class="catalog-import-section">
+    <h4>Offline Catalog Import (JSON)</h4>
+    <p>Load your local medicine database into this browser.</p>
+    <input type="file" accept=".json,application/json" (change)="onCatalogFileSelected($event)">
+    <div class="catalog-import-actions">
+      <button mat-raised-button color="primary" (click)="loadCatalogToProducts()">
+        <mat-icon>playlist_add</mat-icon>
+        Load Catalog into Products
+      </button>
+    </div>
+    <p class="catalog-import-hint">
+      Example:
+      <code>[&#123;"name":"Paracetamol","barcode":"8901234567890","strength":"500mg","manufacturer":"Generic Pharma","category":"Pain Relief","quantity":50&#125;]</code>
+    </p>
+    <div *ngIf="catalogImportSummary" class="barcode-status-success">
+      {{ catalogImportSummary }}
+    </div>
+    <div *ngIf="catalogImportError" class="barcode-status-error">
+      {{ catalogImportError }}
+    </div>
+  </div>
   
   <!-- Image Upload Section -->
   <div class="image-upload-section" *ngIf="showImageUpload">
@@ -273,6 +295,10 @@
       <mat-spinner diameter="30"></mat-spinner>
       <p>Initializing camera...</p>
     </div>
+    <div *ngIf="isBarcodeLookup" class="barcode-status-info">
+      <mat-spinner diameter="30"></mat-spinner>
+      <p>Looking up barcode in openFDA...</p>
+    </div>
     
     <!-- Camera Container -->
     <div class="barcode-container" *ngIf="cameraInitialized || isBarcodeScanning">
@@ -304,11 +330,11 @@
             [(ngModel)]="manualBarcodeInput" 
             placeholder="e.g., 5012254500012" 
             (keyup.enter)="scanManualBarcode()" 
-            [disabled]="isBarcodeScanning"
+            [disabled]="isBarcodeScanning || isBarcodeLookup"
             autofocus
           >
         </mat-form-field>
-        <button mat-raised-button color="primary" (click)="scanManualBarcode()" [disabled]="!manualBarcodeInput.trim() || isBarcodeScanning">
+        <button mat-raised-button color="primary" (click)="scanManualBarcode()" [disabled]="!manualBarcodeInput.trim() || isBarcodeScanning || isBarcodeLookup">
           <mat-icon>search</mat-icon>
           Search
         </button>
@@ -357,6 +383,12 @@
   <!-- Hidden canvas for photo capture -->
   <canvas #captureCanvas hidden></canvas>
   
+  <div class="barcode-input-section" *ngIf="products.length > 0">
+    <mat-form-field appearance="outline" class="barcode-input-field">
+      <mat-label>Search products</mat-label>
+      <input matInput [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" placeholder="Search by name or category">
+    </mat-form-field>
+  </div>
   <table class="products-table" *ngIf="products.length > 0">
     <thead>
       <tr>
@@ -370,7 +402,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of products">
+      <tr *ngFor="let product of pagedProducts">
         <td>{{ product.id }}</td>
         <td>{{ product.name }}</td>
         <td>{{ product.category }}</td>
@@ -384,6 +416,15 @@
       </tr>
     </tbody>
   </table>
+
+  <mat-paginator
+    *ngIf="products.length > 0"
+    [length]="filteredProducts.length"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="onPageChange($event)">
+  </mat-paginator>
   
   <div class="no-products" *ngIf="products.length === 0">
     <p>No products found.</p>

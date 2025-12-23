@@ -1,264 +1,357 @@
-.visual-space-container {
-  padding: 20px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  min-height: 100vh;
-
-  .main-card {
-    margin-bottom: 30px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-
-    mat-card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-
-      mat-icon {
-        font-size: 28px;
-        width: 28px;
-        height: 28px;
-        color: #1976d2;
-      }
-
-      mat-card-title {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-    }
-  }
-
-  .tab-content {
-    padding: 20px;
-
-    h3 {
-      margin-top: 0;
-      color: #333;
-      border-bottom: 2px solid #1976d2;
-      padding-bottom: 10px;
-    }
-
-    h4 {
-      color: #555;
-      margin-top: 20px;
-    }
-  }
-
-  .full-width {
-    width: 100%;
-    margin-bottom: 15px;
-  }
-
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-bottom: 15px;
-
-    mat-form-field {
-      width: 100%;
-    }
-  }
-
-  .image-upload-section {
-    margin: 20px 0;
-    padding: 20px;
-    border: 2px dashed #1976d2;
-    border-radius: 8px;
-    text-align: center;
-    background: #f0f6ff;
-
-    button {
-      margin-top: 10px;
-    }
-  }
-
-  .canvas-container {
-    margin: 20px 0;
-    text-align: center;
-
-    .detection-canvas {
-      max-width: 100%;
-      height: auto;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      margin: 15px 0;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .clear-btn {
-      margin-top: 10px;
-    }
-  }
-
-  .detection-results {
-    margin: 20px 0;
-    padding: 15px;
-    background: #f5f5f5;
-    border-radius: 8px;
-
-    h3 {
-      margin: 0 0 15px 0;
-      border: none;
-      padding: 0;
-    }
-
-    mat-list {
-      max-height: 300px;
-      overflow-y: auto;
-    }
-  }
-
-  .margin-top {
-    margin-top: 20px;
-  }
-
-  .shelves-list {
-    margin-top: 30px;
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 8px;
-
-    h4 {
-      margin-top: 0;
-    }
-  }
-
-  .spaces-card {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-
-    mat-list-item {
-      border-bottom: 1px solid #e0e0e0;
-
-      &:hover {
-        background: #f5f5f5;
-      }
-
-      mat-icon[matListItemIcon] {
-        color: #1976d2;
-      }
-    }
-  }
-
-  .info-card,
-  .empty-card {
-    background: #e3f2fd;
-    border-left: 4px solid #1976d2;
-
-    mat-card-content {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-
-      p {
-        margin: 0;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      mat-icon {
-        color: #1976d2;
-      }
-    }
-  }
-
-  button[mat-raised-button],
-  button[mat-button] {
-    border-radius: 4px;
-    text-transform: uppercase;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-  }
-
-  button[mat-raised-button] {
-    width: 100%;
-
-    mat-icon {
-      margin-right: 8px;
-    }
-  }
+.visual-mapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: #f3f4f6;
 }
 
-// Camera Styles
-.camera-section {
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.tool-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.color-picker label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #1f2937;
+}
+
+.color-picker input[type='color'] {
+  width: 36px;
+  height: 32px;
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.preset-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #1f2937;
+}
+
+.preset-label select {
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  padding: 0 8px;
+  background: #ffffff;
+}
+
+.viewport {
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  border-radius: 16px;
+  overflow: hidden;
+  background: radial-gradient(circle at top, #ffffff 0%, #e5e7eb 100%);
+  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);
+}
+
+.scene-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hint {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  background: rgba(15, 23, 42, 0.85);
+  color: #f8fafc;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.direction-compass {
+  position: absolute;
+  right: 16px;
+  bottom: 90px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.9);
+  color: #f8fafc;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.compass-ring {
+  position: absolute;
+  inset: 6px;
+  border: 2px solid rgba(248, 250, 252, 0.5);
+  border-radius: 50%;
+}
+
+.compass-label {
+  position: absolute;
+}
+
+.compass-label.north {
+  top: 6px;
+}
+
+.compass-label.south {
+  bottom: 6px;
+}
+
+.compass-label.east {
+  right: 6px;
+}
+
+.compass-label.west {
+  left: 6px;
+}
+
+.context-menu {
+  position: absolute;
+  min-width: 160px;
+  background: #0f172a;
+  color: #f8fafc;
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.3);
+  z-index: 10;
+}
+
+.context-menu button {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: inherit;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.context-menu button:hover {
+  background: rgba(248, 250, 252, 0.12);
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  z-index: 9;
+}
+
+.medicine-modal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(520px, 92%);
+  background: #0f172a;
+  color: #f8fafc;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.4);
+  z-index: 10;
+}
+
+.medicine-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.medicine-modal-title {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.capacity-tag {
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(248, 250, 252, 0.15);
+}
+
+.close-btn {
+  background: transparent;
+  border: 1px solid rgba(248, 250, 252, 0.3);
+  color: #f8fafc;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.medicine-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.medicine-modal-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.medicine-modal-actions button {
+  border: 1px solid rgba(248, 250, 252, 0.3);
+  background: rgba(248, 250, 252, 0.08);
+  color: #f8fafc;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.medicine-modal-actions button:hover {
+  background: rgba(248, 250, 252, 0.18);
+}
+
+.medicine-modal-actions label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.medicine-qty-group {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(220px, 1.4fr) minmax(260px, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.medicine-field,
+.qty-field {
+  width: 100%;
+}
+
+.medicine-modal-actions input {
+  border-radius: 8px;
+  border: 1px solid rgba(248, 250, 252, 0.2);
+  padding: 6px 8px;
+  background: rgba(15, 23, 42, 0.6);
+  color: #f8fafc;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.qty-input {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 6px;
+  align-items: center;
+}
+
+.qty-row {
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
+  align-items: flex-end;
   flex-wrap: wrap;
-
-  .camera-btn {
-    flex: 1;
-    min-width: 150px;
-    padding: 12px !important;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-
-    mat-icon {
-      margin-right: 5px;
-    }
-  }
 }
 
-.camera-container {
-  margin: 20px 0;
-  border: 2px solid #1976d2;
+.qty-input button {
+  width: 28px;
+  height: 28px;
+}
+
+.qty-input input {
+  text-align: center;
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.mode-toggle button {
+  min-width: 86px;
+}
+
+.mode-toggle button.active {
+  background: rgba(248, 250, 252, 0.25);
+}
+
+.action-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.action-row button {
+  border: 1px solid rgba(248, 250, 252, 0.3);
+  background: rgba(248, 250, 252, 0.08);
+  color: #f8fafc;
+  padding: 6px 12px;
   border-radius: 8px;
-  overflow: hidden;
-  background: #000;
-
-  h3 {
-    background: #1976d2;
-    color: white;
-    margin: 0;
-    padding: 10px 15px;
-    border-bottom: none;
-  }
-
-  .camera-video {
-    width: 100%;
-    max-height: 500px;
-    min-height: 300px;
-    display: block;
-    background: #000;
-    object-fit: cover;
-    transform: scaleX(-1); // Mirror effect for front camera
-  }
-
-  .camera-hint {
-    padding: 10px;
-    background: #f5f5f5;
-    color: #666;
-    text-align: center;
-    margin: 0;
-    font-size: 13px;
-  }
+  cursor: pointer;
 }
 
-@media (max-width: 768px) {
-  .visual-space-container {
-    padding: 10px;
-
-    .form-row {
-      grid-template-columns: 1fr;
-    }
-
-    .main-card,
-    .spaces-card {
-      margin-bottom: 15px;
-    }
-  }
-
-  .camera-section {
-    flex-direction: column;
-
-    .camera-btn {
-      width: 100%;
-      min-width: unset;
-    }
-  }
+.action-row button:hover {
+  background: rgba(248, 250, 252, 0.18);
 }
 
+.save-btn {
+  background: #38bdf8;
+  color: #0f172a;
+  border-color: transparent;
+}
+
+.medicine-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+  background: rgba(248, 250, 252, 0.08);
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.medicine-qty {
+  font-weight: 700;
+}
+
+.medicine-qty.negative {
+  color: #f87171;
+}
+
+.medicine-alert {
+  font-size: 12px;
+  color: #f87171;
+}
+
+.medicine-row.active {
+  background: rgba(56, 189, 248, 0.2);
+  outline: 1px solid rgba(56, 189, 248, 0.4);
+}

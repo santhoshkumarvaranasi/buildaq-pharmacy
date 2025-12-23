@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PharmacyModule } from './pharmacy/pharmacy.module';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { PharmacyModule } from './pharmacy/pharmacy.module';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    PharmacyModule
+    PharmacyModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

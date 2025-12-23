@@ -18,6 +18,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 
 // Components
 import { PharmacyDashboardComponent } from './pharmacy-dashboard/pharmacy-dashboard.component';
@@ -26,6 +28,7 @@ import { OrderManagementComponent } from './order-management/order-management.co
 import { VisualSpaceMapperComponent } from './visual-space-mapper/visual-space-mapper.component';
 import { MedicineDetectionComponent } from './medicine-detection/medicine-detection.component';
 import { ShelfManagementComponent } from './shelf-management/shelf-management.component';
+import { ThreeEditorComponent } from './three-editor/three-editor.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +37,8 @@ import { ShelfManagementComponent } from './shelf-management/shelf-management.co
     OrderManagementComponent,
     VisualSpaceMapperComponent,
     MedicineDetectionComponent,
-    ShelfManagementComponent
+    ShelfManagementComponent,
+    ThreeEditorComponent
   ],
   imports: [
     CommonModule,
@@ -54,13 +58,16 @@ import { ShelfManagementComponent } from './shelf-management/shelf-management.co
     MatTooltipModule,
     MatSnackBarModule,
     MatExpansionModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule,
+    MatSelectModule
   ],
   exports: [
     PharmacyDashboardComponent,
     VisualSpaceMapperComponent,
     MedicineDetectionComponent,
-    ShelfManagementComponent
+    ShelfManagementComponent,
+    ThreeEditorComponent
   ]
 })
 export class PharmaComponentsModule { }

@@ -95,12 +95,17 @@ export class BarcodeScannerService {
     return this.isScanning.asObservable();
   }
 
-  lookupMedicine(barcode: string): any {
+  async lookupMedicine(barcode: string): Promise<any> {
     console.log('Looking up medicine for barcode:', barcode);
     
     // Check if barcode exists in database
     if (this.medicineDatabase[barcode]) {
-      return this.medicineDatabase[barcode];
+      return { ...this.medicineDatabase[barcode], barcode };
+    }
+
+    const openFdaResult = await this.lookupOpenFda(barcode);
+    if (openFdaResult) {
+      return openFdaResult;
     }
 
     // Return generic info for unknown barcodes
@@ -114,5 +119,59 @@ export class BarcodeScannerService {
 
   resetBarcode(): void {
     this.scannedBarcode.next(null);
+  }
+
+  private async lookupOpenFda(barcode: string): Promise<any | null> {
+    try {
+      const terms = this.buildNdcSearchTerms(barcode);
+      for (const term of terms) {
+        const queries = [
+          `package_ndc:\"${term}\"`,
+          `product_ndc:\"${term}\"`
+        ];
+        for (const query of queries) {
+          const url = `https://api.fda.gov/drug/ndc.json?search=${encodeURIComponent(query)}&limit=1`;
+          const response = await fetch(url);
+          if (!response.ok) {
+            continue;
+          }
+          const data = await response.json();
+          const result = data?.results?.[0];
+          if (result) {
+            const ingredient = result.active_ingredients?.[0];
+            return {
+              name: result.brand_name || result.generic_name || `Medicine (Barcode: ${barcode})`,
+              strength: ingredient?.strength || 'Unknown',
+              manufacturer: result.labeler_name || 'Unknown',
+              genericName: result.generic_name || '',
+              ndc: result.product_ndc || result.package_ndc || '',
+              barcode
+            };
+          }
+        }
+      }
+    } catch (error) {
+      console.warn('OpenFDA lookup failed:', error);
+    }
+    return null;
+  }
+
+  private buildNdcSearchTerms(barcode: string): string[] {
+    const digits = (barcode || '').replace(/\D/g, '');
+    if (!digits) return [];
+
+    const terms: string[] = [digits];
+
+    if (digits.length === 11) {
+      terms.push(`${digits.slice(0, 5)}-${digits.slice(5, 9)}-${digits.slice(9)}`);
+    }
+
+    if (digits.length === 10) {
+      terms.push(`${digits.slice(0, 4)}-${digits.slice(4, 8)}-${digits.slice(8)}`);
+      terms.push(`${digits.slice(0, 5)}-${digits.slice(5, 8)}-${digits.slice(8)}`);
+      terms.push(`${digits.slice(0, 5)}-${digits.slice(5, 9)}-${digits.slice(9)}`);
+    }
+
+    return Array.from(new Set(terms));
   }
 }

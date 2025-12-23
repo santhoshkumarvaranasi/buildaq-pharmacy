@@ -18,9 +18,10 @@ export interface Medicine {
 })
 export class MedicineService {
   private medicines = new BehaviorSubject<Medicine[]>([]);
+  private readonly storageKey = 'buildaq.pharmacy.medicineCatalog';
 
   // Sample medicine database
-  private medicineCatalog: Medicine[] = [
+  private readonly seedCatalog: Medicine[] = [
     {
       id: '1',
       name: 'Aspirin',
@@ -95,8 +96,10 @@ export class MedicineService {
     }
   ];
 
+  private medicineCatalog: Medicine[] = [];
+
   constructor() {
-    this.medicines.next(this.medicineCatalog);
+    this.loadFromStorage();
   }
 
   getMedicines(): Medicine[] {
@@ -131,6 +134,7 @@ export class MedicineService {
   addMedicine(medicine: Medicine): void {
     this.medicineCatalog.push(medicine);
     this.medicines.next([...this.medicineCatalog]);
+    this.saveToStorage();
   }
 
   updateMedicine(id: string, updates: Partial<Medicine>): void {
@@ -138,12 +142,14 @@ export class MedicineService {
     if (index !== -1) {
       this.medicineCatalog[index] = { ...this.medicineCatalog[index], ...updates };
       this.medicines.next([...this.medicineCatalog]);
+      this.saveToStorage();
     }
   }
 
   deleteMedicine(id: string): void {
     this.medicineCatalog = this.medicineCatalog.filter(m => m.id !== id);
     this.medicines.next([...this.medicineCatalog]);
+    this.saveToStorage();
   }
 
   getCategories(): string[] {
@@ -153,5 +159,94 @@ export class MedicineService {
         .filter((c): c is string => !!c)
     );
     return Array.from(categories).sort();
+  }
+
+  importMedicines(medicines: Medicine[]): { added: number; updated: number; skipped: number; total: number } {
+    let added = 0;
+    let updated = 0;
+    let skipped = 0;
+
+    medicines.forEach((incoming) => {
+      if (!incoming?.name) {
+        skipped++;
+        return;
+      }
+
+      const incomingBarcode = (incoming.barcode || '').trim();
+      const incomingName = incoming.name.trim().toLowerCase();
+
+      const existing = this.medicineCatalog.find(m => {
+        if (incomingBarcode && m.barcode) {
+          return m.barcode.trim() === incomingBarcode;
+        }
+        return m.name.trim().toLowerCase() === incomingName;
+      });
+
+      if (existing) {
+        this.mergeMedicine(existing, incoming);
+        updated++;
+        return;
+      }
+
+      const newMedicine: Medicine = {
+        id: incoming.id || (this.medicineCatalog.length + 1).toString(),
+        name: incoming.name,
+        barcode: incomingBarcode,
+        genericName: incoming.genericName || '',
+        manufacturer: incoming.manufacturer || '',
+        strength: incoming.strength || '',
+        quantity: incoming.quantity ?? 0,
+        expiryDate: incoming.expiryDate,
+        category: incoming.category || ''
+      };
+
+      this.medicineCatalog.push(newMedicine);
+      added++;
+    });
+
+    this.medicines.next([...this.medicineCatalog]);
+    this.saveToStorage();
+
+    return { added, updated, skipped, total: medicines.length };
+  }
+
+  private mergeMedicine(target: Medicine, incoming: Medicine): void {
+    target.name = incoming.name || target.name;
+    target.barcode = (incoming.barcode || target.barcode || '').trim();
+    target.genericName = incoming.genericName || target.genericName;
+    target.manufacturer = incoming.manufacturer || target.manufacturer;
+    target.strength = incoming.strength || target.strength;
+    target.quantity = incoming.quantity ?? target.quantity;
+    target.expiryDate = incoming.expiryDate || target.expiryDate;
+    target.category = incoming.category || target.category;
+  }
+
+  private loadFromStorage(): void {
+    try {
+      const raw = window.localStorage.getItem(this.storageKey);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          this.medicineCatalog = parsed;
+        }
+      }
+    } catch {
+      // Ignore storage errors and fall back to seed data
+    }
+
+    if (!this.medicineCatalog.length) {
+      this.medicineCatalog = [...this.seedCatalog];
+    }
+
+    this.medicines.next([...this.medicineCatalog]);
+    this.saveToStorage();
+  }
+
+  private saveToStorage(): void {
+    try {
+      window.localStorage.setItem(this.storageKey, JSON.stringify(this.medicineCatalog));
+    } catch {
+      // Ignore storage errors (e.g., storage disabled)
+    }
   }
 }

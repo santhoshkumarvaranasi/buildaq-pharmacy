@@ -39,6 +39,10 @@ export class OcrService {
         
         // Create a worker for this extraction
         const worker = await Tesseract.createWorker('eng');
+        await worker.setParameters({
+          tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-+/. ',
+          preserve_interword_spaces: '1'
+        });
         const { data: { text } } = await worker.recognize(imageUrl);
         
         console.log('✅ OCR extraction complete');
@@ -88,14 +92,21 @@ export class OcrService {
       genericName: ''
     };
 
-    // Try to extract medicine name (usually first or second non-empty line)
-    for (let i = 0; i < Math.min(3, lines.length); i++) {
-      const line = lines[i].trim();
-      // Skip very short lines and lines that look like numbers
-      if (line.length > 3 && !/^[\d\s]+$/.test(line)) {
-        details.name = line.substring(0, 50); // Limit name length
-        break;
-      }
+    const cleanedLines = lines
+      .map(line => line.replace(/\s+/g, ' ').trim())
+      .filter(line => line.length > 3 && !/^[\d\s]+$/.test(line));
+
+    const scoredLines = cleanedLines.map(line => {
+      const letters = (line.match(/[A-Za-z]/g) || []).length;
+      const digits = (line.match(/[0-9]/g) || []).length;
+      const score = letters * 2 + digits - Math.abs(line.length - 20);
+      return { line, score };
+    });
+
+    scoredLines.sort((a, b) => b.score - a.score);
+
+    if (scoredLines.length > 0) {
+      details.name = scoredLines[0].line.substring(0, 50);
     }
 
     // Look for strength patterns (e.g., "500mg", "10mg", "2%")

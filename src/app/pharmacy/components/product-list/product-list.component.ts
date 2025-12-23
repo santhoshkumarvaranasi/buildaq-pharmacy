@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy, NgZone, ChangeDetectorRef } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, ElementRef, OnDestroy, NgZone, ChangeDetectorRef } from '@angular/core';
 import { ImageDetectionService, DetectionResult } from '../../services/image-detection.service';
 import { AdvancedDetectionService } from '../../services/advanced-detection.service';
 import { BarcodeScannerService } from '../../services/barcode-scanner.service';
 import { OcrService } from '../../services/ocr.service';
+import { LlmExtractionService } from '../../services/llm-extraction.service';
 import { MedicineService, Medicine } from '../../services/medicine.service';
+import { PageEvent } from '@angular/material/paginator';
 
 interface Product {
   id: number;
@@ -21,6 +23,10 @@ interface Product {
 })
 export class ProductListComponent implements OnInit, OnDestroy {
   products: Product[] = [];
+  pageIndex = 0;
+  pageSize = 10;
+  pageSizeOptions = [5, 10, 25, 50];
+  searchTerm = '';
   @ViewChild('imageInput') imageInput!: ElementRef<HTMLInputElement>;
   @ViewChild('cameraVideo') cameraVideoRef!: ElementRef<HTMLVideoElement>;
   @ViewChild('captureCanvas') captureCanvasRef!: ElementRef<HTMLCanvasElement>;
@@ -61,6 +67,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   @ViewChild('barcodeScanner') barcodeScannerRef!: ElementRef<HTMLVideoElement>;
   showBarcodeScanner = false;
   isBarcodeScanning = false;
+  isBarcodeLookup = false;
   scannedBarcode: string | null = null;
   scannedMedicine: any = null;
   manualBarcodeInput = '';
@@ -68,6 +75,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
   barcodeScannerError: string | null = null;
   cameraPermissionDenied = false;
   cameraInitialized = false;
+
+  // Local catalog import
+  catalogImportError: string | null = null;
+  catalogImportSummary: string | null = null;
   
   // Manual medicine entry (for adding medicines not in catalog)
   showManualMedicineForm = false;
@@ -85,6 +96,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     private advancedDetectionService: AdvancedDetectionService,
     private barcodeScannerService: BarcodeScannerService,
     private ocrService: OcrService,
+    private llmExtractionService: LlmExtractionService,
     private medicineService: MedicineService,
     private ngZone: NgZone,
     private cdr: ChangeDetectorRef
@@ -104,14 +116,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
       try {
         if (typeof (window as any).Tesseract !== 'undefined') {
           this.ocrAvailable = true;
-          console.log('✅ OCR (Tesseract.js) is available');
+          console.log('âœ… OCR (Tesseract.js) is available');
         } else {
           this.ocrAvailable = false;
-          console.warn('⚠️ OCR (Tesseract.js) not available');
+          console.warn('âš ï¸ OCR (Tesseract.js) not available');
         }
       } catch (error) {
         this.ocrAvailable = false;
-        console.error('❌ Error checking OCR availability:', error);
+        console.error('âŒ Error checking OCR availability:', error);
       }
     }, 2000); // Wait 2 seconds for Tesseract to load
   }
@@ -179,16 +191,16 @@ export class ProductListComponent implements OnInit, OnDestroy {
     const checkInterval = setInterval(() => {
       const logs = this.consoleLogs.join('\n');
       
-      if (logs.includes('✓ COCO-SSD model loaded successfully')) {
-        this.modelStatus = '✓ AI Detection Ready';
+      if (logs.includes('âœ“ COCO-SSD model loaded successfully')) {
+        this.modelStatus = 'âœ“ AI Detection Ready';
         this.modelReady = true;
         clearInterval(checkInterval);
       } else if (logs.includes('using fallback detection')) {
-        this.modelStatus = '⚠ Fallback Mode (Image Analysis)';
+        this.modelStatus = 'âš  Fallback Mode (Image Analysis)';
         this.modelReady = true; // Still functional with fallback
         clearInterval(checkInterval);
       } else if (logs.includes('Failed to load COCO-SSD model')) {
-        this.modelStatus = '⚠ Using Fallback Detection';
+        this.modelStatus = 'âš  Using Fallback Detection';
         this.modelReady = true;
         clearInterval(checkInterval);
       }
@@ -231,6 +243,31 @@ export class ProductListComponent implements OnInit, OnDestroy {
       }
     ];
   }
+
+  get filteredProducts(): Product[] {
+    const term = this.searchTerm.trim().toLowerCase();
+    if (!term) return this.products;
+    return this.products.filter(product => {
+      return (
+        product.name.toLowerCase().includes(term) ||
+        product.category.toLowerCase().includes(term)
+      );
+    });
+  }
+
+  get pagedProducts(): Product[] {
+    const start = this.pageIndex * this.pageSize;
+    return this.filteredProducts.slice(start, start + this.pageSize);
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+  }
+
+  onSearchChange(): void {
+    this.pageIndex = 0;
+  }
   
   onAddProduct(): void {
     this.toggleImageUpload();
@@ -267,7 +304,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.ocrExtractedMedicines = [];
     this.cdr.detectChanges(); // Force UI update
     
-    console.log('🔤 Starting OCR extraction from uploaded image...');
+    console.log('ðŸ”¤ Starting OCR extraction from uploaded image...');
     
     try {
       const result = await this.ocrService.extractMedicineDetails(this.uploadedImageUrl);
@@ -276,12 +313,35 @@ export class ProductListComponent implements OnInit, OnDestroy {
       
       if (result.success && result.rawText) {
         this.ocrExtractedText = result.rawText;
-        console.log('✅ Text extracted successfully:', this.ocrExtractedText.substring(0, 100));
+        console.log('âœ… Text extracted successfully:', this.ocrExtractedText.substring(0, 100));
+
+        try {
+          const llmDetails = await this.llmExtractionService.extractMedicineDetails(result.rawText);
+          if (llmDetails) {
+            result.medicineDetails = {
+              ...result.medicineDetails,
+              ...llmDetails
+            };
+
+          }
+        } catch (error) {
+          console.warn('LLM extraction failed:', error);
+        }
+
+        if (!result.medicineDetails?.name) {
+          const resolvedName = this.resolveMedicineFromText(result.rawText);
+          if (resolvedName) {
+            result.medicineDetails = {
+              ...result.medicineDetails,
+              name: resolvedName
+            };
+          }
+        }
         
         // If medicine details were extracted, offer to auto-fill the form
         if (result.medicineDetails && result.medicineDetails.name) {
           this.ocrExtractedMedicines = [result.medicineDetails];
-          console.log('📋 Extracted medicine details:', result.medicineDetails);
+          console.log('ðŸ“‹ Extracted medicine details:', result.medicineDetails);
           
           // Auto-fill the manual medicine form
           this.newMedicine = {
@@ -305,13 +365,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
             this.showManualMedicineForm = true;
           }
         } else {
-          console.log('⚠️ No medicine details extracted, showing raw text only');
+          console.log('âš ï¸ No medicine details extracted, showing raw text only');
         }
       } else {
-        console.warn('⚠️ OCR extraction unsuccessful:', result.error);
+        console.warn('âš ï¸ OCR extraction unsuccessful:', result.error);
       }
     } catch (error) {
-      console.error('❌ Error during OCR extraction:', error);
+      console.error('âŒ Error during OCR extraction:', error);
     } finally {
       this.isOcrProcessing = false;
       this.cdr.detectChanges(); // Force UI update
@@ -371,12 +431,19 @@ export class ProductListComponent implements OnInit, OnDestroy {
       }
       
       console.log('Detection complete:', this.detectedMedicines);
+      if (this.detectedMedicines && this.detectedMedicines.objects.length === 0) {
+        const ocrDetection = await this.buildDetectionFromOcr(imageUrl, loadedImg);
+        if (ocrDetection) {
+          console.log('OCR fallback detected medicine:', ocrDetection);
+          this.detectedMedicines = ocrDetection;
+        }
+      }
       
       // Check if detection returned any objects
       if (!this.detectedMedicines || !this.detectedMedicines.objects || this.detectedMedicines.objects.length === 0) {
         console.warn('No medicines detected in the image. Please try another image.');
         this.isDetecting = false;
-        alert('❌ No pharmacy items detected in this image.\n\nPlease try a different image that contains:\n• Medicine bottles\n• Medication boxes\n• Pill containers\n• Medicine labels/text');
+        alert('âŒ No pharmacy items detected in this image.\n\nPlease try a different image that contains:\nâ€¢ Medicine bottles\nâ€¢ Medication boxes\nâ€¢ Pill containers\nâ€¢ Medicine labels/text');
         return;
       }
       
@@ -392,10 +459,68 @@ export class ProductListComponent implements OnInit, OnDestroy {
       this.isDetecting = false;
     }
   }
+
+  private async buildDetectionFromOcr(imageUrl: string, image: HTMLImageElement): Promise<DetectionResult | null> {
+    try {
+      console.log('Attempting OCR fallback detection...');
+      const ocrResult = await this.ocrService.extractMedicineDetails(imageUrl);
+      const medicineName = this.resolveMedicineFromText(ocrResult?.rawText || '') ||
+        ocrResult?.medicineDetails?.name?.trim();
+
+      if (!ocrResult?.success || !medicineName) {
+        console.warn('OCR fallback did not find a medicine name');
+        return null;
+      }
+
+      return {
+        imageUrl,
+        objects: [
+          {
+            class: 'text',
+            score: 0.6,
+            bbox: [0, 0, image.width || 640, image.height || 480],
+            x: 0,
+            y: 0,
+            matchedMedicine: medicineName,
+            confidence: 0.6
+          }
+        ],
+        timestamp: new Date(),
+        imageWidth: image.width || 640,
+        imageHeight: image.height || 480
+      };
+    } catch (error) {
+      console.error('OCR fallback error:', error);
+      return null;
+    }
+  }
+
+  private resolveMedicineFromText(rawText: string): string | null {
+    if (!rawText) return null;
+    const text = rawText.toLowerCase();
+    const medicines = this.medicineService.getMedicines();
+
+    let bestMatch: string | null = null;
+    let bestLength = 0;
+
+    medicines.forEach(med => {
+      const name = med.name.toLowerCase();
+      const generic = med.genericName?.toLowerCase() || '';
+      if (name && text.includes(name) && name.length > bestLength) {
+        bestMatch = med.name;
+        bestLength = name.length;
+      } else if (generic && text.includes(generic) && generic.length > bestLength) {
+        bestMatch = med.name;
+        bestLength = generic.length;
+      }
+    });
+
+    return bestMatch;
+  }
   
   addDetectedMedicines(): void {
     if (!this.detectedMedicines) {
-      alert('❌ No medicines detected');
+      alert('âŒ No medicines detected');
       return;
     }
     
@@ -452,27 +577,30 @@ export class ProductListComponent implements OnInit, OnDestroy {
           quantity: 50
         };
         this.medicineService.addMedicine(medicine);
-        console.log('✅ Added new medicine to catalog:', medicineName);
+        console.log('âœ… Added new medicine to catalog:', medicineName);
       } else {
-        console.log('ℹ️ Medicine exists in catalog:', medicineName);
+        console.log('â„¹ï¸ Medicine exists in catalog:', medicineName);
       }
       
       // Add to products table
       const product = this.medicineToProduct(medicine);
       this.products.push(product);
       addedCount++;
-      console.log('✅ Added to products table:', medicineName);
+      console.log('âœ… Added to products table:', medicineName);
     });
     
     this.resetImageUpload();
+    if (this.pageIndex * this.pageSize >= this.products.length) {
+      this.pageIndex = 0;
+    }
     
     console.log('=== Summary ===');
     console.log('Total products added:', addedCount);
     
     if (addedCount > 0) {
-      alert(`✅ Successfully added ${addedCount} medicine(s)!\n\nNow showing ${this.products.length} total products.`);
+      alert(`âœ… Successfully added ${addedCount} medicine(s)!\n\nNow showing ${this.products.length} total products.`);
     } else {
-      alert('ℹ️ All selected medicines were already in your products list.');
+      alert('â„¹ï¸ All selected medicines were already in your products list.');
     }
   }
   
@@ -576,6 +704,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
           console.log('Image URL created, starting detection...');
           this.showCamera = false; // Hide camera after capture
           this.detectMedicinesFromImage();
+          this.extractTextFromImage();
         };
         reader.readAsDataURL(blob);
       } else {
@@ -601,11 +730,108 @@ export class ProductListComponent implements OnInit, OnDestroy {
   
   onDeleteProduct(id: number): void {
     this.products = this.products.filter(p => p.id !== id);
+    if (this.pageIndex * this.pageSize >= this.products.length) {
+      this.pageIndex = Math.max(0, Math.floor((this.products.length - 1) / this.pageSize));
+    }
   }
   
   // Medicine identification methods
   loadCatalogMedicines(): void {
     this.catalogMedicines = this.medicineService.getMedicines();
+  }
+
+  onCatalogFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    this.catalogImportError = null;
+    this.catalogImportSummary = null;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const raw = String(reader.result || '');
+      this.importCatalogJson(raw);
+      input.value = '';
+    };
+    reader.onerror = () => {
+      this.catalogImportError = 'Failed to read file.';
+    };
+    reader.readAsText(file);
+  }
+
+  private importCatalogJson(raw: string): void {
+    try {
+      const parsed = JSON.parse(raw);
+      const list = Array.isArray(parsed) ? parsed : parsed?.medicines;
+      if (!Array.isArray(list)) {
+        this.catalogImportError = 'Invalid JSON format. Expected an array or { medicines: [] }.';
+        return;
+      }
+
+      const medicines: Medicine[] = list.map((item: any) => ({
+        id: String(item.id || ''),
+        name: String(item.name || '').trim(),
+        barcode: String(item.barcode || '').trim(),
+        genericName: item.genericName ? String(item.genericName).trim() : '',
+        manufacturer: item.manufacturer ? String(item.manufacturer).trim() : '',
+        strength: item.strength ? String(item.strength).trim() : '',
+        category: item.category ? String(item.category).trim() : '',
+        quantity: typeof item.quantity === 'number' ? item.quantity : undefined
+      }));
+
+      const summary = this.medicineService.importMedicines(medicines);
+      this.loadCatalogMedicines();
+      this.catalogImportSummary = `Imported ${summary.total}. Added ${summary.added}, updated ${summary.updated}, skipped ${summary.skipped}.`;
+    } catch (error) {
+      this.catalogImportError = 'Invalid JSON. Please check the file format.';
+      console.warn('Catalog import failed:', error);
+    }
+  }
+
+  loadCatalogToProducts(): void {
+    const catalog = this.medicineService.getMedicines();
+    if (!catalog.length) {
+      this.catalogImportError = 'Catalog is empty. Import a JSON file first.';
+      return;
+    }
+
+    let added = 0;
+    let skipped = 0;
+    const existingNames = new Set(this.products.map(p => p.name.toLowerCase()));
+    let nextId = this.products.reduce((max, p) => Math.max(max, p.id), 0) + 1;
+
+    catalog.forEach(medicine => {
+      const name = (medicine.name || '').trim();
+      if (!name) {
+        skipped++;
+        return;
+      }
+      const key = name.toLowerCase();
+      if (existingNames.has(key)) {
+        skipped++;
+        return;
+      }
+
+      const idNum = Number(medicine.id);
+      const expiry = medicine.expiryDate ? new Date(medicine.expiryDate) : null;
+
+      this.products.push({
+        id: Number.isFinite(idNum) ? idNum : nextId++,
+        name,
+        category: medicine.category || 'Uncategorized',
+        price: 0,
+        quantity: medicine.quantity ?? 0,
+        expiryDate: expiry ? expiry.toISOString().slice(0, 10) : 'N/A'
+      });
+      existingNames.add(key);
+      added++;
+    });
+
+    this.catalogImportSummary = `Loaded catalog into products. Added ${added}, skipped ${skipped}.`;
+    if (this.pageIndex * this.pageSize >= this.products.length) {
+      this.pageIndex = 0;
+    }
   }
   
   editMedicineName(index: number): void {
@@ -678,7 +904,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
             } else {
               console.warn('Video element not found');
               this.isBarcodeScanning = false;
-              this.barcodeScannerError = '❌ Camera element not found. Please try again.';
+              this.barcodeScannerError = 'âŒ Camera element not found. Please try again.';
               this.cdr.detectChanges();
             }
           } catch (error) {
@@ -689,11 +915,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
             // Check if it's a permission denied error
             if (errorMsg.includes('NotAllowedError') || errorMsg.includes('permission') || errorMsg.includes('denied')) {
               this.cameraPermissionDenied = true;
-              this.barcodeScannerError = '❌ Camera permission denied. Please allow camera access in browser settings.';
+              this.barcodeScannerError = 'âŒ Camera permission denied. Please allow camera access in browser settings.';
             } else if (errorMsg.includes('NotFoundError') || errorMsg.includes('device')) {
-              this.barcodeScannerError = '❌ No camera device found. Please use manual barcode input below.';
+              this.barcodeScannerError = 'âŒ No camera device found. Please use manual barcode input below.';
             } else {
-              this.barcodeScannerError = `❌ Camera error: ${errorMsg}. Use manual input below.`;
+              this.barcodeScannerError = `âŒ Camera error: ${errorMsg}. Use manual input below.`;
             }
             this.cdr.detectChanges();
           }
@@ -702,21 +928,31 @@ export class ProductListComponent implements OnInit, OnDestroy {
     });
   }
 
-  scanManualBarcode(): void {
+  async scanManualBarcode(): Promise<void> {
     if (!this.manualBarcodeInput.trim()) {
-      this.barcodeScannerError = '⚠️ Please enter a barcode number';
+      this.barcodeScannerError = 'Please enter a barcode number';
       return;
     }
 
     console.log('Manual barcode entered:', this.manualBarcodeInput);
     this.scannedBarcode = this.manualBarcodeInput;
     this.barcodeScannerError = null;
+    this.isBarcodeLookup = true;
+    this.scannedMedicine = null;
+    this.cdr.detectChanges();
 
     // Lookup medicine info from barcode
-    this.scannedMedicine = this.barcodeScannerService.lookupMedicine(this.scannedBarcode);
+    try {
+      this.scannedMedicine = await this.barcodeScannerService.lookupMedicine(this.scannedBarcode || '');
+    } catch (error) {
+      console.error('Barcode lookup failed:', error);
+      this.barcodeScannerError = 'Barcode lookup failed. Please try again or add manually.';
+    } finally {
+      this.isBarcodeLookup = false;
+    }
     
-    if (this.scannedMedicine.name.includes('Medicine (Barcode:')) {
-      this.barcodeScannerError = `⚠️ Barcode not found in database. Adding as new medicine.`;
+    if (this.scannedMedicine?.name?.includes('Medicine (Barcode:')) {
+      this.barcodeScannerError = 'Barcode not found in database. You can add it manually.';
     } else {
       this.barcodeScannerError = null;
     }
@@ -750,7 +986,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     const exists = medicineList.some(m => m.name.toLowerCase() === this.scannedMedicine.name.toLowerCase());
 
     if (exists) {
-      alert(`✅ "${this.scannedMedicine.name}" already exists in catalog`);
+      alert(`âœ… "${this.scannedMedicine.name}" already exists in catalog`);
     } else {
       // Add new medicine
       const newMedicine: Medicine = {
@@ -770,9 +1006,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
       // Add to products table
       const product = this.medicineToProduct(newMedicine);
       this.products.push(product);
+      if (this.pageIndex * this.pageSize >= this.products.length) {
+        this.pageIndex = 0;
+      }
 
       console.log('Added new medicine:', newMedicine);
-      alert(`✅ "${this.scannedMedicine.name}" added to catalog successfully!`);
+      alert(`âœ… "${this.scannedMedicine.name}" added to catalog successfully!`);
     }
 
     // Reset and close scanner
@@ -805,7 +1044,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   saveManualMedicine(): void {
     if (!this.newMedicine.name.trim()) {
-      alert('⚠️ Please enter medicine name');
+      alert('âš ï¸ Please enter medicine name');
       return;
     }
 
@@ -813,7 +1052,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     const exists = medicineList.some(m => m.name.toLowerCase() === this.newMedicine.name.toLowerCase());
 
     if (exists) {
-      alert(`✅ "${this.newMedicine.name}" already exists in catalog`);
+      alert(`âœ… "${this.newMedicine.name}" already exists in catalog`);
       this.showManualMedicineForm = false;
       return;
     }
@@ -836,9 +1075,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
     // Add to products table
     const product = this.medicineToProduct(medicine);
     this.products.push(product);
+    if (this.pageIndex * this.pageSize >= this.products.length) {
+      this.pageIndex = 0;
+    }
 
     console.log('Added new medicine manually:', medicine);
-    alert(`✅ "${medicine.name}" added to catalog successfully!`);
+    alert(`âœ… "${medicine.name}" added to catalog successfully!`);
 
     this.showManualMedicineForm = false;
   }
@@ -847,4 +1089,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.showManualMedicineForm = false;
   }
 }
+
+
+
+
+
+
 

@@ -6,6 +6,7 @@ import { OrderManagementComponent } from './components/order-management/order-ma
 import { VisualSpaceMapperComponent } from './components/visual-space-mapper/visual-space-mapper.component';
 import { MedicineDetectionComponent } from './components/medicine-detection/medicine-detection.component';
 import { ShelfManagementComponent } from './components/shelf-management/shelf-management.component';
+import { ThreeEditorComponent } from './components/three-editor/three-editor.component';
 
 const routes: Routes = [
   {
@@ -15,6 +16,7 @@ const routes: Routes = [
       { path: 'products', component: ProductListComponent },
       { path: 'orders', component: OrderManagementComponent },
       { path: 'visual-mapper', component: VisualSpaceMapperComponent },
+      { path: 'visual-editor', component: ThreeEditorComponent },
       { path: 'medicine-detection', component: MedicineDetectionComponent },
       { path: 'shelf-management', component: ShelfManagementComponent },
       { path: '', redirectTo: 'visual-mapper', pathMatch: 'full' }

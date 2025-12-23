@@ -12,6 +12,15 @@ export class ShelfManagementComponent implements OnInit {
   selectedSpace: VisualSpace | null = null;
   selectedShelf: Shelf | null = null;
   medicines: MedicineLocation[] = [];
+  manualMedicine = {
+    name: '',
+    barcode: '',
+    x: 0,
+    y: 0,
+    width: 50,
+    height: 50,
+    confidence: 0.9
+  };
 
   displayedMedicineColumns: string[] = ['name', 'position', 'confidence', 'actions'];
 
@@ -65,6 +74,45 @@ export class ShelfManagementComponent implements OnInit {
     }
   }
 
+  addManualMedicine(): void {
+    if (!this.selectedShelf) {
+      this.snackBar.open('Please select a shelf first', 'Close', { duration: 3000 });
+      return;
+    }
+
+    const name = this.manualMedicine.name.trim();
+    if (!name) {
+      this.snackBar.open('Medicine name is required', 'Close', { duration: 3000 });
+      return;
+    }
+
+    const medicine: MedicineLocation = {
+      id: this.generateId(),
+      name,
+      barcode: this.manualMedicine.barcode.trim() || undefined,
+      x: Number(this.manualMedicine.x) || 0,
+      y: Number(this.manualMedicine.y) || 0,
+      width: Number(this.manualMedicine.width) || 50,
+      height: Number(this.manualMedicine.height) || 50,
+      confidence: Number(this.manualMedicine.confidence) || 0.9,
+      shelfId: this.selectedShelf.id,
+      detectionTime: new Date()
+    };
+
+    this.shelfMappingService.addMedicineToShelf(this.selectedShelf.id, medicine);
+    this.medicines = this.shelfMappingService.getMedicinesByShelf(this.selectedShelf.id);
+    this.manualMedicine = {
+      name: '',
+      barcode: '',
+      x: 0,
+      y: 0,
+      width: 50,
+      height: 50,
+      confidence: 0.9
+    };
+    this.snackBar.open('Medicine added to shelf', 'Close', { duration: 3000 });
+  }
+
   exportShelfData(): void {
     if (!this.selectedShelf) {
       this.snackBar.open('Please select a shelf', 'Close', { duration: 3000 });
@@ -102,5 +150,9 @@ export class ShelfManagementComponent implements OnInit {
     if (this.medicines.length === 0) return 0;
     const sum = this.medicines.reduce((acc, m) => acc + m.confidence, 0);
     return sum / this.medicines.length;
+  }
+
+  private generateId(): string {
+    return '_' + Math.random().toString(36).substr(2, 9);
   }
 }
