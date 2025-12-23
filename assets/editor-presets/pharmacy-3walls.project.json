@@ -1,0 +1,3021 @@
+{
+  "metadata": {
+    "type": "App"
+  },
+  "project": {
+    "shadows": true,
+    "vr": false
+  },
+  "camera": {
+    "metadata": {
+      "version": 4.5,
+      "type": "Object",
+      "generator": "Object3D.toJSON"
+    },
+    "object": {
+      "uuid": "9B2F1A30-2C13-4E3C-8B5A-20A07A64C1A0",
+      "type": "PerspectiveCamera",
+      "name": "Camera",
+      "layers": 1,
+      "matrix": [
+        0.923,
+        0,
+        -0.385,
+        0,
+        -0.152,
+        0.917,
+        -0.369,
+        0,
+        0.353,
+        0.398,
+        0.846,
+        0,
+        7.5,
+        5.5,
+        11,
+        1
+      ],
+      "fov": 50,
+      "zoom": 1,
+      "near": 0.1,
+      "far": 1000,
+      "focus": 10,
+      "aspect": 1.6,
+      "filmGauge": 35,
+      "filmOffset": 0
+    }
+  },
+  "scene": {
+    "metadata": {
+      "version": 4.5,
+      "type": "Object",
+      "generator": "Object3D.toJSON"
+    },
+    "geometries": [
+      {
+        "uuid": "FLOOR-PLANE-0001",
+        "type": "PlaneGeometry",
+        "width": 10,
+        "height": 8,
+        "widthSegments": 1,
+        "heightSegments": 1
+      },
+      {
+        "uuid": "WALL-BOX-0001",
+        "type": "BoxGeometry",
+        "width": 10,
+        "height": 3,
+        "depth": 0.1,
+        "widthSegments": 1,
+        "heightSegments": 1,
+        "depthSegments": 1
+      },
+      {
+        "uuid": "SHELF-LONG-0001",
+        "type": "BoxGeometry",
+        "width": 9.2,
+        "height": 2,
+        "depth": 0.6,
+        "widthSegments": 1,
+        "heightSegments": 1,
+        "depthSegments": 1
+      },
+      {
+        "uuid": "SHELF-SIDE-0001",
+        "type": "BoxGeometry",
+        "width": 7.2,
+        "height": 2,
+        "depth": 0.6,
+        "widthSegments": 1,
+        "heightSegments": 1,
+        "depthSegments": 1
+      },
+      {
+        "uuid": "DESK-BOX-0001",
+        "type": "BoxGeometry",
+        "width": 1.4,
+        "height": 0.75,
+        "depth": 0.7,
+        "widthSegments": 1,
+        "heightSegments": 1,
+        "depthSegments": 1
+      },
+      {
+        "uuid": "CHAIR-BOX-0001",
+        "type": "BoxGeometry",
+        "width": 0.6,
+        "height": 0.9,
+        "depth": 0.6,
+        "widthSegments": 1,
+        "heightSegments": 1,
+        "depthSegments": 1
+      }
+    ],
+    "materials": [
+      {
+        "uuid": "MAT-WALL-0001",
+        "type": "MeshStandardMaterial",
+        "color": 15395570,
+        "roughness": 0.85,
+        "metalness": 0.02
+      },
+      {
+        "uuid": "MAT-FLOOR-0001",
+        "type": "MeshStandardMaterial",
+        "color": 13819103,
+        "roughness": 0.9,
+        "metalness": 0.05
+      },
+      {
+        "uuid": "MAT-GLASS-0001",
+        "type": "MeshPhysicalMaterial",
+        "color": 16777215,
+        "roughness": 0.05,
+        "metalness": 0,
+        "transparent": true,
+        "opacity": 0.35,
+        "transmission": 0.95,
+        "ior": 1.45,
+        "thickness": 0.05
+      },
+      {
+        "uuid": "MAT-DESK-0001",
+        "type": "MeshStandardMaterial",
+        "color": 10461087,
+        "roughness": 0.6,
+        "metalness": 0.1
+      },
+      {
+        "uuid": "MAT-CHAIR-0001",
+        "type": "MeshStandardMaterial",
+        "color": 4144959,
+        "roughness": 0.7,
+        "metalness": 0.2
+      }
+    ],
+    "object": {
+      "uuid": "SCENE-ROOT-0001",
+      "type": "Scene",
+      "name": "Pharmacy Room",
+      "layers": 1,
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "userData": {
+        "buildaqBoxes": [
+          {
+            "name": "Paracetamol 500mg",
+            "category": "Analgesics",
+            "shelf": "Glass Shelf Back",
+            "x": 10,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A1"
+          },
+          {
+            "name": "Ibuprofen 200mg",
+            "category": "Pain Relief",
+            "shelf": "Glass Shelf Back",
+            "x": 80,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A2"
+          },
+          {
+            "name": "Azithromycin 500mg",
+            "category": "Antibiotics",
+            "shelf": "Glass Shelf Back",
+            "x": 150,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A3"
+          },
+          {
+            "name": "Amoxicillin 500mg",
+            "category": "Antibiotics",
+            "shelf": "Glass Shelf Back",
+            "x": 220,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A4"
+          },
+          {
+            "name": "Pantoprazole 40mg",
+            "category": "Gastro",
+            "shelf": "Glass Shelf Back",
+            "x": 290,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A5"
+          },
+          {
+            "name": "Omeprazole 20mg",
+            "category": "Gastro",
+            "shelf": "Glass Shelf Back",
+            "x": 360,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A6"
+          },
+          {
+            "name": "Cetirizine 10mg",
+            "category": "Antihistamines",
+            "shelf": "Glass Shelf Back",
+            "x": 430,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A7"
+          },
+          {
+            "name": "Levocetirizine 5mg",
+            "category": "Antihistamines",
+            "shelf": "Glass Shelf Back",
+            "x": 500,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A8"
+          },
+          {
+            "name": "Dextromethorphan Syrup",
+            "category": "Cough & Cold",
+            "shelf": "Glass Shelf Back",
+            "x": 570,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A9"
+          },
+          {
+            "name": "Vitamin C 500",
+            "category": "Vitamins",
+            "shelf": "Glass Shelf Back",
+            "x": 640,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A10"
+          },
+          {
+            "name": "Multivitamins",
+            "category": "Supplements",
+            "shelf": "Glass Shelf Back",
+            "x": 710,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A11"
+          },
+          {
+            "name": "ORS Sachets",
+            "category": "Rehydration",
+            "shelf": "Glass Shelf Back",
+            "x": 780,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "A13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "A14"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B1"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B2"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B3"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B4"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B5"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B6"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B7"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B8"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B9"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B10"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B11"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B14"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C1"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C2"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C3"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C4"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C5"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C6"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C7"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C8"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C9"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C10"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C11"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C14"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D1"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D2"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D3"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D4"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D5"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D6"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D7"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D8"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D9"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D10"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D11"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D14"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E1"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E2"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E3"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E4"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E5"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E6"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E7"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E8"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E9"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E10"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E11"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E14"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F1"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F2"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F3"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F4"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F5"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F6"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F7"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F8"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F9"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F10"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F11"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Back",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F14"
+          },
+          {
+            "name": "Metformin 500mg",
+            "category": "Diabetes Care",
+            "shelf": "Glass Shelf Left",
+            "x": 10,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A1"
+          },
+          {
+            "name": "Glibenclamide 5mg",
+            "category": "Diabetes Care",
+            "shelf": "Glass Shelf Left",
+            "x": 65,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A2"
+          },
+          {
+            "name": "Amlodipine 5mg",
+            "category": "Hypertension",
+            "shelf": "Glass Shelf Left",
+            "x": 120,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A3"
+          },
+          {
+            "name": "Losartan 50mg",
+            "category": "Hypertension",
+            "shelf": "Glass Shelf Left",
+            "x": 175,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A4"
+          },
+          {
+            "name": "Atorvastatin 10mg",
+            "category": "Cardiac",
+            "shelf": "Glass Shelf Left",
+            "x": 230,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A5"
+          },
+          {
+            "name": "Aspirin 75mg",
+            "category": "Cardiac",
+            "shelf": "Glass Shelf Left",
+            "x": 285,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A6"
+          },
+          {
+            "name": "Salbutamol Inhaler",
+            "category": "Respiratory",
+            "shelf": "Glass Shelf Left",
+            "x": 340,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A7"
+          },
+          {
+            "name": "Budesonide Inhaler",
+            "category": "Respiratory",
+            "shelf": "Glass Shelf Left",
+            "x": 395,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A8"
+          },
+          {
+            "name": "Clotrimazole Cream",
+            "category": "Dermatology",
+            "shelf": "Glass Shelf Left",
+            "x": 450,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A9"
+          },
+          {
+            "name": "Mupirocin Ointment",
+            "category": "Dermatology",
+            "shelf": "Glass Shelf Left",
+            "x": 505,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A10"
+          },
+          {
+            "name": "Antiseptic Solution",
+            "category": "Antiseptic",
+            "shelf": "Glass Shelf Left",
+            "x": 560,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A11"
+          },
+          {
+            "name": "Wound Dressing Pack",
+            "category": "Wound Care",
+            "shelf": "Glass Shelf Left",
+            "x": 615,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "A13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "A14"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B1"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B2"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B3"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B4"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B5"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B6"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B7"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B8"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B9"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B10"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B11"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B14"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C1"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C2"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C3"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C4"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C5"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C6"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C7"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C8"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C9"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C10"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C11"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C14"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D1"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D2"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D3"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D4"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D5"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D6"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D7"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D8"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D9"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D10"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D11"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D14"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E1"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E2"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E3"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E4"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E5"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E6"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E7"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E8"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E9"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E10"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E11"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E14"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F1"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F2"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F3"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F4"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F5"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F6"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F7"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F8"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F9"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F10"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F11"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Left",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F14"
+          },
+          {
+            "name": "Baby Diapers",
+            "category": "Baby Care",
+            "shelf": "Glass Shelf Right",
+            "x": 10,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A1"
+          },
+          {
+            "name": "Baby Lotion",
+            "category": "Baby Care",
+            "shelf": "Glass Shelf Right",
+            "x": 65,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A2"
+          },
+          {
+            "name": "Pregnancy Test",
+            "category": "Women's Health",
+            "shelf": "Glass Shelf Right",
+            "x": 120,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A3"
+          },
+          {
+            "name": "Sanitary Pads",
+            "category": "Women's Health",
+            "shelf": "Glass Shelf Right",
+            "x": 175,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A4"
+          },
+          {
+            "name": "Eye Drops",
+            "category": "Ophthalmic",
+            "shelf": "Glass Shelf Right",
+            "x": 230,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A5"
+          },
+          {
+            "name": "Ear Drops",
+            "category": "ENT",
+            "shelf": "Glass Shelf Right",
+            "x": 285,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A6"
+          },
+          {
+            "name": "Dental Pain Gel",
+            "category": "Dental",
+            "shelf": "Glass Shelf Right",
+            "x": 340,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A7"
+          },
+          {
+            "name": "Oral Rehydration",
+            "category": "Nutrition",
+            "shelf": "Glass Shelf Right",
+            "x": 395,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A8"
+          },
+          {
+            "name": "Probiotic Capsules",
+            "category": "Probiotics",
+            "shelf": "Glass Shelf Right",
+            "x": 450,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A9"
+          },
+          {
+            "name": "Ayurvedic Tonic",
+            "category": "Ayurvedic",
+            "shelf": "Glass Shelf Right",
+            "x": 505,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A10"
+          },
+          {
+            "name": "Homeopathy Drops",
+            "category": "Homeopathy",
+            "shelf": "Glass Shelf Right",
+            "x": 560,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A11"
+          },
+          {
+            "name": "Syringes & Disposables",
+            "category": "Disposables",
+            "shelf": "Glass Shelf Right",
+            "x": 615,
+            "y": 5,
+            "width": 50,
+            "depth": 20,
+            "label": "A12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "A13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "A14"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B1"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B2"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B3"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B4"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B5"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B6"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B7"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B8"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B9"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B10"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B11"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "B14"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C1"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C2"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C3"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C4"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C5"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C6"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C7"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C8"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C9"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C10"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C11"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "C14"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D1"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D2"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D3"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D4"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D5"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D6"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D7"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D8"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D9"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D10"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D11"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "D14"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E1"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E2"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E3"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E4"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E5"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E6"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E7"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E8"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E9"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E10"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E11"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "E14"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F1"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F2"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F3"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F4"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F5"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F6"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F7"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F8"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F9"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F10"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F11"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F12"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F13"
+          },
+          {
+            "name": "Empty",
+            "category": "Empty",
+            "shelf": "Glass Shelf Right",
+            "x": 0,
+            "y": 0,
+            "width": 50,
+            "depth": 20,
+            "label": "F14"
+          }
+        ]
+      },
+      "children": [
+        {
+          "uuid": "AMBIENT-0001",
+          "type": "AmbientLight",
+          "name": "AmbientLight",
+          "layers": 1,
+          "matrix": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "color": 16777215,
+          "intensity": 0.7
+        },
+        {
+          "uuid": "DIRLIGHT-0001",
+          "type": "DirectionalLight",
+          "name": "DirectionalLight",
+          "layers": 1,
+          "matrix": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            5,
+            8,
+            5,
+            1
+          ],
+          "color": 16777215,
+          "intensity": 0.85
+        },
+        {
+          "uuid": "FLOOR-0001",
+          "type": "Mesh",
+          "name": "Floor",
+          "layers": 1,
+          "matrix": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "geometry": "FLOOR-PLANE-0001",
+          "material": "MAT-FLOOR-0001",
+          "userData": {
+            "buildaqIgnore": true
+          }
+        },
+        {
+          "uuid": "WALL-BACK-0001",
+          "type": "Mesh",
+          "name": "Wall Back",
+          "layers": 1,
+          "matrix": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1.5,
+            -3.95,
+            1
+          ],
+          "geometry": "WALL-BOX-0001",
+          "material": "MAT-WALL-0001",
+          "userData": {
+            "buildaqIgnore": true
+          }
+        },
+        {
+          "uuid": "WALL-LEFT-0001",
+          "type": "Mesh",
+          "name": "Wall Left",
+          "layers": 1,
+          "matrix": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            -1,
+            0,
+            0,
+            0,
+            -4.95,
+            1.5,
+            0,
+            1
+          ],
+          "geometry": "WALL-BOX-0001",
+          "material": "MAT-WALL-0001",
+          "userData": {
+            "buildaqIgnore": true
+          }
+        },
+        {
+          "uuid": "WALL-RIGHT-0001",
+          "type": "Mesh",
+          "name": "Wall Right",
+          "layers": 1,
+          "matrix": [
+            0,
+            0,
+            -1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            4.95,
+            1.5,
+            0,
+            1
+          ],
+          "geometry": "WALL-BOX-0001",
+          "material": "MAT-WALL-0001",
+          "userData": {
+            "buildaqIgnore": true
+          }
+        },
+        {
+          "uuid": "SHELF-BACK-LONG",
+          "type": "Mesh",
+          "name": "Glass Shelf Back",
+          "layers": 1,
+          "matrix": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            -3.25,
+            1
+          ],
+          "geometry": "SHELF-LONG-0001",
+          "material": "MAT-GLASS-0001",
+          "userData": {
+            "buildaqShelf": true
+          }
+        },
+        {
+          "uuid": "SHELF-LEFT-LONG",
+          "type": "Mesh",
+          "name": "Glass Shelf Left",
+          "layers": 1,
+          "matrix": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            -1,
+            0,
+            0,
+            0,
+            -4.35,
+            1,
+            0,
+            1
+          ],
+          "geometry": "SHELF-SIDE-0001",
+          "material": "MAT-GLASS-0001",
+          "userData": {
+            "buildaqShelf": true
+          }
+        },
+        {
+          "uuid": "SHELF-RIGHT-LONG",
+          "type": "Mesh",
+          "name": "Glass Shelf Right",
+          "layers": 1,
+          "matrix": [
+            0,
+            0,
+            -1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            4.35,
+            1,
+            0,
+            1
+          ],
+          "geometry": "SHELF-SIDE-0001",
+          "material": "MAT-GLASS-0001",
+          "userData": {
+            "buildaqShelf": true
+          }
+        },
+        {
+          "uuid": "DESK-0001",
+          "type": "Mesh",
+          "name": "Pharmacist Desk",
+          "layers": 1,
+          "matrix": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0.5,
+            0.375,
+            2.4,
+            1
+          ],
+          "geometry": "DESK-BOX-0001",
+          "material": "MAT-DESK-0001",
+          "userData": {
+            "buildaqFurniture": "desk"
+          }
+        },
+        {
+          "uuid": "CHAIR-0001",
+          "type": "Mesh",
+          "name": "Pharmacist Chair",
+          "layers": 1,
+          "matrix": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0.5,
+            0.45,
+            1.4,
+            1
+          ],
+          "geometry": "CHAIR-BOX-0001",
+          "material": "MAT-CHAIR-0001",
+          "userData": {
+            "buildaqFurniture": "chair"
+          }
+        }
+      ]
+    }
+  },
+  "scripts": {}
+}

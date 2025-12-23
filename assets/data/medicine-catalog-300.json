@@ -1,0 +1,2402 @@
+﻿[
+    {
+        "name":  "Paracetamol Tablet",
+        "genericName":  "Paracetamol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Paracetamol Capsule",
+        "genericName":  "Paracetamol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Paracetamol Syrup",
+        "genericName":  "Paracetamol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Ibuprofen Tablet",
+        "genericName":  "Ibuprofen",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Ibuprofen Capsule",
+        "genericName":  "Ibuprofen",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Ibuprofen Syrup",
+        "genericName":  "Ibuprofen",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Diclofenac Tablet",
+        "genericName":  "Diclofenac",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Diclofenac Capsule",
+        "genericName":  "Diclofenac",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Diclofenac Syrup",
+        "genericName":  "Diclofenac",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Aceclofenac Tablet",
+        "genericName":  "Aceclofenac",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Aceclofenac Capsule",
+        "genericName":  "Aceclofenac",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Aceclofenac Syrup",
+        "genericName":  "Aceclofenac",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Naproxen Tablet",
+        "genericName":  "Naproxen",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Naproxen Capsule",
+        "genericName":  "Naproxen",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Naproxen Syrup",
+        "genericName":  "Naproxen",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Aspirin Tablet",
+        "genericName":  "Aspirin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Aspirin Capsule",
+        "genericName":  "Aspirin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Aspirin Syrup",
+        "genericName":  "Aspirin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Etoricoxib Tablet",
+        "genericName":  "Etoricoxib",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Etoricoxib Capsule",
+        "genericName":  "Etoricoxib",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Etoricoxib Syrup",
+        "genericName":  "Etoricoxib",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Tramadol Tablet",
+        "genericName":  "Tramadol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Tramadol Capsule",
+        "genericName":  "Tramadol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Tramadol Syrup",
+        "genericName":  "Tramadol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Ketorolac Tablet",
+        "genericName":  "Ketorolac",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Ketorolac Capsule",
+        "genericName":  "Ketorolac",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Ketorolac Syrup",
+        "genericName":  "Ketorolac",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Piroxicam Tablet",
+        "genericName":  "Piroxicam",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Piroxicam Capsule",
+        "genericName":  "Piroxicam",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Piroxicam Syrup",
+        "genericName":  "Piroxicam",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Meloxicam Tablet",
+        "genericName":  "Meloxicam",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Meloxicam Capsule",
+        "genericName":  "Meloxicam",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Meloxicam Syrup",
+        "genericName":  "Meloxicam",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Mefenamic Acid Tablet",
+        "genericName":  "Mefenamic Acid",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Mefenamic Acid Capsule",
+        "genericName":  "Mefenamic Acid",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Mefenamic Acid Syrup",
+        "genericName":  "Mefenamic Acid",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Celecoxib Tablet",
+        "genericName":  "Celecoxib",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Celecoxib Capsule",
+        "genericName":  "Celecoxib",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Celecoxib Syrup",
+        "genericName":  "Celecoxib",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Pain Relief",
+        "quantity":  0
+    },
+    {
+        "name":  "Amoxicillin Tablet",
+        "genericName":  "Amoxicillin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Amoxicillin Capsule",
+        "genericName":  "Amoxicillin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Amoxicillin Syrup",
+        "genericName":  "Amoxicillin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Amoxicillin-Clavulanate Tablet",
+        "genericName":  "Amoxicillin-Clavulanate",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Amoxicillin-Clavulanate Capsule",
+        "genericName":  "Amoxicillin-Clavulanate",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Amoxicillin-Clavulanate Syrup",
+        "genericName":  "Amoxicillin-Clavulanate",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Azithromycin Tablet",
+        "genericName":  "Azithromycin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Azithromycin Capsule",
+        "genericName":  "Azithromycin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Azithromycin Syrup",
+        "genericName":  "Azithromycin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Cefixime Tablet",
+        "genericName":  "Cefixime",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Cefixime Capsule",
+        "genericName":  "Cefixime",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Cefixime Syrup",
+        "genericName":  "Cefixime",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Cefuroxime Tablet",
+        "genericName":  "Cefuroxime",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Cefuroxime Capsule",
+        "genericName":  "Cefuroxime",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Cefuroxime Syrup",
+        "genericName":  "Cefuroxime",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Cefpodoxime Tablet",
+        "genericName":  "Cefpodoxime",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Cefpodoxime Capsule",
+        "genericName":  "Cefpodoxime",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Cefpodoxime Syrup",
+        "genericName":  "Cefpodoxime",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Ceftriaxone Tablet",
+        "genericName":  "Ceftriaxone",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Ceftriaxone Capsule",
+        "genericName":  "Ceftriaxone",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Ceftriaxone Syrup",
+        "genericName":  "Ceftriaxone",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Cephalexin Tablet",
+        "genericName":  "Cephalexin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Cephalexin Capsule",
+        "genericName":  "Cephalexin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Cephalexin Syrup",
+        "genericName":  "Cephalexin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Doxycycline Tablet",
+        "genericName":  "Doxycycline",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Doxycycline Capsule",
+        "genericName":  "Doxycycline",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Doxycycline Syrup",
+        "genericName":  "Doxycycline",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Ciprofloxacin Tablet",
+        "genericName":  "Ciprofloxacin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Ciprofloxacin Capsule",
+        "genericName":  "Ciprofloxacin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Ciprofloxacin Syrup",
+        "genericName":  "Ciprofloxacin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Levofloxacin Tablet",
+        "genericName":  "Levofloxacin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Levofloxacin Capsule",
+        "genericName":  "Levofloxacin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Levofloxacin Syrup",
+        "genericName":  "Levofloxacin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Ofloxacin Tablet",
+        "genericName":  "Ofloxacin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Ofloxacin Capsule",
+        "genericName":  "Ofloxacin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Ofloxacin Syrup",
+        "genericName":  "Ofloxacin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Metronidazole Tablet",
+        "genericName":  "Metronidazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Metronidazole Capsule",
+        "genericName":  "Metronidazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Metronidazole Syrup",
+        "genericName":  "Metronidazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Tinidazole Tablet",
+        "genericName":  "Tinidazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Tinidazole Capsule",
+        "genericName":  "Tinidazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Tinidazole Syrup",
+        "genericName":  "Tinidazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Nitrofurantoin Tablet",
+        "genericName":  "Nitrofurantoin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Nitrofurantoin Capsule",
+        "genericName":  "Nitrofurantoin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Nitrofurantoin Syrup",
+        "genericName":  "Nitrofurantoin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Linezolid Tablet",
+        "genericName":  "Linezolid",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Linezolid Capsule",
+        "genericName":  "Linezolid",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Linezolid Syrup",
+        "genericName":  "Linezolid",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Clarithromycin Tablet",
+        "genericName":  "Clarithromycin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Clarithromycin Capsule",
+        "genericName":  "Clarithromycin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Clarithromycin Syrup",
+        "genericName":  "Clarithromycin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antibiotic",
+        "quantity":  0
+    },
+    {
+        "name":  "Cetirizine Tablet",
+        "genericName":  "Cetirizine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Allergy",
+        "quantity":  0
+    },
+    {
+        "name":  "Cetirizine Capsule",
+        "genericName":  "Cetirizine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Allergy",
+        "quantity":  0
+    },
+    {
+        "name":  "Cetirizine Syrup",
+        "genericName":  "Cetirizine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Allergy",
+        "quantity":  0
+    },
+    {
+        "name":  "Levocetirizine Tablet",
+        "genericName":  "Levocetirizine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Allergy",
+        "quantity":  0
+    },
+    {
+        "name":  "Levocetirizine Capsule",
+        "genericName":  "Levocetirizine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Allergy",
+        "quantity":  0
+    },
+    {
+        "name":  "Levocetirizine Syrup",
+        "genericName":  "Levocetirizine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Allergy",
+        "quantity":  0
+    },
+    {
+        "name":  "Loratadine Tablet",
+        "genericName":  "Loratadine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Allergy",
+        "quantity":  0
+    },
+    {
+        "name":  "Loratadine Capsule",
+        "genericName":  "Loratadine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Allergy",
+        "quantity":  0
+    },
+    {
+        "name":  "Loratadine Syrup",
+        "genericName":  "Loratadine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Allergy",
+        "quantity":  0
+    },
+    {
+        "name":  "Fexofenadine Tablet",
+        "genericName":  "Fexofenadine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Allergy",
+        "quantity":  0
+    },
+    {
+        "name":  "Fexofenadine Capsule",
+        "genericName":  "Fexofenadine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Allergy",
+        "quantity":  0
+    },
+    {
+        "name":  "Fexofenadine Syrup",
+        "genericName":  "Fexofenadine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Allergy",
+        "quantity":  0
+    },
+    {
+        "name":  "Montelukast Tablet",
+        "genericName":  "Montelukast",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Allergy",
+        "quantity":  0
+    },
+    {
+        "name":  "Montelukast Capsule",
+        "genericName":  "Montelukast",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Allergy",
+        "quantity":  0
+    },
+    {
+        "name":  "Montelukast Syrup",
+        "genericName":  "Montelukast",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Allergy",
+        "quantity":  0
+    },
+    {
+        "name":  "Omeprazole Tablet",
+        "genericName":  "Omeprazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Omeprazole Capsule",
+        "genericName":  "Omeprazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Omeprazole Syrup",
+        "genericName":  "Omeprazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Pantoprazole Tablet",
+        "genericName":  "Pantoprazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Pantoprazole Capsule",
+        "genericName":  "Pantoprazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Pantoprazole Syrup",
+        "genericName":  "Pantoprazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Rabeprazole Tablet",
+        "genericName":  "Rabeprazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Rabeprazole Capsule",
+        "genericName":  "Rabeprazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Rabeprazole Syrup",
+        "genericName":  "Rabeprazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Esomeprazole Tablet",
+        "genericName":  "Esomeprazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Esomeprazole Capsule",
+        "genericName":  "Esomeprazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Esomeprazole Syrup",
+        "genericName":  "Esomeprazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Famotidine Tablet",
+        "genericName":  "Famotidine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Famotidine Capsule",
+        "genericName":  "Famotidine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Famotidine Syrup",
+        "genericName":  "Famotidine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Domperidone Tablet",
+        "genericName":  "Domperidone",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Domperidone Capsule",
+        "genericName":  "Domperidone",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Domperidone Syrup",
+        "genericName":  "Domperidone",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Ondansetron Tablet",
+        "genericName":  "Ondansetron",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Ondansetron Capsule",
+        "genericName":  "Ondansetron",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Ondansetron Syrup",
+        "genericName":  "Ondansetron",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Metoclopramide Tablet",
+        "genericName":  "Metoclopramide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Metoclopramide Capsule",
+        "genericName":  "Metoclopramide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Metoclopramide Syrup",
+        "genericName":  "Metoclopramide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Dicyclomine Tablet",
+        "genericName":  "Dicyclomine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Dicyclomine Capsule",
+        "genericName":  "Dicyclomine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Dicyclomine Syrup",
+        "genericName":  "Dicyclomine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Hyoscine Butylbromide Tablet",
+        "genericName":  "Hyoscine Butylbromide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Hyoscine Butylbromide Capsule",
+        "genericName":  "Hyoscine Butylbromide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Hyoscine Butylbromide Syrup",
+        "genericName":  "Hyoscine Butylbromide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Loperamide Tablet",
+        "genericName":  "Loperamide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Loperamide Capsule",
+        "genericName":  "Loperamide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Loperamide Syrup",
+        "genericName":  "Loperamide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Lactulose Tablet",
+        "genericName":  "Lactulose",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Lactulose Capsule",
+        "genericName":  "Lactulose",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Lactulose Syrup",
+        "genericName":  "Lactulose",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Gastro",
+        "quantity":  0
+    },
+    {
+        "name":  "Salbutamol Tablet",
+        "genericName":  "Salbutamol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Salbutamol Capsule",
+        "genericName":  "Salbutamol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Salbutamol Syrup",
+        "genericName":  "Salbutamol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Budesonide Tablet",
+        "genericName":  "Budesonide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Budesonide Capsule",
+        "genericName":  "Budesonide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Budesonide Syrup",
+        "genericName":  "Budesonide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Formoterol Tablet",
+        "genericName":  "Formoterol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Formoterol Capsule",
+        "genericName":  "Formoterol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Formoterol Syrup",
+        "genericName":  "Formoterol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Tiotropium Tablet",
+        "genericName":  "Tiotropium",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Tiotropium Capsule",
+        "genericName":  "Tiotropium",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Tiotropium Syrup",
+        "genericName":  "Tiotropium",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Ipratropium Tablet",
+        "genericName":  "Ipratropium",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Ipratropium Capsule",
+        "genericName":  "Ipratropium",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Ipratropium Syrup",
+        "genericName":  "Ipratropium",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Ambroxol Tablet",
+        "genericName":  "Ambroxol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Ambroxol Capsule",
+        "genericName":  "Ambroxol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Ambroxol Syrup",
+        "genericName":  "Ambroxol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Guaifenesin Tablet",
+        "genericName":  "Guaifenesin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Guaifenesin Capsule",
+        "genericName":  "Guaifenesin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Guaifenesin Syrup",
+        "genericName":  "Guaifenesin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Respiratory",
+        "quantity":  0
+    },
+    {
+        "name":  "Metformin Tablet",
+        "genericName":  "Metformin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Metformin Capsule",
+        "genericName":  "Metformin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Metformin Syrup",
+        "genericName":  "Metformin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Glimepiride Tablet",
+        "genericName":  "Glimepiride",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Glimepiride Capsule",
+        "genericName":  "Glimepiride",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Glimepiride Syrup",
+        "genericName":  "Glimepiride",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Gliclazide Tablet",
+        "genericName":  "Gliclazide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Gliclazide Capsule",
+        "genericName":  "Gliclazide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Gliclazide Syrup",
+        "genericName":  "Gliclazide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Sitagliptin Tablet",
+        "genericName":  "Sitagliptin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Sitagliptin Capsule",
+        "genericName":  "Sitagliptin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Sitagliptin Syrup",
+        "genericName":  "Sitagliptin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Vildagliptin Tablet",
+        "genericName":  "Vildagliptin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Vildagliptin Capsule",
+        "genericName":  "Vildagliptin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Vildagliptin Syrup",
+        "genericName":  "Vildagliptin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Teneligliptin Tablet",
+        "genericName":  "Teneligliptin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Teneligliptin Capsule",
+        "genericName":  "Teneligliptin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Teneligliptin Syrup",
+        "genericName":  "Teneligliptin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Empagliflozin Tablet",
+        "genericName":  "Empagliflozin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Empagliflozin Capsule",
+        "genericName":  "Empagliflozin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Empagliflozin Syrup",
+        "genericName":  "Empagliflozin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Dapagliflozin Tablet",
+        "genericName":  "Dapagliflozin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Dapagliflozin Capsule",
+        "genericName":  "Dapagliflozin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Dapagliflozin Syrup",
+        "genericName":  "Dapagliflozin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Insulin Regular Tablet",
+        "genericName":  "Insulin Regular",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Insulin Regular Capsule",
+        "genericName":  "Insulin Regular",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Insulin Regular Syrup",
+        "genericName":  "Insulin Regular",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Insulin Glargine Tablet",
+        "genericName":  "Insulin Glargine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Insulin Glargine Capsule",
+        "genericName":  "Insulin Glargine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Insulin Glargine Syrup",
+        "genericName":  "Insulin Glargine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Diabetes",
+        "quantity":  0
+    },
+    {
+        "name":  "Amlodipine Tablet",
+        "genericName":  "Amlodipine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Amlodipine Capsule",
+        "genericName":  "Amlodipine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Amlodipine Syrup",
+        "genericName":  "Amlodipine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Telmisartan Tablet",
+        "genericName":  "Telmisartan",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Telmisartan Capsule",
+        "genericName":  "Telmisartan",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Telmisartan Syrup",
+        "genericName":  "Telmisartan",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Losartan Tablet",
+        "genericName":  "Losartan",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Losartan Capsule",
+        "genericName":  "Losartan",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Losartan Syrup",
+        "genericName":  "Losartan",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Olmesartan Tablet",
+        "genericName":  "Olmesartan",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Olmesartan Capsule",
+        "genericName":  "Olmesartan",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Olmesartan Syrup",
+        "genericName":  "Olmesartan",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Enalapril Tablet",
+        "genericName":  "Enalapril",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Enalapril Capsule",
+        "genericName":  "Enalapril",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Enalapril Syrup",
+        "genericName":  "Enalapril",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Lisinopril Tablet",
+        "genericName":  "Lisinopril",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Lisinopril Capsule",
+        "genericName":  "Lisinopril",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Lisinopril Syrup",
+        "genericName":  "Lisinopril",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Atenolol Tablet",
+        "genericName":  "Atenolol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Atenolol Capsule",
+        "genericName":  "Atenolol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Atenolol Syrup",
+        "genericName":  "Atenolol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Metoprolol Tablet",
+        "genericName":  "Metoprolol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Metoprolol Capsule",
+        "genericName":  "Metoprolol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Metoprolol Syrup",
+        "genericName":  "Metoprolol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Bisoprolol Tablet",
+        "genericName":  "Bisoprolol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Bisoprolol Capsule",
+        "genericName":  "Bisoprolol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Bisoprolol Syrup",
+        "genericName":  "Bisoprolol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Carvedilol Tablet",
+        "genericName":  "Carvedilol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Carvedilol Capsule",
+        "genericName":  "Carvedilol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Carvedilol Syrup",
+        "genericName":  "Carvedilol",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Hydrochlorothiazide Tablet",
+        "genericName":  "Hydrochlorothiazide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Hydrochlorothiazide Capsule",
+        "genericName":  "Hydrochlorothiazide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Hydrochlorothiazide Syrup",
+        "genericName":  "Hydrochlorothiazide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Furosemide Tablet",
+        "genericName":  "Furosemide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Furosemide Capsule",
+        "genericName":  "Furosemide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Furosemide Syrup",
+        "genericName":  "Furosemide",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Spironolactone Tablet",
+        "genericName":  "Spironolactone",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Spironolactone Capsule",
+        "genericName":  "Spironolactone",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Spironolactone Syrup",
+        "genericName":  "Spironolactone",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Atorvastatin Tablet",
+        "genericName":  "Atorvastatin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Atorvastatin Capsule",
+        "genericName":  "Atorvastatin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Atorvastatin Syrup",
+        "genericName":  "Atorvastatin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Rosuvastatin Tablet",
+        "genericName":  "Rosuvastatin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Rosuvastatin Capsule",
+        "genericName":  "Rosuvastatin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Rosuvastatin Syrup",
+        "genericName":  "Rosuvastatin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Clopidogrel Tablet",
+        "genericName":  "Clopidogrel",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Clopidogrel Capsule",
+        "genericName":  "Clopidogrel",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Clopidogrel Syrup",
+        "genericName":  "Clopidogrel",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Cardio",
+        "quantity":  0
+    },
+    {
+        "name":  "Amitriptyline Tablet",
+        "genericName":  "Amitriptyline",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Amitriptyline Capsule",
+        "genericName":  "Amitriptyline",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Amitriptyline Syrup",
+        "genericName":  "Amitriptyline",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Fluoxetine Tablet",
+        "genericName":  "Fluoxetine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Fluoxetine Capsule",
+        "genericName":  "Fluoxetine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Fluoxetine Syrup",
+        "genericName":  "Fluoxetine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Sertraline Tablet",
+        "genericName":  "Sertraline",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Sertraline Capsule",
+        "genericName":  "Sertraline",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Sertraline Syrup",
+        "genericName":  "Sertraline",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Escitalopram Tablet",
+        "genericName":  "Escitalopram",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Escitalopram Capsule",
+        "genericName":  "Escitalopram",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Escitalopram Syrup",
+        "genericName":  "Escitalopram",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Alprazolam Tablet",
+        "genericName":  "Alprazolam",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Alprazolam Capsule",
+        "genericName":  "Alprazolam",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Alprazolam Syrup",
+        "genericName":  "Alprazolam",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Diazepam Tablet",
+        "genericName":  "Diazepam",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Diazepam Capsule",
+        "genericName":  "Diazepam",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Diazepam Syrup",
+        "genericName":  "Diazepam",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Clonazepam Tablet",
+        "genericName":  "Clonazepam",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Clonazepam Capsule",
+        "genericName":  "Clonazepam",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Clonazepam Syrup",
+        "genericName":  "Clonazepam",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Gabapentin Tablet",
+        "genericName":  "Gabapentin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Gabapentin Capsule",
+        "genericName":  "Gabapentin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Gabapentin Syrup",
+        "genericName":  "Gabapentin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Pregabalin Tablet",
+        "genericName":  "Pregabalin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Pregabalin Capsule",
+        "genericName":  "Pregabalin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Pregabalin Syrup",
+        "genericName":  "Pregabalin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Neuro",
+        "quantity":  0
+    },
+    {
+        "name":  "Fluconazole Tablet",
+        "genericName":  "Fluconazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antifungal",
+        "quantity":  0
+    },
+    {
+        "name":  "Fluconazole Capsule",
+        "genericName":  "Fluconazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antifungal",
+        "quantity":  0
+    },
+    {
+        "name":  "Fluconazole Syrup",
+        "genericName":  "Fluconazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antifungal",
+        "quantity":  0
+    },
+    {
+        "name":  "Clotrimazole Tablet",
+        "genericName":  "Clotrimazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antifungal",
+        "quantity":  0
+    },
+    {
+        "name":  "Clotrimazole Capsule",
+        "genericName":  "Clotrimazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antifungal",
+        "quantity":  0
+    },
+    {
+        "name":  "Clotrimazole Syrup",
+        "genericName":  "Clotrimazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antifungal",
+        "quantity":  0
+    },
+    {
+        "name":  "Ketoconazole Tablet",
+        "genericName":  "Ketoconazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antifungal",
+        "quantity":  0
+    },
+    {
+        "name":  "Ketoconazole Capsule",
+        "genericName":  "Ketoconazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antifungal",
+        "quantity":  0
+    },
+    {
+        "name":  "Ketoconazole Syrup",
+        "genericName":  "Ketoconazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antifungal",
+        "quantity":  0
+    },
+    {
+        "name":  "Acyclovir Tablet",
+        "genericName":  "Acyclovir",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antiviral",
+        "quantity":  0
+    },
+    {
+        "name":  "Acyclovir Capsule",
+        "genericName":  "Acyclovir",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antiviral",
+        "quantity":  0
+    },
+    {
+        "name":  "Acyclovir Syrup",
+        "genericName":  "Acyclovir",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antiviral",
+        "quantity":  0
+    },
+    {
+        "name":  "Ivermectin Tablet",
+        "genericName":  "Ivermectin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antiparasitic",
+        "quantity":  0
+    },
+    {
+        "name":  "Ivermectin Capsule",
+        "genericName":  "Ivermectin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antiparasitic",
+        "quantity":  0
+    },
+    {
+        "name":  "Ivermectin Syrup",
+        "genericName":  "Ivermectin",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antiparasitic",
+        "quantity":  0
+    },
+    {
+        "name":  "Albendazole Tablet",
+        "genericName":  "Albendazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antiparasitic",
+        "quantity":  0
+    },
+    {
+        "name":  "Albendazole Capsule",
+        "genericName":  "Albendazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antiparasitic",
+        "quantity":  0
+    },
+    {
+        "name":  "Albendazole Syrup",
+        "genericName":  "Albendazole",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Antiparasitic",
+        "quantity":  0
+    },
+    {
+        "name":  "Levothyroxine Tablet",
+        "genericName":  "Levothyroxine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Endocrine",
+        "quantity":  0
+    },
+    {
+        "name":  "Levothyroxine Capsule",
+        "genericName":  "Levothyroxine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Endocrine",
+        "quantity":  0
+    },
+    {
+        "name":  "Levothyroxine Syrup",
+        "genericName":  "Levothyroxine",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Endocrine",
+        "quantity":  0
+    },
+    {
+        "name":  "Iron Folic Acid Tablet",
+        "genericName":  "Iron Folic Acid",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Supplements",
+        "quantity":  0
+    },
+    {
+        "name":  "Iron Folic Acid Capsule",
+        "genericName":  "Iron Folic Acid",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Supplements",
+        "quantity":  0
+    },
+    {
+        "name":  "Iron Folic Acid Syrup",
+        "genericName":  "Iron Folic Acid",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Supplements",
+        "quantity":  0
+    },
+    {
+        "name":  "Vitamin C Tablet",
+        "genericName":  "Vitamin C",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Supplements",
+        "quantity":  0
+    },
+    {
+        "name":  "Vitamin C Capsule",
+        "genericName":  "Vitamin C",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Supplements",
+        "quantity":  0
+    },
+    {
+        "name":  "Vitamin C Syrup",
+        "genericName":  "Vitamin C",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Supplements",
+        "quantity":  0
+    },
+    {
+        "name":  "Calcium Carbonate Tablet",
+        "genericName":  "Calcium Carbonate",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Supplements",
+        "quantity":  0
+    },
+    {
+        "name":  "Calcium Carbonate Capsule",
+        "genericName":  "Calcium Carbonate",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Supplements",
+        "quantity":  0
+    },
+    {
+        "name":  "Calcium Carbonate Syrup",
+        "genericName":  "Calcium Carbonate",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Supplements",
+        "quantity":  0
+    },
+    {
+        "name":  "Vitamin D3 Tablet",
+        "genericName":  "Vitamin D3",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Supplements",
+        "quantity":  0
+    },
+    {
+        "name":  "Vitamin D3 Capsule",
+        "genericName":  "Vitamin D3",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Supplements",
+        "quantity":  0
+    },
+    {
+        "name":  "Vitamin D3 Syrup",
+        "genericName":  "Vitamin D3",
+        "strength":  "",
+        "manufacturer":  "Generic",
+        "category":  "Supplements",
+        "quantity":  0
+    }
+]
