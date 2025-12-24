@@ -112,6 +112,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   
   ngOnInit(): void {
     this.loadProducts();
+    this.ensureExpiryDates();
     this.syncFromVisualMapper();
     this.checkModelStatus();
     this.loadCatalogMedicines();
@@ -274,6 +275,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
         quantity: Number(item.quantity ?? 0),
         expiryDate: String(item.expiryDate || 'N/A')
       })).filter(item => item.name);
+      this.ensureExpiryDates();
       return true;
     } catch (error) {
       console.warn('Failed to parse saved products', error);
@@ -353,6 +355,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       });
       this.products = nextProducts.sort((a, b) => a.name.localeCompare(b.name));
       this.pageIndex = 0;
+      this.ensureExpiryDates();
       this.saveProducts();
     } catch (error) {
       console.warn('Failed to sync from visual mapper', error);
@@ -409,6 +412,37 @@ export class ProductListComponent implements OnInit, OnDestroy {
     const now = new Date();
     const diffMs = parsed.getTime() - now.setHours(0, 0, 0, 0);
     return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  }
+
+  private ensureExpiryDates(): void {
+    let updated = false;
+    this.products = this.products.map(product => {
+      if (!product.expiryDate || product.expiryDate.toLowerCase() === 'n/a') {
+        updated = true;
+        return { ...product, expiryDate: this.generateExpiryDate(product.name) };
+      }
+      return product;
+    });
+    if (updated) {
+      this.saveProducts();
+    }
+  }
+
+  private generateExpiryDate(seed: string): string {
+    const base = new Date();
+    const days = 180 + (this.simpleHash(seed) % 540);
+    const expiry = new Date(base.getTime());
+    expiry.setDate(expiry.getDate() + days);
+    return expiry.toISOString().slice(0, 10);
+  }
+
+  private simpleHash(value: string): number {
+    let hash = 0;
+    for (let i = 0; i < value.length; i += 1) {
+      hash = (hash << 5) - hash + value.charCodeAt(i);
+      hash |= 0;
+    }
+    return Math.abs(hash);
   }
 
   get pagedProducts(): Product[] {
@@ -768,7 +802,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       category: medicine.category || 'Uncategorized',
       price: 0,
       quantity: medicine.quantity || 50,
-      expiryDate: '2026-12-31'
+      expiryDate: this.generateExpiryDate(medicine.name)
     };
   }
   
@@ -980,7 +1014,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
         category: medicine.category || 'Uncategorized',
         price: 0,
         quantity: medicine.quantity ?? 0,
-        expiryDate: expiry ? expiry.toISOString().slice(0, 10) : 'N/A'
+        expiryDate: expiry ? expiry.toISOString().slice(0, 10) : this.generateExpiryDate(name)
       });
       existingNames.add(key);
       added++;
@@ -990,6 +1024,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     if (this.pageIndex * this.pageSize >= this.products.length) {
       this.pageIndex = 0;
     }
+    this.ensureExpiryDates();
     this.saveProducts();
   }
   
@@ -1168,6 +1203,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       if (this.pageIndex * this.pageSize >= this.products.length) {
         this.pageIndex = 0;
       }
+      this.ensureExpiryDates();
       this.saveProducts();
 
       console.log('Added new medicine:', newMedicine);
@@ -1238,6 +1274,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     if (this.pageIndex * this.pageSize >= this.products.length) {
       this.pageIndex = 0;
     }
+    this.ensureExpiryDates();
     this.saveProducts();
 
     console.log('Added new medicine manually:', medicine);
