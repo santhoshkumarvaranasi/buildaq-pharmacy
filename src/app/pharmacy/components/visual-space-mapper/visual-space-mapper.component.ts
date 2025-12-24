@@ -137,6 +137,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     missing: 0,
     extra: 0
   };
+  auditReport = '';
 
   private animationFrameId: number | null = null;
   private storageKey = 'buildaq_pharmacy_layout_v2';
@@ -909,6 +910,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.auditInput = '';
     this.auditResults = [];
     this.auditSummary = { matched: 0, missing: 0, extra: 0 };
+    this.auditReport = '';
   }
 
   openBoxManager(id: string): void {
@@ -1089,6 +1091,49 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.computeAuditResults();
   }
 
+  copyAuditReport(): void {
+    if (!this.auditReport) {
+      this.generateAuditReport();
+    }
+    if (!this.auditReport) return;
+    navigator.clipboard?.writeText(this.auditReport).catch(() => {
+      // noop
+    });
+  }
+
+  downloadAuditReport(): void {
+    if (!this.auditReport) {
+      this.generateAuditReport();
+    }
+    if (!this.auditReport) return;
+    const blob = new Blob([this.auditReport], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `audit-report-${new Date().toISOString().slice(0, 10)}.txt`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+
+  private generateAuditReport(): void {
+    if (!this.auditResults.length) {
+      this.auditReport = '';
+      return;
+    }
+    const lines = [
+      `Audit Report: ${new Date().toLocaleString()}`,
+      `Target: ${this.auditTargetName}`,
+      `Matched: ${this.auditSummary.matched}, Missing: ${this.auditSummary.missing}, Extra: ${this.auditSummary.extra}`,
+      '',
+      'Name | Expected | Scanned | Diff | Status'
+    ];
+    this.auditResults.forEach(result => {
+      lines.push(
+        `${result.name} | ${result.expected} | ${result.scanned} | ${result.diff} | ${result.status}`
+      );
+    });
+    this.auditReport = lines.join('\n');
+  }
+
   private computeAuditResults(): void {
     const expectedMap = new Map<string, number>();
     this.auditTargetIds.forEach(id => {
@@ -1141,6 +1186,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
 
     this.auditResults = results.sort((a, b) => a.name.localeCompare(b.name));
     this.auditSummary = { matched, missing, extra };
+    this.generateAuditReport();
   }
 
   private getStockStatus(item: LayoutItem): 'low' | 'high' | null {

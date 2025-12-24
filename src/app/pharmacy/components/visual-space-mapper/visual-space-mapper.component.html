@@ -243,6 +243,10 @@
           <button type="button" (click)="clearAuditInput()">Clear</button>
           <button type="button" class="audit-run" (click)="runAudit()" [disabled]="auditTargetIds.length === 0">Compare</button>
         </div>
+        <div class="audit-actions">
+          <button type="button" (click)="copyAuditReport()" [disabled]="auditResults.length === 0">Copy Report</button>
+          <button type="button" (click)="downloadAuditReport()" [disabled]="auditResults.length === 0">Download Report</button>
+        </div>
         <div class="audit-summary" *ngIf="auditResults.length > 0">
           <span>Matched {{ auditSummary.matched }}</span>
           <span>Missing {{ auditSummary.missing }}</span>
