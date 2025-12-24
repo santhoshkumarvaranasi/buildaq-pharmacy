@@ -1,9 +1,15 @@
 <div class="order-management-container">
   <h2>Order Management</h2>
+  <div class="order-banner">
+    Build a customer order from your product list. All data is saved in local storage.
+  </div>
 
   <div class="order-layout">
     <section class="order-builder">
       <h3>Create Order</h3>
+      <div class="empty-state" *ngIf="products.length === 0">
+        No products available yet. Add products in the Products tab or sync from Visual Mapper.
+      </div>
       <div class="builder-fields">
         <label>
           Customer Name
@@ -60,6 +66,65 @@
           </button>
         </div>
       </div>
+
+      <div class="receipt-panel">
+        <h3>Receive Stock (Inbound)</h3>
+        <div class="builder-fields">
+          <label>
+            Supplier Name
+            <input type="text" [(ngModel)]="receiptDraft.supplierName" placeholder="Enter supplier name" />
+          </label>
+        </div>
+
+        <div class="product-picker">
+          <div class="picker-header">
+            <span>Products</span>
+            <input type="text" [(ngModel)]="inboundProductSearch" placeholder="Search products" />
+          </div>
+          <div class="product-list">
+            <div class="product-row" *ngFor="let product of filteredInboundProducts">
+              <div>
+                <div class="product-name">{{ product.name }}</div>
+                <div class="product-meta">{{ product.category }} · stock {{ product.quantity }}</div>
+              </div>
+              <button type="button" (click)="addToReceiptDraft(product)">Add</button>
+            </div>
+            <div class="empty-state" *ngIf="filteredInboundProducts.length === 0">
+              No products found.
+            </div>
+          </div>
+        </div>
+
+        <div class="draft-panel">
+          <div class="draft-header">
+            <span>Inbound Items</span>
+            <span class="draft-total">Units {{ receiptUnits }}</span>
+          </div>
+          <div class="draft-list">
+            <div class="draft-row" *ngFor="let item of receiptDraft.items">
+              <div class="draft-info">
+                <div class="draft-name">{{ item.name }}</div>
+                <div class="draft-meta">{{ item.category }}</div>
+              </div>
+              <div class="draft-qty">
+                <button type="button" (click)="updateReceiptQty(item, item.qty - 1)">-</button>
+                <input type="number" min="1" [ngModel]="item.qty" (ngModelChange)="updateReceiptQty(item, $event)" />
+                <button type="button" (click)="updateReceiptQty(item, item.qty + 1)">+</button>
+              </div>
+              <button type="button" class="remove-btn" (click)="removeReceiptItem(item)">Remove</button>
+            </div>
+            <div class="empty-state" *ngIf="receiptDraft.items.length === 0">
+              No inbound items yet.
+            </div>
+          </div>
+          <div class="draft-actions">
+            <button type="button" class="btn-secondary" (click)="clearReceiptDraft()">Clear</button>
+            <button type="button" class="btn-primary" (click)="receiveStock()" [disabled]="!receiptDraft.supplierName || receiptDraft.items.length === 0">
+              Receive Stock
+            </button>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="order-list">
@@ -96,6 +161,31 @@
       
       <div class="no-orders" *ngIf="orders.length === 0">
         <p>No orders found.</p>
+      </div>
+
+      <div class="receipts-section">
+        <h3>Recent Receipts</h3>
+        <table class="orders-table" *ngIf="receipts.length > 0">
+          <thead>
+            <tr>
+              <th>Receipt #</th>
+              <th>Supplier</th>
+              <th>Units</th>
+              <th>Received Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let receipt of receipts">
+              <td>{{ receipt.receiptNumber }}</td>
+              <td>{{ receipt.supplierName }}</td>
+              <td>{{ receipt.totalUnits }}</td>
+              <td>{{ receipt.receivedDate }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="no-orders" *ngIf="receipts.length === 0">
+          <p>No receipts found.</p>
+        </div>
       </div>
     </section>
   </div>

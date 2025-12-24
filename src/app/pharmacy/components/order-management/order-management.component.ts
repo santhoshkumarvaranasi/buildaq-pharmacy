@@ -19,6 +19,22 @@ interface OrderItem {
   qty: number;
 }
 
+interface Receipt {
+  id: number;
+  receiptNumber: string;
+  supplierName: string;
+  receivedDate: string;
+  items: ReceiptItem[];
+  totalUnits: number;
+}
+
+interface ReceiptItem {
+  productId: number;
+  name: string;
+  category: string;
+  qty: number;
+}
+
 interface Product {
   id: number;
   name: string;
@@ -35,14 +51,21 @@ interface Product {
 })
 export class OrderManagementComponent implements OnInit, OnDestroy {
   orders: Order[] = [];
+  receipts: Receipt[] = [];
   products: Product[] = [];
   productSearch = '';
+  inboundProductSearch = '';
   orderDraft = {
     customerName: '',
     items: [] as OrderItem[]
   };
+  receiptDraft = {
+    supplierName: '',
+    items: [] as ReceiptItem[]
+  };
 
   private ordersStorageKey = 'buildaq_pharmacy_orders';
+  private receiptsStorageKey = 'buildaq_pharmacy_receipts';
   private productsStorageKey = 'buildaq_pharmacy_products';
   private productsUpdatedHandler = () => this.loadProductsFromStorage();
   
@@ -50,6 +73,7 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
   
   ngOnInit(): void {
     this.loadOrdersFromStorage();
+    this.loadReceiptsFromStorage();
     this.loadProductsFromStorage();
     window.addEventListener('buildaq-products-updated', this.productsUpdatedHandler);
   }
@@ -74,6 +98,29 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
 
   private saveOrders(): void {
     localStorage.setItem(this.ordersStorageKey, JSON.stringify(this.orders));
+  }
+
+  private loadReceiptsFromStorage(): void {
+    const raw = localStorage.getItem(this.receiptsStorageKey);
+    if (!raw) {
+      this.receipts = [];
+      return;
+    }
+    try {
+      this.receipts = JSON.parse(raw) as Receipt[];
+    } catch (error) {
+      console.warn('Failed to parse receipts', error);
+      this.receipts = [];
+    }
+  }
+
+  private saveReceipts(): void {
+    localStorage.setItem(this.receiptsStorageKey, JSON.stringify(this.receipts));
+  }
+
+  private saveProductsToStorage(): void {
+    localStorage.setItem(this.productsStorageKey, JSON.stringify(this.products));
+    window.dispatchEvent(new Event('buildaq-products-updated'));
   }
 
   private loadProductsFromStorage(): void {
@@ -109,8 +156,21 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
     );
   }
 
+  get filteredInboundProducts(): Product[] {
+    const term = this.inboundProductSearch.trim().toLowerCase();
+    if (!term) return this.products;
+    return this.products.filter(product =>
+      product.name.toLowerCase().includes(term) ||
+      product.category.toLowerCase().includes(term)
+    );
+  }
+
   get draftTotal(): number {
     return this.orderDraft.items.reduce((sum, item) => sum + item.qty * item.price, 0);
+  }
+
+  get receiptUnits(): number {
+    return this.receiptDraft.items.reduce((sum, item) => sum + item.qty, 0);
   }
 
   addToDraft(product: Product): void {
@@ -140,6 +200,36 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
   clearDraft(): void {
     this.orderDraft = {
       customerName: '',
+      items: []
+    };
+  }
+
+  addToReceiptDraft(product: Product): void {
+    const existing = this.receiptDraft.items.find(item => item.productId === product.id);
+    if (existing) {
+      existing.qty += 1;
+      return;
+    }
+    this.receiptDraft.items.push({
+      productId: product.id,
+      name: product.name,
+      category: product.category,
+      qty: 1
+    });
+  }
+
+  updateReceiptQty(item: ReceiptItem, next: number): void {
+    const qty = Math.max(1, Math.floor(Number(next) || 1));
+    item.qty = qty;
+  }
+
+  removeReceiptItem(item: ReceiptItem): void {
+    this.receiptDraft.items = this.receiptDraft.items.filter(entry => entry !== item);
+  }
+
+  clearReceiptDraft(): void {
+    this.receiptDraft = {
+      supplierName: '',
       items: []
     };
   }
@@ -180,6 +270,114 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
     });
     this.saveOrders();
     this.clearDraft();
+  }
+
+  receiveStock(): void {
+    const supplierName = this.receiptDraft.supplierName.trim();
+    if (!supplierName || this.receiptDraft.items.length === 0) return;
+
+    const nextId = this.receipts.reduce((max, receipt) => Math.max(max, receipt.id), 0) + 1;
+    const date = new Date();
+    const dateToken = date.toISOString().slice(0, 10).replace(/-/g, '');
+    const receiptNumber = `REC-${dateToken}-${String(nextId).padStart(3, '0')}`;
+
+    this.receiptDraft.items.forEach(item => {
+      const product = this.products.find(p => p.id === item.productId);
+      if (product) {
+        product.quantity += item.qty;
+      } else {
+        this.products.push({
+          id: item.productId,
+          name: item.name,
+          category: item.category || 'Medicine',
+          price: 0,
+          quantity: item.qty,
+          expiryDate: 'N/A'
+        });
+      }
+    });
+    this.saveProductsToStorage();
+    this.applyInboundToLayout(this.receiptDraft.items);
+
+    this.receipts.unshift({
+      id: nextId,
+      receiptNumber,
+      supplierName,
+      receivedDate: date.toISOString().slice(0, 10),
+      items: this.receiptDraft.items.map(item => ({ ...item })),
+      totalUnits: this.receiptUnits
+    });
+    this.saveReceipts();
+    this.clearReceiptDraft();
+  }
+
+  private applyInboundToLayout(items: ReceiptItem[]): void {
+    const layoutKey = 'buildaq_pharmacy_layout_v2';
+    const raw = localStorage.getItem(layoutKey);
+    if (!raw) return;
+    try {
+      const layout = JSON.parse(raw) as Array<{
+        id: string;
+        type?: string;
+        medicines?: Array<{ name: string; qty: number }> | string[];
+        tag?: string;
+      }>;
+      let updated = false;
+
+      const normalized = layout.map(item => {
+        if (item.type !== 'box' || !item.medicines) return item;
+        if (item.medicines.length > 0 && typeof item.medicines[0] === 'string') {
+          const legacy = item.medicines as string[];
+          return { ...item, medicines: legacy.map(name => ({ name, qty: 1 })) };
+        }
+        return item;
+      });
+
+      items.forEach(inbound => {
+        let remaining = inbound.qty;
+        if (remaining <= 0) return;
+        const nameKey = inbound.name.trim().toLowerCase();
+
+        const candidateBoxes = normalized.filter(item => item.type === 'box') as Array<{
+          id: string;
+          medicines?: Array<{ name: string; qty: number }>;
+          tag?: string;
+        }>;
+
+        candidateBoxes.forEach(box => {
+          if (remaining <= 0) return;
+          if (!box.medicines) return;
+          const match = box.medicines.find(med => med.name.toLowerCase() === nameKey);
+          if (!match) return;
+          const add = remaining;
+          match.qty += add;
+          remaining -= add;
+          updated = true;
+        });
+
+        if (remaining > 0) {
+          const tagged = candidateBoxes.find(box => (box.tag || '').toLowerCase() === inbound.category.toLowerCase());
+          const target = tagged || candidateBoxes[0];
+          if (target) {
+            if (!target.medicines) target.medicines = [];
+            const match = target.medicines.find(med => med.name.toLowerCase() === nameKey);
+            if (match) {
+              match.qty += remaining;
+            } else {
+              target.medicines.push({ name: inbound.name, qty: remaining });
+            }
+            updated = true;
+          }
+        }
+      });
+
+      if (updated) {
+        localStorage.setItem(layoutKey, JSON.stringify(normalized));
+        window.dispatchEvent(new Event('buildaq-layout-updated'));
+      }
+    } catch (error) {
+      console.warn('Failed to apply inbound stock to layout', error);
+    }
   }
   
   onViewOrder(order: Order): void {

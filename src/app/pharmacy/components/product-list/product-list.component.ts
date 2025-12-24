@@ -160,11 +160,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
         }
         return String(arg);
       }).join(' ');
-      
-      this.consoleLogs.push(`[${type}] ${message}`);
-      if (this.consoleLogs.length > this.maxLogs) {
-        this.consoleLogs.shift();
-      }
+
+      setTimeout(() => {
+        this.consoleLogs.push(`[${type}] ${message}`);
+        if (this.consoleLogs.length > this.maxLogs) {
+          this.consoleLogs.shift();
+        }
+        this.cdr.detectChanges();
+      }, 0);
     };
     
     console.log = (...args: any[]) => {

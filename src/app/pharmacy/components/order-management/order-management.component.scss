@@ -1,5 +1,12 @@
+:host {
+  display: block;
+}
+
 .order-management-container {
   padding: 20px;
+  min-height: 520px;
+  background: #f8fafc;
+  border-radius: 12px;
   
   h2 {
     margin-bottom: 20px;
@@ -10,6 +17,15 @@
     margin: 0 0 12px;
     color: #1f2937;
     font-size: 18px;
+  }
+
+  .order-banner {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin-bottom: 16px;
   }
 
   .order-layout {
@@ -109,6 +125,12 @@
     border: 1px solid #e5e7eb;
     border-radius: 12px;
     overflow: hidden;
+  }
+
+  .receipt-panel {
+    margin-top: 20px;
+    border-top: 1px dashed #e5e7eb;
+    padding-top: 16px;
   }
 
   .draft-header {
@@ -218,6 +240,10 @@
   .btn-primary:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+  }
+
+  .receipts-section {
+    margin-top: 24px;
   }
   
   .orders-table {

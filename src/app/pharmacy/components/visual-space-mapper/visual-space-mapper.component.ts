@@ -142,12 +142,14 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
   presets: LayoutPreset[] = [];
   selectedPresetId = '';
   private medicineCatalog: MedicineCatalogEntry[] | null = null;
+  private layoutUpdatedHandler = () => this.reloadLayoutFromStorage();
 
   constructor(private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.presets = this.buildPresets();
     this.loadLayout();
+    window.addEventListener('buildaq-layout-updated', this.layoutUpdatedHandler);
   }
 
   ngAfterViewInit(): void {
@@ -166,6 +168,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     window.removeEventListener('resize', this.onResize);
     window.removeEventListener('keydown', this.onKeyDownHandler);
     window.removeEventListener('click', this.onWindowClick);
+    window.removeEventListener('buildaq-layout-updated', this.layoutUpdatedHandler);
   }
 
   setMode(mode: 'drawWall' | 'drawShelf' | 'drawBox' | 'select' | 'delete'): void {
@@ -255,7 +258,18 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.transformControls.addEventListener('objectChange', () => {
       this.syncSelectedMesh();
     });
-    this.scene.add(this.transformControls as unknown as THREE.Object3D);
+    const controlsObject = this.transformControls as unknown as {
+      isObject3D?: boolean;
+      getHelper?: () => unknown;
+    };
+    if (controlsObject?.isObject3D) {
+      this.scene.add(this.transformControls as unknown as THREE.Object3D);
+    } else {
+      const helper = controlsObject?.getHelper?.();
+      if (helper && (helper as { isObject3D?: boolean }).isObject3D) {
+        this.scene.add(helper as THREE.Object3D);
+      }
+    }
 
     this.renderer.domElement.addEventListener('pointerdown', this.onPointerDown);
     this.renderer.domElement.addEventListener('pointermove', this.onPointerMove);
@@ -1124,6 +1138,26 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
       }
     });
     this.updateTagFlags();
+    this.applyPicklistHighlights();
+  }
+
+  private reloadLayoutFromStorage(): void {
+    this.layoutItems = [];
+    this.layoutMap.clear();
+    this.wallMeshes.forEach(mesh => this.disposeMesh(mesh));
+    this.shelfMeshes.forEach(mesh => this.disposeMesh(mesh));
+    this.boxMeshes.forEach(mesh => this.disposeMesh(mesh));
+    this.boxLabels.forEach(label => this.disposeObject(label));
+    this.tagFlags.forEach(flag => this.disposeObject(flag));
+    this.wallMeshes.clear();
+    this.shelfMeshes.clear();
+    this.boxMeshes.clear();
+    this.boxLabels.clear();
+    this.tagFlags.clear();
+    this.loadLayout();
+    if (this.scene) {
+      this.rebuildFromLayout();
+    }
     this.applyPicklistHighlights();
   }
 
