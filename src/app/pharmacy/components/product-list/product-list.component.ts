@@ -83,6 +83,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   
   private storageKey = 'buildaq_pharmacy_products';
   private layoutStorageKey = 'buildaq_pharmacy_layout_v2';
+  private expirySeedKey = 'buildaq_pharmacy_expiry_seed_v3';
   private productsUpdatedHandler = () => this.loadProductsFromStorage();
   private layoutUpdatedHandler = () => this.syncFromVisualMapper();
   
@@ -416,21 +417,58 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   private ensureExpiryDates(): void {
     let updated = false;
+    const shouldReseed = localStorage.getItem(this.expirySeedKey) !== '1';
+    const preset = shouldReseed ? this.buildExpiryPreset() : new Map<string, string>();
     this.products = this.products.map(product => {
-      if (!product.expiryDate || product.expiryDate.toLowerCase() === 'n/a') {
+      const needsExpiry = !product.expiryDate || product.expiryDate.toLowerCase() === 'n/a';
+      const presetExpiry = preset.get(product.name);
+      if (presetExpiry) {
+        updated = true;
+        return { ...product, expiryDate: presetExpiry };
+      }
+      if (shouldReseed || needsExpiry) {
         updated = true;
         return { ...product, expiryDate: this.generateExpiryDate(product.name) };
       }
       return product;
     });
     if (updated) {
+      localStorage.setItem(this.expirySeedKey, '1');
       this.saveProducts();
     }
   }
 
+  private buildExpiryPreset(): Map<string, string> {
+    const preset = new Map<string, string>();
+    const sorted = [...this.products]
+      .filter(product => product.name)
+      .sort((a, b) => a.name.localeCompare(b.name));
+    const now = new Date();
+    const expiredTargets = sorted.slice(0, 5);
+    const soonTargets = sorted.slice(5, 10);
+
+    expiredTargets.forEach((product, index) => {
+      const daysAgo = 10 + ((this.simpleHash(product.name) + index) % 30);
+      const expiry = new Date(now.getTime());
+      expiry.setDate(expiry.getDate() - daysAgo);
+      preset.set(product.name, expiry.toISOString().slice(0, 10));
+    });
+
+    soonTargets.forEach((product, index) => {
+      const daysAhead = 15 + ((this.simpleHash(product.name) + index) % 45);
+      const expiry = new Date(now.getTime());
+      expiry.setDate(expiry.getDate() + daysAhead);
+      preset.set(product.name, expiry.toISOString().slice(0, 10));
+    });
+
+    return preset;
+  }
+
   private generateExpiryDate(seed: string): string {
     const base = new Date();
-    const days = 180 + (this.simpleHash(seed) % 540);
+    const hash = this.simpleHash(seed);
+    const futureDays = 180 + (hash % 540);
+    const days = futureDays;
     const expiry = new Date(base.getTime());
     expiry.setDate(expiry.getDate() + days);
     return expiry.toISOString().slice(0, 10);
