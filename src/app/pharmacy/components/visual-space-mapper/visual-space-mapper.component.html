@@ -59,6 +59,11 @@
       </button>
     </div>
     <div class="tool-group">
+      <button type="button" mat-stroked-button [color]="heatmapEnabled ? 'accent' : ''" (click)="toggleHeatmap()">
+        Heatmap
+      </button>
+    </div>
+    <div class="tool-group">
       <button type="button" mat-stroked-button color="primary" (click)="openAudit()">
         Audit
       </button>
@@ -273,6 +278,13 @@
       <div class="compass-label east">E</div>
       <div class="compass-label south">S</div>
       <div class="compass-label west">W</div>
+    </div>
+    <div class="heatmap-legend" *ngIf="heatmapEnabled">
+      <span><i class="heatmap-swatch" style="background:#3b82f6"></i>Empty</span>
+      <span><i class="heatmap-swatch" style="background:#10b981"></i>Low</span>
+      <span><i class="heatmap-swatch" style="background:#f59e0b"></i>Mid</span>
+      <span><i class="heatmap-swatch" style="background:#ef4444"></i>High</span>
+      <span><i class="heatmap-swatch" style="background:#b91c1c"></i>Over</span>
     </div>
   </div>
 </div>

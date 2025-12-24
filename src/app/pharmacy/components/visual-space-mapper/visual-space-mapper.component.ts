@@ -138,6 +138,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     extra: 0
   };
   auditReport = '';
+  heatmapEnabled = false;
 
   private animationFrameId: number | null = null;
   private storageKey = 'buildaq_pharmacy_layout_v2';
@@ -906,6 +907,15 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.auditOpen = false;
   }
 
+  toggleHeatmap(): void {
+    this.heatmapEnabled = !this.heatmapEnabled;
+    if (this.heatmapEnabled) {
+      this.applyHeatmap();
+      return;
+    }
+    this.clearHeatmap();
+  }
+
   clearAuditInput(): void {
     this.auditInput = '';
     this.auditResults = [];
@@ -1085,6 +1095,47 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.auditTargetIds = [];
     this.auditTargetName = 'Select a shelf or box';
     this.auditResults = [];
+  }
+
+  private applyHeatmap(): void {
+    this.clearHeatmap();
+    this.layoutItems.forEach(item => {
+      if (item.type !== 'box') return;
+      const mesh = this.boxMeshes.get(item.id);
+      if (!mesh) return;
+      const ratio = this.getCapacityRatio(item);
+      const color = this.getHeatmapColor(ratio);
+      const material = mesh.material as THREE.MeshStandardMaterial;
+      if (!mesh.userData?.['origColor']) {
+        mesh.userData['origColor'] = material.color.clone();
+      }
+      material.color.set(color);
+    });
+  }
+
+  private clearHeatmap(): void {
+    this.boxMeshes.forEach(mesh => {
+      const material = mesh.material as THREE.MeshStandardMaterial;
+      const original = mesh.userData?.['origColor'] as THREE.Color | undefined;
+      if (original) {
+        material.color.copy(original);
+      }
+    });
+  }
+
+  private getCapacityRatio(item: LayoutItem): number {
+    const capacity = item.capacity ?? 0;
+    const total = this.getTotalQty(item);
+    if (!capacity) return 0;
+    return Math.max(0, Math.min(1.5, total / capacity));
+  }
+
+  private getHeatmapColor(ratio: number): string {
+    if (ratio <= 0.2) return '#3b82f6';
+    if (ratio <= 0.5) return '#10b981';
+    if (ratio <= 0.8) return '#f59e0b';
+    if (ratio <= 1.0) return '#ef4444';
+    return '#b91c1c';
   }
 
   runAudit(): void {
@@ -1334,6 +1385,9 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
       this.rebuildFromLayout();
     }
     this.applyPicklistHighlights();
+    if (this.heatmapEnabled) {
+      this.applyHeatmap();
+    }
   }
 
   private updatePicklistMappings(): void {
