@@ -127,6 +127,16 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
   picklistCurrentId: string | null = null;
   pickQtyMap: Record<number, number> = {};
   productCatalog: ProductCatalogItem[] = [];
+  auditOpen = false;
+  auditTargetName = 'No shelf selected';
+  auditTargetIds: string[] = [];
+  auditInput = '';
+  auditResults: Array<{ name: string; expected: number; scanned: number; diff: number; status: 'match' | 'missing' | 'extra' }> = [];
+  auditSummary = {
+    matched: 0,
+    missing: 0,
+    extra: 0
+  };
 
   private animationFrameId: number | null = null;
   private storageKey = 'buildaq_pharmacy_layout_v2';
@@ -321,6 +331,10 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
       }
       const target = hits[0].object as THREE.Mesh;
       const id = this.getLayoutIdFromObject(target);
+      if (id && this.auditOpen) {
+        this.setAuditTargetFromId(id);
+        return;
+      }
       if (id && this.boxMeshes.has(id) && this.mode === 'select') {
         this.selectMesh(this.boxMeshes.get(id)!);
         this.openBoxManager(id);
@@ -875,6 +889,28 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.clearPickHighlights();
   }
 
+  openAudit(): void {
+    this.auditOpen = true;
+    this.auditResults = [];
+    this.auditSummary = { matched: 0, missing: 0, extra: 0 };
+    if (this.selectedMesh) {
+      const id = this.getLayoutIdFromObject(this.selectedMesh);
+      if (id) {
+        this.setAuditTargetFromId(id);
+      }
+    }
+  }
+
+  closeAudit(): void {
+    this.auditOpen = false;
+  }
+
+  clearAuditInput(): void {
+    this.auditInput = '';
+    this.auditResults = [];
+    this.auditSummary = { matched: 0, missing: 0, extra: 0 };
+  }
+
   openBoxManager(id: string): void {
     const item = this.layoutMap.get(id);
     if (!item || item.type !== 'box') return;
@@ -1015,6 +1051,96 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     const isRightWall = item.position.x > 0.1;
     const rightFacing = Math.abs((item.rotation.y || 0) - Math.PI / 2) < 0.2;
     return isRightWall && rightFacing ? 'back' : 'front';
+  }
+
+  private setAuditTargetFromId(id: string): void {
+    const item = this.layoutMap.get(id);
+    if (!item) return;
+    if (item.type === 'box') {
+      this.auditTargetIds = [id];
+      this.auditTargetName = item.name || 'Selected Box';
+      this.computeAuditResults();
+      return;
+    }
+    if (item.type === 'shelf') {
+      const candidates = this.layoutItems.filter(entry => entry.type === 'box');
+      const shelfBounds = {
+        x: item.size.x / 2 + 0.6,
+        y: item.size.y / 2 + 0.6,
+        z: item.size.z / 2 + 1.2
+      };
+      const shelfPos = item.position;
+      const boxes = candidates.filter(box =>
+        Math.abs(box.position.x - shelfPos.x) <= shelfBounds.x &&
+        Math.abs(box.position.y - shelfPos.y) <= shelfBounds.y &&
+        Math.abs(box.position.z - shelfPos.z) <= shelfBounds.z
+      );
+      this.auditTargetIds = boxes.map(box => box.id);
+      this.auditTargetName = item.name || 'Selected Shelf';
+      this.computeAuditResults();
+      return;
+    }
+    this.auditTargetIds = [];
+    this.auditTargetName = 'Select a shelf or box';
+    this.auditResults = [];
+  }
+
+  runAudit(): void {
+    this.computeAuditResults();
+  }
+
+  private computeAuditResults(): void {
+    const expectedMap = new Map<string, number>();
+    this.auditTargetIds.forEach(id => {
+      const item = this.layoutMap.get(id);
+      if (!item || item.type !== 'box' || !item.medicines) return;
+      item.medicines.forEach(entry => {
+        const name = entry.name.trim();
+        if (!name) return;
+        expectedMap.set(name, (expectedMap.get(name) || 0) + entry.qty);
+      });
+    });
+
+    const scannedMap = new Map<string, number>();
+    const lines = this.auditInput.split('\n').map(line => line.trim()).filter(Boolean);
+    lines.forEach(line => {
+      const parts = line.split(/[,|\t]/).map(p => p.trim()).filter(Boolean);
+      if (parts.length === 0) return;
+      let name = parts[0];
+      let qty = 1;
+      if (parts.length > 1) {
+        const parsed = Number(parts[1]);
+        qty = Number.isFinite(parsed) ? parsed : 1;
+      } else {
+        const match = line.match(/(.+)\s+(\d+)$/);
+        if (match) {
+          name = match[1].trim();
+          qty = Number(match[2]);
+        }
+      }
+      scannedMap.set(name, (scannedMap.get(name) || 0) + qty);
+    });
+
+    const allNames = new Set<string>([...expectedMap.keys(), ...scannedMap.keys()]);
+    const results: Array<{ name: string; expected: number; scanned: number; diff: number; status: 'match' | 'missing' | 'extra' }> = [];
+    let matched = 0;
+    let missing = 0;
+    let extra = 0;
+    allNames.forEach(name => {
+      const expected = expectedMap.get(name) || 0;
+      const scanned = scannedMap.get(name) || 0;
+      const diff = scanned - expected;
+      let status: 'match' | 'missing' | 'extra' = 'match';
+      if (diff < 0) status = 'missing';
+      if (diff > 0) status = 'extra';
+      if (status === 'match') matched += 1;
+      if (status === 'missing') missing += 1;
+      if (status === 'extra') extra += 1;
+      results.push({ name, expected, scanned, diff, status });
+    });
+
+    this.auditResults = results.sort((a, b) => a.name.localeCompare(b.name));
+    this.auditSummary = { matched, missing, extra };
   }
 
   private getStockStatus(item: LayoutItem): 'low' | 'high' | null {

@@ -59,6 +59,11 @@
       </button>
     </div>
     <div class="tool-group">
+      <button type="button" mat-stroked-button color="primary" (click)="openAudit()">
+        Audit
+      </button>
+    </div>
+    <div class="tool-group">
       <label class="preset-label">
         Preset
         <select [(ngModel)]="selectedPresetId">
@@ -214,6 +219,46 @@
           </div>
           <div class="picklist-empty" *ngIf="picklistItems.length === 0">
             No items yet. Add products on the left.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="audit-drawer" *ngIf="auditOpen">
+      <div class="audit-header">
+        <div>
+          <div class="audit-title">Stock Audit</div>
+          <div class="audit-subtitle">{{ auditTargetName }}</div>
+        </div>
+        <button type="button" class="close-btn" (click)="closeAudit()">Close</button>
+      </div>
+      <div class="audit-body">
+        <p class="audit-hint">
+          Click a shelf or box in the scene to set the audit target, then paste scanned counts.
+        </p>
+        <label class="audit-label">
+          Scanned list (one per line, e.g. "Paracetamol, 12")
+          <textarea [(ngModel)]="auditInput" rows="6" placeholder="Medicine Name, qty"></textarea>
+        </label>
+        <div class="audit-actions">
+          <button type="button" (click)="clearAuditInput()">Clear</button>
+          <button type="button" class="audit-run" (click)="runAudit()" [disabled]="auditTargetIds.length === 0">Compare</button>
+        </div>
+        <div class="audit-summary" *ngIf="auditResults.length > 0">
+          <span>Matched {{ auditSummary.matched }}</span>
+          <span>Missing {{ auditSummary.missing }}</span>
+          <span>Extra {{ auditSummary.extra }}</span>
+        </div>
+        <div class="audit-results">
+          <div class="audit-row" *ngFor="let result of auditResults" [class.missing]="result.status === 'missing'" [class.extra]="result.status === 'extra'">
+            <div class="audit-name">{{ result.name }}</div>
+            <div class="audit-values">
+              <span>Expected {{ result.expected }}</span>
+              <span>Scanned {{ result.scanned }}</span>
+              <span>Diff {{ result.diff }}</span>
+            </div>
+          </div>
+          <div class="audit-empty" *ngIf="auditResults.length === 0">
+            No audit results yet.
           </div>
         </div>
       </div>
