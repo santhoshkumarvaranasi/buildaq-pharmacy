@@ -197,6 +197,108 @@
     }
   }
 
+  .expiry-alerts {
+    background: #fff;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    margin-bottom: 20px;
+  }
+
+  .expiry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+
+    h3 {
+      margin: 0 0 6px;
+      color: #1f2937;
+    }
+
+    p {
+      margin: 0;
+      font-size: 12px;
+      color: #6b7280;
+    }
+  }
+
+  .expiry-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .expiry-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 12px;
+    display: grid;
+    gap: 8px;
+
+    h4 {
+      margin: 0;
+      font-size: 14px;
+      color: #111827;
+    }
+  }
+
+  .expiry-card-expired {
+    border-color: #fecaca;
+    background: #fff1f2;
+  }
+
+  .expiry-card-soon {
+    border-color: #fed7aa;
+    background: #fff7ed;
+  }
+
+  .expiry-row {
+    display: grid;
+    gap: 4px;
+    font-size: 12px;
+    color: #111827;
+  }
+
+  .expiry-tag {
+    font-weight: 600;
+    color: #b91c1c;
+  }
+
+  .expiry-card-soon .expiry-tag {
+    color: #c2410c;
+  }
+
+  .expiry-action {
+    font-size: 11px;
+    color: #6b7280;
+  }
+
+  .expiry-empty {
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  .expiry-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    margin-left: 8px;
+  }
+
+  .expiry-pill.expiry-expired {
+    background: #fecaca;
+    color: #b91c1c;
+  }
+
+  .expiry-pill.expiry-soon {
+    background: #fed7aa;
+    color: #c2410c;
+  }
+
   .barcode-scanner-section {
     background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);
     border: 2px solid #1976d2;

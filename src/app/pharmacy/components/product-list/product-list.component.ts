@@ -79,6 +79,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   // Local catalog import
   catalogImportError: string | null = null;
   catalogImportSummary: string | null = null;
+  expiryThresholdDays = 60;
   
   private storageKey = 'buildaq_pharmacy_products';
   private layoutStorageKey = 'buildaq_pharmacy_layout_v2';
@@ -367,6 +368,47 @@ export class ProductListComponent implements OnInit, OnDestroy {
         product.category.toLowerCase().includes(term)
       );
     });
+  }
+
+  get expiringSoonProducts(): Array<Product & { daysLeft: number }> {
+    return this.products
+      .map(product => {
+        const daysLeft = this.getDaysUntilExpiry(product.expiryDate);
+        return { ...product, daysLeft };
+      })
+      .filter(item => Number.isFinite(item.daysLeft) && item.daysLeft > 0 && item.daysLeft <= this.expiryThresholdDays)
+      .sort((a, b) => a.daysLeft - b.daysLeft);
+  }
+
+  get expiredProducts(): Array<Product & { daysLeft: number }> {
+    return this.products
+      .map(product => {
+        const daysLeft = this.getDaysUntilExpiry(product.expiryDate);
+        return { ...product, daysLeft };
+      })
+      .filter(item => Number.isFinite(item.daysLeft) && item.daysLeft <= 0)
+      .sort((a, b) => a.daysLeft - b.daysLeft);
+  }
+
+  getExpiryStatus(expiryDate: string): { label: string; className: string } | null {
+    const daysLeft = this.getDaysUntilExpiry(expiryDate);
+    if (!Number.isFinite(daysLeft)) return null;
+    if (daysLeft <= 0) {
+      return { label: 'Expired', className: 'expiry-expired' };
+    }
+    if (daysLeft <= this.expiryThresholdDays) {
+      return { label: `${daysLeft} days`, className: 'expiry-soon' };
+    }
+    return null;
+  }
+
+  private getDaysUntilExpiry(expiryDate: string): number {
+    if (!expiryDate || expiryDate.toLowerCase() === 'n/a') return Number.NaN;
+    const parsed = new Date(expiryDate);
+    if (Number.isNaN(parsed.getTime())) return Number.NaN;
+    const now = new Date();
+    const diffMs = parsed.getTime() - now.setHours(0, 0, 0, 0);
+    return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
   }
 
   get pagedProducts(): Product[] {

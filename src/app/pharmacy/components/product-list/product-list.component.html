@@ -75,6 +75,35 @@
       </div>
     </div>
   </details>
+
+  <div class="expiry-alerts" *ngIf="products.length > 0">
+    <div class="expiry-header">
+      <div>
+        <h3>Expiry Alerts</h3>
+        <p>Flag medicines within {{ expiryThresholdDays }} days of expiry. Suggest remove/discount and restock.</p>
+      </div>
+    </div>
+    <div class="expiry-grid">
+      <div class="expiry-card expiry-card-expired">
+        <h4>Expired</h4>
+        <div *ngIf="expiredProducts.length === 0" class="expiry-empty">None</div>
+        <div class="expiry-row" *ngFor="let product of expiredProducts">
+          <span>{{ product.name }}</span>
+          <span class="expiry-tag">Expired {{ -product.daysLeft }} days</span>
+          <span class="expiry-action">Remove + restock</span>
+        </div>
+      </div>
+      <div class="expiry-card expiry-card-soon">
+        <h4>Near Expiry</h4>
+        <div *ngIf="expiringSoonProducts.length === 0" class="expiry-empty">None</div>
+        <div class="expiry-row" *ngFor="let product of expiringSoonProducts">
+          <span>{{ product.name }}</span>
+          <span class="expiry-tag">In {{ product.daysLeft }} days</span>
+          <span class="expiry-action">Discount + restock plan</span>
+        </div>
+      </div>
+    </div>
+  </div>
   
   <!-- Image Upload Section -->
   <div class="image-upload-section" *ngIf="showImageUpload">
@@ -407,7 +436,12 @@
         <td>{{ product.category }}</td>
         <td>${{ product.price }}</td>
         <td>{{ product.quantity }}</td>
-        <td>{{ product.expiryDate }}</td>
+        <td>
+          {{ product.expiryDate }}
+          <span *ngIf="getExpiryStatus(product.expiryDate) as status" class="expiry-pill" [ngClass]="status.className">
+            {{ status.label }}
+          </span>
+        </td>
         <td>
           <button class="btn-edit" (click)="onEditProduct(product)">Edit</button>
           <button class="btn-delete" (click)="onDeleteProduct(product.id)">Delete</button>
