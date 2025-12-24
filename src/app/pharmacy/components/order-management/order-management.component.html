@@ -129,6 +129,14 @@
 
     <section class="order-list">
       <h3>Recent Orders</h3>
+      <div class="stock-alert" *ngIf="lowStockItems.length > 0">
+        <div class="stock-alert-title">Low stock alerts</div>
+        <div class="stock-alert-items">
+          <span *ngFor="let item of lowStockItems">
+            {{ item.name }} ({{ item.qty }})
+          </span>
+        </div>
+      </div>
       <table class="orders-table" *ngIf="orders.length > 0">
         <thead>
           <tr>

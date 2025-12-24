@@ -143,6 +143,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
   selectedPresetId = '';
   private medicineCatalog: MedicineCatalogEntry[] | null = null;
   private layoutUpdatedHandler = () => this.reloadLayoutFromStorage();
+  private productsUpdatedHandler = () => this.reloadLayoutFromStorage();
 
   constructor(private snackBar: MatSnackBar) {}
 
@@ -150,6 +151,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.presets = this.buildPresets();
     this.loadLayout();
     window.addEventListener('buildaq-layout-updated', this.layoutUpdatedHandler);
+    window.addEventListener('buildaq-products-updated', this.productsUpdatedHandler);
   }
 
   ngAfterViewInit(): void {
@@ -169,6 +171,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     window.removeEventListener('keydown', this.onKeyDownHandler);
     window.removeEventListener('click', this.onWindowClick);
     window.removeEventListener('buildaq-layout-updated', this.layoutUpdatedHandler);
+    window.removeEventListener('buildaq-products-updated', this.productsUpdatedHandler);
   }
 
   setMode(mode: 'drawWall' | 'drawShelf' | 'drawBox' | 'select' | 'delete'): void {

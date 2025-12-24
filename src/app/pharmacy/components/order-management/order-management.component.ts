@@ -9,6 +9,7 @@ interface Order {
   status: 'pending' | 'processing' | 'completed' | 'cancelled';
   orderDate: string;
   items: OrderItem[];
+  applied?: boolean;
 }
 
 interface OrderItem {
@@ -55,6 +56,8 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   productSearch = '';
   inboundProductSearch = '';
+  lowStockItems: Array<{ name: string; qty: number }> = [];
+  lowStockThreshold = 10;
   orderDraft = {
     customerName: '',
     items: [] as OrderItem[]
@@ -67,7 +70,10 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
   private ordersStorageKey = 'buildaq_pharmacy_orders';
   private receiptsStorageKey = 'buildaq_pharmacy_receipts';
   private productsStorageKey = 'buildaq_pharmacy_products';
-  private productsUpdatedHandler = () => this.loadProductsFromStorage();
+  private productsUpdatedHandler = () => {
+    this.loadProductsFromStorage();
+    this.refreshLowStockItems();
+  };
   
   constructor() { }
   
@@ -75,6 +81,7 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
     this.loadOrdersFromStorage();
     this.loadReceiptsFromStorage();
     this.loadProductsFromStorage();
+    this.refreshLowStockItems();
     window.addEventListener('buildaq-products-updated', this.productsUpdatedHandler);
   }
 
@@ -89,7 +96,11 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
       return;
     }
     try {
-      this.orders = JSON.parse(raw) as Order[];
+      const parsed = JSON.parse(raw) as Order[];
+      this.orders = parsed.map(order => ({
+        ...order,
+        applied: order.applied ?? order.status === 'completed'
+      }));
     } catch (error) {
       console.warn('Failed to parse orders', error);
       this.orders = [];
@@ -127,6 +138,7 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
     const raw = localStorage.getItem(this.productsStorageKey);
     if (!raw) {
       this.products = [];
+      this.refreshLowStockItems();
       return;
     }
     try {
@@ -266,7 +278,8 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
       totalAmount: this.draftTotal,
       status: 'pending',
       orderDate: date.toISOString().slice(0, 10),
-      items: this.orderDraft.items.map(item => ({ ...item }))
+      items: this.orderDraft.items.map(item => ({ ...item })),
+      applied: false
     });
     this.saveOrders();
     this.clearDraft();
@@ -298,6 +311,7 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
     });
     this.saveProductsToStorage();
     this.applyInboundToLayout(this.receiptDraft.items);
+    this.refreshLowStockItems();
 
     this.receipts.unshift({
       id: nextId,
@@ -394,6 +408,105 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
             ? 'cancelled'
             : 'pending';
     order.status = nextStatus;
+    if (nextStatus === 'completed' && !order.applied) {
+      this.applyOutboundToProducts(order.items);
+      this.applyOutboundToLayout(order.items);
+      order.applied = true;
+      this.refreshLowStockItems();
+    }
     this.saveOrders();
+  }
+
+  private applyOutboundToProducts(items: OrderItem[]): void {
+    items.forEach(item => {
+      const product = this.products.find(p => p.id === item.productId);
+      if (product) {
+        product.quantity -= item.qty;
+        return;
+      }
+      this.products.push({
+        id: item.productId,
+        name: item.name,
+        category: item.category || 'Medicine',
+        price: item.price ?? 0,
+        quantity: -item.qty,
+        expiryDate: 'N/A'
+      });
+    });
+    this.saveProductsToStorage();
+  }
+
+  private applyOutboundToLayout(items: OrderItem[]): void {
+    const layoutKey = 'buildaq_pharmacy_layout_v2';
+    const raw = localStorage.getItem(layoutKey);
+    if (!raw) return;
+    try {
+      const layout = JSON.parse(raw) as Array<{
+        id: string;
+        type?: string;
+        medicines?: Array<{ name: string; qty: number }> | string[];
+        tag?: string;
+      }>;
+      let updated = false;
+
+      const normalized = layout.map(item => {
+        if (item.type !== 'box' || !item.medicines) return item;
+        if (item.medicines.length > 0 && typeof item.medicines[0] === 'string') {
+          const legacy = item.medicines as string[];
+          return { ...item, medicines: legacy.map(name => ({ name, qty: 1 })) };
+        }
+        return item;
+      });
+
+      const boxes = normalized.filter(item => item.type === 'box') as Array<{
+        id: string;
+        medicines?: Array<{ name: string; qty: number }>;
+        tag?: string;
+      }>;
+
+      items.forEach(orderItem => {
+        let remaining = orderItem.qty;
+        if (remaining <= 0) return;
+        const nameKey = orderItem.name.trim().toLowerCase();
+
+        boxes.forEach(box => {
+          if (remaining <= 0) return;
+          if (!box.medicines) return;
+          const match = box.medicines.find(med => med.name.toLowerCase() === nameKey);
+          if (!match || match.qty <= 0) return;
+          const take = Math.min(match.qty, remaining);
+          match.qty -= take;
+          remaining -= take;
+          updated = true;
+        });
+
+        if (remaining > 0) {
+          const fallback = boxes[0];
+          if (fallback) {
+            if (!fallback.medicines) fallback.medicines = [];
+            const match = fallback.medicines.find(med => med.name.toLowerCase() === nameKey);
+            if (match) {
+              match.qty -= remaining;
+            } else {
+              fallback.medicines.push({ name: orderItem.name, qty: -remaining });
+            }
+            updated = true;
+          }
+        }
+      });
+
+      if (updated) {
+        localStorage.setItem(layoutKey, JSON.stringify(normalized));
+        window.dispatchEvent(new Event('buildaq-layout-updated'));
+      }
+    } catch (error) {
+      console.warn('Failed to apply outbound stock to layout', error);
+    }
+  }
+
+  private refreshLowStockItems(): void {
+    this.lowStockItems = this.products
+      .filter(product => product.quantity < this.lowStockThreshold)
+      .map(product => ({ name: product.name, qty: product.quantity }));
   }
 }
