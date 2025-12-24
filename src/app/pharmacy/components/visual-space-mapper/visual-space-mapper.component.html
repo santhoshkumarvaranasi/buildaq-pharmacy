@@ -54,6 +54,11 @@
       </button>
     </div>
     <div class="tool-group">
+      <button type="button" mat-stroked-button color="primary" (click)="openPicklist()">
+        Picklist
+      </button>
+    </div>
+    <div class="tool-group">
       <label class="preset-label">
         Preset
         <select [(ngModel)]="selectedPresetId">
@@ -154,6 +159,62 @@
           <span class="medicine-name">{{ med.name }}</span>
           <span class="medicine-qty" [class.negative]="med.qty < 0">{{ med.qty }}</span>
           <span class="medicine-alert" *ngIf="med.qty < 0">short {{ -med.qty }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="picklist-drawer" *ngIf="picklistOpen">
+      <div class="picklist-header">
+        <div>
+          <div class="picklist-title">Picklist</div>
+          <div class="picklist-subtitle">Select products and guide picking</div>
+        </div>
+        <button type="button" class="close-btn" (click)="closePicklist()">Close</button>
+      </div>
+      <div class="picklist-body">
+        <div class="picklist-catalog">
+          <label class="picklist-search">
+            Search
+            <input type="text" [(ngModel)]="picklistSearch" placeholder="Search products" />
+          </label>
+          <div class="picklist-catalog-list">
+            <div class="picklist-row" *ngFor="let product of filteredCatalog">
+              <div class="picklist-info">
+                <div class="picklist-name">{{ product.name }}</div>
+                <div class="picklist-meta">{{ product.category }} · stock {{ product.quantity }}</div>
+              </div>
+              <input
+                type="number"
+                min="1"
+                class="picklist-qty"
+                [ngModel]="getPickQty(product.id)"
+                (ngModelChange)="setPickQty(product.id, $event)"
+              />
+              <button type="button" class="picklist-add" (click)="addToPicklist(product)">Add</button>
+            </div>
+            <div class="picklist-empty" *ngIf="filteredCatalog.length === 0">
+              No products found.
+            </div>
+          </div>
+        </div>
+        <div class="picklist-items">
+          <div class="picklist-actions">
+            <button type="button" class="picklist-start" (click)="startPicklist()" [disabled]="picklistItems.length === 0">
+              Start Picking
+            </button>
+            <button type="button" (click)="clearPicklist()" [disabled]="picklistItems.length === 0">Clear</button>
+          </div>
+          <div class="picklist-item" *ngFor="let item of picklistItems" [class.active]="item.id === picklistCurrentId" [class.picked]="item.status === 'picked'" (click)="focusPickItem(item)">
+            <div class="picklist-item-info">
+              <div class="picklist-item-name">{{ item.name }}</div>
+              <div class="picklist-item-meta">{{ item.tag || 'General' }} · qty {{ item.qty }}</div>
+            </div>
+            <button type="button" class="picklist-toggle" (click)="togglePicked(item); $event.stopPropagation()">
+              {{ item.status === 'picked' ? 'Undo' : 'Picked' }}
+            </button>
+          </div>
+          <div class="picklist-empty" *ngIf="picklistItems.length === 0">
+            No items yet. Add products on the left.
+          </div>
         </div>
       </div>
     </div>

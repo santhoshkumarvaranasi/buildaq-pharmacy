@@ -14,8 +14,6 @@ interface NavItem {
   styleUrls: ['./pharmacy-dashboard.component.scss']
 })
 export class PharmacyDashboardComponent {
-  title = 'Pharmacy Shelf Mapping System';
-
   navItems: NavItem[] = [
     {
       label: 'Visual Space Mapper',

@@ -23,6 +23,13 @@ interface MedicineCatalogEntry {
   category?: string;
 }
 
+interface ProductCatalogItem {
+  id: number;
+  name: string;
+  category: string;
+  quantity: number;
+}
+
 interface LayoutItem {
   id: string;
   type: LayoutType;
@@ -42,6 +49,16 @@ interface LayoutPreset {
   id: string;
   name: string;
   items: LayoutItem[];
+}
+
+interface PicklistItem {
+  id: string;
+  name: string;
+  qty: number;
+  status: 'pending' | 'picked';
+  applied?: boolean;
+  tag?: string;
+  boxIds: string[];
 }
 
 @Component({
@@ -103,9 +120,18 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     quantity: 1,
     mode: 'deposit' as 'deposit' | 'withdraw'
   };
+  picklistOpen = false;
+  picklistSearch = '';
+  picklistItems: PicklistItem[] = [];
+  picklistActive = false;
+  picklistCurrentId: string | null = null;
+  pickQtyMap: Record<number, number> = {};
+  productCatalog: ProductCatalogItem[] = [];
 
   private animationFrameId: number | null = null;
   private storageKey = 'buildaq_pharmacy_layout_v2';
+  private productStorageKey = 'buildaq_pharmacy_products';
+  private picklistStorageKey = 'buildaq_pharmacy_picklist';
   private wallHeight = 3;
   private wallThickness = 0.1;
   private shelfDepth = 0.5;
@@ -167,6 +193,14 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.tagFlags.clear();
     this.saveLayout();
     this.snackBar.open('Layout cleared', 'Close', { duration: 2000 });
+  }
+
+  get filteredCatalog(): ProductCatalogItem[] {
+    const term = this.picklistSearch.trim().toLowerCase();
+    if (!term) return this.productCatalog;
+    return this.productCatalog.filter(item =>
+      item.name.toLowerCase().includes(term) || item.category.toLowerCase().includes(term)
+    );
   }
 
   async applyPreset(): Promise<void> {
@@ -678,6 +712,152 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.medicinePopup.visible = false;
   }
 
+  openPicklist(): void {
+    this.picklistOpen = true;
+    this.picklistActive = false;
+    this.picklistCurrentId = null;
+    this.loadProductCatalog();
+    this.loadPicklist();
+    this.applyPicklistHighlights();
+  }
+
+  closePicklist(): void {
+    this.picklistOpen = false;
+    this.picklistActive = false;
+    this.picklistCurrentId = null;
+    this.clearPickHighlights();
+  }
+
+  setPickQty(productId: number, value: number): void {
+    const qty = Number(value);
+    const previous = this.pickQtyMap[productId] || 1;
+    if (value === null || value === undefined || value === ('' as unknown as number) || Number.isNaN(qty)) {
+      this.pickQtyMap[productId] = previous;
+      return;
+    }
+    this.pickQtyMap[productId] = Number.isFinite(qty) && qty > 0 ? qty : 1;
+    if (this.picklistOpen) {
+      this.applyPicklistHighlights();
+    }
+  }
+
+  getPickQty(productId: number): number {
+    return this.pickQtyMap[productId] || 1;
+  }
+
+  addToPicklist(product: ProductCatalogItem): void {
+    const qty = this.getPickQty(product.id);
+    const existing = this.picklistItems.find(item => item.name.toLowerCase() === product.name.toLowerCase());
+    if (existing) {
+      existing.qty += qty;
+      existing.status = 'pending';
+    } else {
+      this.picklistItems.push({
+        id: this.generateId(),
+        name: product.name,
+        qty,
+        status: 'pending',
+        boxIds: []
+      });
+    }
+    this.updatePicklistMappings();
+    this.savePicklist();
+    this.applyPicklistHighlights();
+  }
+
+  startPicklist(): void {
+    if (!this.picklistItems.length) return;
+    this.picklistActive = true;
+    this.picklistItems = this.picklistItems
+      .map(item => ({ ...item, status: item.status || 'pending' }))
+      .sort((a, b) => (a.tag || '').localeCompare(b.tag || '') || a.name.localeCompare(b.name));
+    this.picklistCurrentId = this.picklistItems.find(item => item.status === 'pending')?.id || null;
+    this.applyPicklistHighlights();
+  }
+
+  focusPickItem(item: PicklistItem): void {
+    if (!item.boxIds.length) return;
+    const targets = item.boxIds.map(id => this.boxMeshes.get(id)).filter(Boolean) as THREE.Mesh[];
+    if (!targets.length) return;
+    const center = targets.reduce((acc, mesh) => acc.add(mesh.position), new THREE.Vector3()).divideScalar(targets.length);
+    this.controls.target.copy(center);
+    this.camera.position.set(center.x + 3, center.y + 3, center.z + 3);
+    this.controls.update();
+  }
+
+  togglePicked(item: PicklistItem): void {
+    const nextStatus = item.status === 'picked' ? 'pending' : 'picked';
+    if (nextStatus === 'picked' && !item.applied) {
+      this.applyPicklistAdjustment(item, -item.qty);
+      item.applied = true;
+    } else if (nextStatus === 'pending' && item.applied) {
+      this.applyPicklistAdjustment(item, item.qty);
+      item.applied = false;
+    }
+    item.status = nextStatus;
+    if (this.picklistCurrentId === item.id && item.status === 'picked') {
+      this.picklistCurrentId = this.picklistItems.find(i => i.status === 'pending')?.id || null;
+    }
+    this.savePicklist();
+    this.applyPicklistHighlights();
+  }
+
+  private applyPicklistAdjustment(item: PicklistItem, delta: number): void {
+    if (!item.boxIds.length || !Number.isFinite(delta) || delta === 0) return;
+    const targetName = item.name.trim().toLowerCase();
+    if (!targetName) return;
+    let pending = Math.abs(delta);
+    const isConsume = delta < 0;
+    const boxes = item.boxIds
+      .map(id => this.layoutMap.get(id))
+      .filter((box): box is LayoutItem => box !== undefined && box.type === 'box');
+
+    if (isConsume) {
+      boxes.forEach(box => {
+        if (!box.medicines || pending <= 0) return;
+        const entry = box.medicines.find(med => med.name.toLowerCase() === targetName);
+        if (!entry || entry.qty <= 0) return;
+        const take = Math.min(entry.qty, pending);
+        entry.qty -= take;
+        pending -= take;
+      });
+
+      if (pending > 0) {
+        const fallback = boxes[0];
+        if (fallback) {
+          if (!fallback.medicines) fallback.medicines = [];
+          const entry = fallback.medicines.find(med => med.name.toLowerCase() === targetName);
+          if (entry) {
+            entry.qty -= pending;
+          } else {
+            fallback.medicines.push({ name: item.name, qty: -pending });
+          }
+        }
+      }
+    } else {
+      const targetBox = boxes[0];
+      if (!targetBox) return;
+      if (!targetBox.medicines) targetBox.medicines = [];
+      const entry = targetBox.medicines.find(med => med.name.toLowerCase() === targetName);
+      if (entry) {
+        entry.qty += pending;
+      } else {
+        targetBox.medicines.push({ name: item.name, qty: pending });
+      }
+    }
+
+    boxes.forEach(box => this.updateBoxLabel(box.id));
+    this.saveLayout();
+  }
+
+  clearPicklist(): void {
+    this.picklistItems = [];
+    this.picklistCurrentId = null;
+    this.picklistActive = false;
+    this.savePicklist();
+    this.clearPickHighlights();
+  }
+
   openBoxManager(id: string): void {
     const item = this.layoutMap.get(id);
     if (!item || item.type !== 'box') return;
@@ -847,8 +1027,48 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
 
   private saveLayout(): void {
     localStorage.setItem(this.storageKey, JSON.stringify(this.layoutItems));
+    window.dispatchEvent(new Event('buildaq-layout-updated'));
     if (this.scene) {
       this.updateTagFlags();
+    }
+  }
+
+  private savePicklist(): void {
+    localStorage.setItem(this.picklistStorageKey, JSON.stringify(this.picklistItems));
+  }
+
+  private loadPicklist(): void {
+    const raw = localStorage.getItem(this.picklistStorageKey);
+    if (!raw) {
+      this.picklistItems = [];
+      return;
+    }
+    try {
+      const parsed = JSON.parse(raw) as PicklistItem[];
+      this.picklistItems = parsed.map(item => ({
+        ...item,
+        status: item.status || 'pending',
+        applied: item.applied ?? item.status === 'picked',
+        boxIds: item.boxIds || []
+      }));
+    } catch (error) {
+      console.warn('Failed to parse picklist', error);
+      this.picklistItems = [];
+    }
+    this.updatePicklistMappings();
+  }
+
+  private loadProductCatalog(): void {
+    const raw = localStorage.getItem(this.productStorageKey);
+    if (!raw) {
+      this.productCatalog = [];
+      return;
+    }
+    try {
+      this.productCatalog = JSON.parse(raw) as ProductCatalogItem[];
+    } catch (error) {
+      console.warn('Failed to parse product catalog', error);
+      this.productCatalog = [];
     }
   }
 
@@ -904,6 +1124,196 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
       }
     });
     this.updateTagFlags();
+    this.applyPicklistHighlights();
+  }
+
+  private updatePicklistMappings(): void {
+    this.picklistItems = this.picklistItems.map(item => {
+      const matches = this.findBoxesForProduct(item.name);
+      const tag = matches.length ? this.layoutMap.get(matches[0])?.tag : undefined;
+      return { ...item, boxIds: matches, tag };
+    });
+  }
+
+  private findBoxesForProduct(name: string): string[] {
+    const target = name.trim().toLowerCase();
+    const ids: string[] = [];
+    this.layoutItems.forEach(item => {
+      if (item.type !== 'box' || !item.medicines) return;
+      if (item.medicines.some(med => med.name.toLowerCase() === target)) {
+        ids.push(item.id);
+      }
+    });
+    return ids;
+  }
+
+  private applyPicklistHighlights(): void {
+    this.clearPickHighlights();
+    if (!this.picklistOpen || !this.picklistItems.length) return;
+    this.picklistItems.forEach(item => {
+      const highlightColor = item.status === 'picked' ? '#94a3b8' : '#38bdf8';
+      if (this.picklistCurrentId === item.id) {
+        this.highlightBoxes(item.boxIds, '#f59e0b', 1.6, 'PICK');
+        return;
+      }
+      this.highlightBoxes(
+        item.boxIds,
+        highlightColor,
+        item.status === 'picked' ? 0.6 : 1.1,
+        item.status === 'picked' ? 'DONE' : 'PICK'
+      );
+    });
+  }
+
+  private clearPickHighlights(): void {
+    this.boxMeshes.forEach(mesh => {
+      const material = mesh.material as THREE.MeshStandardMaterial;
+      if (!material?.emissive) return;
+      const original = mesh.userData?.['origEmissive'] as THREE.Color | undefined;
+      const intensity = mesh.userData?.['origEmissiveIntensity'] as number | undefined;
+      if (original) {
+        material.emissive.copy(original);
+        material.emissiveIntensity = intensity ?? 0;
+      } else {
+        material.emissive.set('#000000');
+        material.emissiveIntensity = 0;
+      }
+
+      const outline = mesh.userData?.['pickOutline'] as THREE.LineSegments | undefined;
+      if (outline) {
+        mesh.remove(outline);
+        outline.geometry.dispose();
+        const outlineMaterial = outline.material as THREE.Material | THREE.Material[];
+        if (Array.isArray(outlineMaterial)) {
+          outlineMaterial.forEach(mat => mat.dispose());
+        } else {
+          outlineMaterial.dispose();
+        }
+        delete mesh.userData['pickOutline'];
+      }
+
+      const badge = mesh.userData?.['pickBadge'] as THREE.Mesh | undefined;
+      if (badge) {
+        mesh.remove(badge);
+        badge.geometry.dispose();
+        const badgeMaterial = badge.material as THREE.Material | THREE.Material[];
+        if (Array.isArray(badgeMaterial)) {
+          badgeMaterial.forEach(mat => mat.dispose());
+        } else {
+          badgeMaterial.dispose();
+        }
+        delete mesh.userData['pickBadge'];
+      }
+    });
+  }
+
+  private highlightBoxes(ids: string[], color: string, intensity: number, badgeText = 'PICK'): void {
+    ids.forEach(id => {
+      const mesh = this.boxMeshes.get(id);
+      if (!mesh) return;
+      const material = mesh.material as THREE.MeshStandardMaterial;
+      if (!material) return;
+      if (!mesh.userData?.['origEmissive']) {
+        mesh.userData['origEmissive'] = material.emissive.clone();
+        mesh.userData['origEmissiveIntensity'] = material.emissiveIntensity;
+      }
+      material.emissive.set(color);
+      material.emissiveIntensity = intensity;
+
+      const item = this.layoutMap.get(id);
+      if (!item) return;
+
+      const outline = mesh.userData?.['pickOutline'] as THREE.LineSegments | undefined;
+      if (!outline) {
+        const newOutline = this.createPickOutline(item.size, color);
+        mesh.add(newOutline);
+        mesh.userData['pickOutline'] = newOutline;
+      } else {
+        (outline.material as THREE.LineBasicMaterial).color.set(color);
+      }
+
+      const badge = mesh.userData?.['pickBadge'] as THREE.Mesh | undefined;
+      if (!badge) {
+        const side = this.getLabelSide(item);
+        const newBadge = this.createPickBadge(item.size, side, badgeText, color);
+        mesh.add(newBadge);
+        mesh.userData['pickBadge'] = newBadge;
+      } else {
+        const badgeMaterial = badge.material as THREE.MeshBasicMaterial;
+        if (badgeMaterial.map) {
+          badgeMaterial.map.dispose();
+        }
+        const nextBadge = this.createPickBadge(
+          item.size,
+          this.getLabelSide(item),
+          badgeText,
+          color
+        );
+        badgeMaterial.map = (nextBadge.material as THREE.MeshBasicMaterial).map || null;
+        badgeMaterial.needsUpdate = true;
+        const { position, rotation, scale } = nextBadge;
+        badge.position.copy(position);
+        badge.rotation.copy(rotation);
+        badge.scale.copy(scale);
+        nextBadge.geometry.dispose();
+        const nextMaterial = nextBadge.material as THREE.Material;
+        nextMaterial.dispose();
+      }
+    });
+  }
+
+  private createPickOutline(
+    size: { x: number; y: number; z: number },
+    color: string
+  ): THREE.LineSegments {
+    const geometry = new THREE.EdgesGeometry(new THREE.BoxGeometry(size.x, size.y, size.z));
+    const material = new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.9 });
+    const outline = new THREE.LineSegments(geometry, material);
+    outline.renderOrder = 12;
+    outline.scale.set(1.03, 1.03, 1.03);
+    return outline;
+  }
+
+  private createPickBadge(
+    size: { x: number; y: number; z: number },
+    side: 'front' | 'back',
+    text: string,
+    color: string
+  ): THREE.Mesh {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 6;
+      ctx.strokeRect(6, 6, canvas.width - 12, canvas.height - 12);
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 54px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, canvas.width / 2, canvas.height / 2 + 4);
+    }
+    const texture = new THREE.CanvasTexture(canvas);
+    const material = new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+      depthTest: true
+    });
+    const badgeWidth = Math.min(size.x * 0.5, 0.7);
+    const badgeHeight = Math.min(size.y * 0.22, 0.25);
+    const geometry = new THREE.PlaneGeometry(badgeWidth, badgeHeight);
+    const badge = new THREE.Mesh(geometry, material);
+
+    const zOffset = size.z / 2 + 0.015;
+    const yOffset = size.y / 2 - badgeHeight / 2 - 0.05;
+    const xOffset = -size.x / 2 + badgeWidth / 2 + 0.06;
+    badge.position.set(xOffset, yOffset, side === 'front' ? zOffset : -zOffset);
+    badge.rotation.y = side === 'front' ? 0 : Math.PI;
+    badge.renderOrder = 13;
+    return badge;
   }
 
   private updatePointer(event: PointerEvent): void {
@@ -1319,6 +1729,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     if (catalog.length === 0) {
       return layout;
     }
+    this.ensureProductCatalogSeeded(catalog);
     const boxes = layout.filter(item =>
       item.type === 'box' && item.name && (item.name.startsWith('B-') || item.name.startsWith('L-') || item.name.startsWith('R-'))
     );
@@ -1413,6 +1824,28 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
       this.medicineCatalog = [];
       return this.medicineCatalog;
     }
+  }
+
+  private ensureProductCatalogSeeded(catalog: MedicineCatalogEntry[]): void {
+    const raw = localStorage.getItem(this.productStorageKey);
+    if (raw) {
+      try {
+        const existing = JSON.parse(raw) as ProductCatalogItem[];
+        if (Array.isArray(existing) && existing.length > 0) {
+          return;
+        }
+      } catch {
+        // Fall through to seed.
+      }
+    }
+    const products: ProductCatalogItem[] = catalog.map((entry, index) => ({
+      id: index + 1,
+      name: entry.name,
+      category: entry.category || 'Medicine',
+      quantity: 50
+    }));
+    localStorage.setItem(this.productStorageKey, JSON.stringify(products));
+    window.dispatchEvent(new Event('buildaq-products-updated'));
   }
 
   private promptBoxName(): string {

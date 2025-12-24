@@ -1,39 +1,102 @@
 <div class="order-management-container">
   <h2>Order Management</h2>
-  
-  <button class="btn-create" (click)="onCreateOrder()">Create New Order</button>
-  
-  <table class="orders-table" *ngIf="orders.length > 0">
-    <thead>
-      <tr>
-        <th>Order #</th>
-        <th>Customer</th>
-        <th>Amount</th>
-        <th>Status</th>
-        <th>Order Date</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let order of orders">
-        <td>{{ order.orderNumber }}</td>
-        <td>{{ order.customerName }}</td>
-        <td>${{ order.totalAmount | number:'1.2-2' }}</td>
-        <td>
-          <span class="status-badge" [style.backgroundColor]="getStatusColor(order.status)">
-            {{ order.status | uppercase }}
-          </span>
-        </td>
-        <td>{{ order.orderDate }}</td>
-        <td>
-          <button class="btn-view" (click)="onViewOrder(order)">View</button>
-          <button class="btn-update" (click)="onUpdateStatus(order)">Update</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  
-  <div class="no-orders" *ngIf="orders.length === 0">
-    <p>No orders found.</p>
+
+  <div class="order-layout">
+    <section class="order-builder">
+      <h3>Create Order</h3>
+      <div class="builder-fields">
+        <label>
+          Customer Name
+          <input type="text" [(ngModel)]="orderDraft.customerName" placeholder="Enter customer name" />
+        </label>
+      </div>
+
+      <div class="product-picker">
+        <div class="picker-header">
+          <span>Products</span>
+          <input type="text" [(ngModel)]="productSearch" placeholder="Search products" />
+        </div>
+        <div class="product-list">
+          <div class="product-row" *ngFor="let product of filteredProducts">
+            <div>
+              <div class="product-name">{{ product.name }}</div>
+              <div class="product-meta">{{ product.category }} · stock {{ product.quantity }}</div>
+            </div>
+            <button type="button" (click)="addToDraft(product)">Add</button>
+          </div>
+          <div class="empty-state" *ngIf="filteredProducts.length === 0">
+            No products found.
+          </div>
+        </div>
+      </div>
+
+      <div class="draft-panel">
+        <div class="draft-header">
+          <span>Order Items</span>
+          <span class="draft-total">Total INR {{ draftTotal | number:'1.2-2' }}</span>
+        </div>
+        <div class="draft-list">
+          <div class="draft-row" *ngFor="let item of orderDraft.items">
+            <div class="draft-info">
+              <div class="draft-name">{{ item.name }}</div>
+              <div class="draft-meta">{{ item.category }}</div>
+            </div>
+            <div class="draft-qty">
+              <button type="button" (click)="updateDraftQty(item, item.qty - 1)">-</button>
+              <input type="number" min="1" [ngModel]="item.qty" (ngModelChange)="updateDraftQty(item, $event)" />
+              <button type="button" (click)="updateDraftQty(item, item.qty + 1)">+</button>
+            </div>
+            <div class="draft-total-line">INR {{ (item.qty * item.price) | number:'1.2-2' }}</div>
+            <button type="button" class="remove-btn" (click)="removeDraftItem(item)">Remove</button>
+          </div>
+          <div class="empty-state" *ngIf="orderDraft.items.length === 0">
+            No items yet. Add products on the left.
+          </div>
+        </div>
+        <div class="draft-actions">
+          <button type="button" class="btn-secondary" (click)="clearDraft()">Clear</button>
+          <button type="button" class="btn-primary" (click)="createOrder()" [disabled]="!orderDraft.customerName || orderDraft.items.length === 0">
+            Create Order
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="order-list">
+      <h3>Recent Orders</h3>
+      <table class="orders-table" *ngIf="orders.length > 0">
+        <thead>
+          <tr>
+            <th>Order #</th>
+            <th>Customer</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Order Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of orders">
+            <td>{{ order.orderNumber }}</td>
+            <td>{{ order.customerName }}</td>
+            <td>INR {{ order.totalAmount | number:'1.2-2' }}</td>
+            <td>
+              <span class="status-badge" [style.backgroundColor]="getStatusColor(order.status)">
+                {{ order.status | uppercase }}
+              </span>
+            </td>
+            <td>{{ order.orderDate }}</td>
+            <td>
+              <button class="btn-view" (click)="onViewOrder(order)">View</button>
+              <button class="btn-update" (click)="onUpdateStatus(order)">Update</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div class="no-orders" *ngIf="orders.length === 0">
+        <p>No orders found.</p>
+      </div>
+    </section>
   </div>
 </div>

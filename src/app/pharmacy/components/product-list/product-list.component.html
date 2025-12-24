@@ -11,36 +11,33 @@
     </div>
   </div>
   
-  <!-- Debug Console -->
-  <div class="console-toggle-btn">
-    <button mat-mini-fab (click)="toggleConsole()" title="Toggle Debug Console">
-      <mat-icon>{{ showConsole ? 'unfold_less' : 'unfold_more' }}</mat-icon>
-    </button>
-  </div>
-  
-  <div *ngIf="showConsole" class="debug-console">
-    <div class="console-header">
-      <h4>Debug Console</h4>
-      <div class="console-controls">
-        <button mat-icon-button (click)="clearConsole()" title="Clear logs">
-          <mat-icon>clear_all</mat-icon>
-        </button>
-        <button mat-icon-button (click)="toggleConsole()" title="Close">
-          <mat-icon>close</mat-icon>
-        </button>
+  <details class="tool-section">
+    <summary>Debug Console</summary>
+    <div class="debug-console">
+      <div class="console-header">
+        <h4>Debug Console</h4>
+        <div class="console-controls">
+          <button mat-icon-button (click)="clearConsole()" title="Clear logs">
+            <mat-icon>clear_all</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="console-output">
+        <div *ngFor="let log of consoleLogs" [ngClass]="getLogClass(log)" class="log-line">
+          {{ log }}
+        </div>
+        <div *ngIf="consoleLogs.length === 0" class="log-empty">
+          No logs yet...
+        </div>
       </div>
     </div>
-    <div class="console-output">
-      <div *ngFor="let log of consoleLogs" [ngClass]="getLogClass(log)" class="log-line">
-        {{ log }}
-      </div>
-      <div *ngIf="consoleLogs.length === 0" class="log-empty">
-        No logs yet...
-      </div>
-    </div>
-  </div>
+  </details>
   
   <div class="action-buttons-row">
+    <button class="btn-add" (click)="syncFromVisualMapper()">
+      <mat-icon>sync</mat-icon>
+      Sync from Visual Mapper
+    </button>
     <button class="btn-add" (click)="onAddProduct()">
       <mat-icon>add_photo_alternate</mat-icon>
       Add Medicines by Image
@@ -55,27 +52,29 @@
     </button>
   </div>
 
-  <div class="catalog-import-section">
-    <h4>Offline Catalog Import (JSON)</h4>
-    <p>Load your local medicine database into this browser.</p>
-    <input type="file" accept=".json,application/json" (change)="onCatalogFileSelected($event)">
-    <div class="catalog-import-actions">
-      <button mat-raised-button color="primary" (click)="loadCatalogToProducts()">
-        <mat-icon>playlist_add</mat-icon>
-        Load Catalog into Products
-      </button>
+  <details class="tool-section">
+    <summary>Offline Catalog Import (JSON)</summary>
+    <div class="catalog-import-section">
+      <p>Load your local medicine database into this browser.</p>
+      <input type="file" accept=".json,application/json" (change)="onCatalogFileSelected($event)">
+      <div class="catalog-import-actions">
+        <button mat-raised-button color="primary" (click)="loadCatalogToProducts()">
+          <mat-icon>playlist_add</mat-icon>
+          Load Catalog into Products
+        </button>
+      </div>
+      <p class="catalog-import-hint">
+        Example:
+        <code>[&#123;"name":"Paracetamol","barcode":"8901234567890","strength":"500mg","manufacturer":"Generic Pharma","category":"Pain Relief","quantity":50&#125;]</code>
+      </p>
+      <div *ngIf="catalogImportSummary" class="barcode-status-success">
+        {{ catalogImportSummary }}
+      </div>
+      <div *ngIf="catalogImportError" class="barcode-status-error">
+        {{ catalogImportError }}
+      </div>
     </div>
-    <p class="catalog-import-hint">
-      Example:
-      <code>[&#123;"name":"Paracetamol","barcode":"8901234567890","strength":"500mg","manufacturer":"Generic Pharma","category":"Pain Relief","quantity":50&#125;]</code>
-    </p>
-    <div *ngIf="catalogImportSummary" class="barcode-status-success">
-      {{ catalogImportSummary }}
-    </div>
-    <div *ngIf="catalogImportError" class="barcode-status-error">
-      {{ catalogImportError }}
-    </div>
-  </div>
+  </details>
   
   <!-- Image Upload Section -->
   <div class="image-upload-section" *ngIf="showImageUpload">

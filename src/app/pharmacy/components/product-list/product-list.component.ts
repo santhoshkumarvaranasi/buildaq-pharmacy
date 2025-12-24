@@ -80,6 +80,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
   catalogImportError: string | null = null;
   catalogImportSummary: string | null = null;
   
+  private storageKey = 'buildaq_pharmacy_products';
+  private layoutStorageKey = 'buildaq_pharmacy_layout_v2';
+  private productsUpdatedHandler = () => this.loadProductsFromStorage();
+  private layoutUpdatedHandler = () => this.syncFromVisualMapper();
+  
   // Manual medicine entry (for adding medicines not in catalog)
   showManualMedicineForm = false;
   newMedicine = {
@@ -106,9 +111,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
   
   ngOnInit(): void {
     this.loadProducts();
+    this.syncFromVisualMapper();
     this.checkModelStatus();
     this.loadCatalogMedicines();
     this.checkOcrAvailability();
+    window.addEventListener('buildaq-products-updated', this.productsUpdatedHandler);
+    window.addEventListener('buildaq-layout-updated', this.layoutUpdatedHandler);
   }
   
   private checkOcrAvailability(): void {
@@ -132,6 +140,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
     if (this.cameraStream) {
       this.cameraStream.getTracks().forEach(track => track.stop());
     }
+    window.removeEventListener('buildaq-products-updated', this.productsUpdatedHandler);
+    window.removeEventListener('buildaq-layout-updated', this.layoutUpdatedHandler);
   }
   
   setupConsoleLogging(): void {
@@ -215,7 +225,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
   
   loadProducts(): void {
-    // Mock data - replace with actual API call
+    if (this.loadProductsFromStorage()) {
+      return;
+    }
     this.products = [
       {
         id: 1,
@@ -242,6 +254,105 @@ export class ProductListComponent implements OnInit, OnDestroy {
         expiryDate: '2026-06-30'
       }
     ];
+    this.saveProducts();
+  }
+
+  private loadProductsFromStorage(): boolean {
+    const saved = localStorage.getItem(this.storageKey);
+    if (!saved) return false;
+    try {
+      const parsed = JSON.parse(saved) as Array<Partial<Product>>;
+      this.products = parsed.map((item, index) => ({
+        id: Number(item.id ?? index + 1),
+        name: String(item.name || '').trim(),
+        category: String(item.category || 'Medicine').trim(),
+        price: Number(item.price ?? 0),
+        quantity: Number(item.quantity ?? 0),
+        expiryDate: String(item.expiryDate || 'N/A')
+      })).filter(item => item.name);
+      return true;
+    } catch (error) {
+      console.warn('Failed to parse saved products', error);
+      return false;
+    }
+  }
+
+  private saveProducts(): void {
+    localStorage.setItem(this.storageKey, JSON.stringify(this.products));
+    window.dispatchEvent(new Event('buildaq-products-updated'));
+  }
+
+  syncFromVisualMapper(): void {
+    const raw = localStorage.getItem(this.layoutStorageKey);
+    if (!raw) return;
+    try {
+      const layout = JSON.parse(raw) as Array<{
+        type?: string;
+        medicines?: unknown;
+        tag?: string;
+      }>;
+      const totals = new Map<string, { qty: number; category: string }>();
+      layout.forEach(item => {
+        if (item.type !== 'box' || !item.medicines) return;
+        const category = item.tag || 'Medicine';
+        const entries: Array<{ name: string; qty: number }> = [];
+
+        if (Array.isArray(item.medicines)) {
+          item.medicines.forEach(med => {
+            if (typeof med === 'string') {
+              entries.push({ name: med, qty: 1 });
+              return;
+            }
+            if (med && typeof med === 'object') {
+              const name = String((med as { name?: string; medicine?: string; title?: string }).name
+                || (med as { medicine?: string }).medicine
+                || (med as { title?: string }).title
+                || '').trim();
+              const qty = Number((med as { qty?: number; quantity?: number }).qty
+                ?? (med as { quantity?: number }).quantity
+                ?? 1);
+              entries.push({ name, qty: Number.isFinite(qty) ? qty : 0 });
+            }
+          });
+        } else if (item.medicines && typeof item.medicines === 'object') {
+          Object.entries(item.medicines as Record<string, number>).forEach(([name, qty]) => {
+            entries.push({ name: String(name).trim(), qty: Number(qty ?? 0) });
+          });
+        }
+
+        entries.forEach(entry => {
+          const key = entry.name.trim().toLowerCase();
+          if (!key) return;
+          const current = totals.get(key);
+          totals.set(key, {
+            qty: (current?.qty || 0) + (Number.isFinite(entry.qty) ? entry.qty : 0),
+            category: current?.category || category
+          });
+        });
+      });
+
+      if (totals.size === 0) return;
+
+      const existingByName = new Map(this.products.map(p => [p.name.toLowerCase(), p]));
+      let nextId = this.products.reduce((max, p) => Math.max(max, p.id), 0) + 1;
+      const nextProducts: Product[] = [];
+      totals.forEach((value, key) => {
+        const existing = existingByName.get(key);
+        nextProducts.push({
+          id: existing?.id ?? nextId++,
+          name: existing?.name || key.replace(/\b\w/g, char => char.toUpperCase()),
+          category: existing?.category || value.category || 'Medicine',
+          price: existing?.price ?? 0,
+          quantity: value.qty,
+          expiryDate: existing?.expiryDate || 'N/A'
+        });
+      });
+      this.products = nextProducts.sort((a, b) => a.name.localeCompare(b.name));
+      this.pageIndex = 0;
+      this.saveProducts();
+    } catch (error) {
+      console.warn('Failed to sync from visual mapper', error);
+    }
   }
 
   get filteredProducts(): Product[] {
@@ -593,6 +704,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     if (this.pageIndex * this.pageSize >= this.products.length) {
       this.pageIndex = 0;
     }
+    this.saveProducts();
     
     console.log('=== Summary ===');
     console.log('Total products added:', addedCount);
@@ -733,6 +845,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     if (this.pageIndex * this.pageSize >= this.products.length) {
       this.pageIndex = Math.max(0, Math.floor((this.products.length - 1) / this.pageSize));
     }
+    this.saveProducts();
   }
   
   // Medicine identification methods
@@ -832,6 +945,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     if (this.pageIndex * this.pageSize >= this.products.length) {
       this.pageIndex = 0;
     }
+    this.saveProducts();
   }
   
   editMedicineName(index: number): void {
@@ -1009,6 +1123,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       if (this.pageIndex * this.pageSize >= this.products.length) {
         this.pageIndex = 0;
       }
+      this.saveProducts();
 
       console.log('Added new medicine:', newMedicine);
       alert(`âœ… "${this.scannedMedicine.name}" added to catalog successfully!`);
@@ -1078,6 +1193,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     if (this.pageIndex * this.pageSize >= this.products.length) {
       this.pageIndex = 0;
     }
+    this.saveProducts();
 
     console.log('Added new medicine manually:', medicine);
     alert(`âœ… "${medicine.name}" added to catalog successfully!`);
