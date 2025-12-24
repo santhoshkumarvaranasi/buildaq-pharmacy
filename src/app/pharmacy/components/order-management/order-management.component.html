@@ -10,6 +10,26 @@
       <div class="empty-state" *ngIf="products.length === 0">
         No products available yet. Add products in the Products tab or sync from Visual Mapper.
       </div>
+      <div class="customer-panel">
+        <div class="customer-header">
+          <span>Customer List</span>
+          <input type="text" [(ngModel)]="customerSearch" placeholder="Search customers" />
+        </div>
+        <div class="customer-list">
+          <button type="button" class="customer-row" *ngFor="let customer of filteredCustomers" (click)="selectCustomer(customer)">
+            <span class="customer-name">{{ customer.name }}</span>
+            <span class="customer-phone" *ngIf="customer.phone">{{ customer.phone }}</span>
+          </button>
+          <div class="empty-state" *ngIf="filteredCustomers.length === 0">
+            No customers yet.
+          </div>
+        </div>
+        <div class="customer-add">
+          <input type="text" [(ngModel)]="customerDraft.name" placeholder="Customer name" />
+          <input type="text" [(ngModel)]="customerDraft.phone" placeholder="Phone (optional)" />
+          <button type="button" class="btn-primary" (click)="addCustomer()" [disabled]="!customerDraft.name">Add Customer</button>
+        </div>
+      </div>
       <div class="builder-fields">
         <label>
           Customer Name
@@ -160,6 +180,7 @@
             </td>
             <td>{{ order.orderDate }}</td>
             <td>
+              <button class="btn-view" (click)="quickReorder(order)">Reorder</button>
               <button class="btn-view" (click)="onViewOrder(order)">View</button>
               <button class="btn-update" (click)="onUpdateStatus(order)">Update</button>
             </td>

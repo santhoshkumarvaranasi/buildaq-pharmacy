@@ -45,6 +45,12 @@ interface Product {
   expiryDate: string;
 }
 
+interface Customer {
+  id: number;
+  name: string;
+  phone?: string;
+}
+
 @Component({
   selector: 'app-order-management',
   templateUrl: './order-management.component.html',
@@ -54,13 +60,19 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
   orders: Order[] = [];
   receipts: Receipt[] = [];
   products: Product[] = [];
+  customers: Customer[] = [];
   productSearch = '';
   inboundProductSearch = '';
   lowStockItems: Array<{ name: string; qty: number }> = [];
   lowStockThreshold = 10;
+  customerSearch = '';
   orderDraft = {
     customerName: '',
     items: [] as OrderItem[]
+  };
+  customerDraft = {
+    name: '',
+    phone: ''
   };
   receiptDraft = {
     supplierName: '',
@@ -70,6 +82,7 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
   private ordersStorageKey = 'buildaq_pharmacy_orders';
   private receiptsStorageKey = 'buildaq_pharmacy_receipts';
   private productsStorageKey = 'buildaq_pharmacy_products';
+  private customersStorageKey = 'buildaq_pharmacy_customers';
   private productsUpdatedHandler = () => {
     this.loadProductsFromStorage();
     this.refreshLowStockItems();
@@ -81,6 +94,7 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
     this.loadOrdersFromStorage();
     this.loadReceiptsFromStorage();
     this.loadProductsFromStorage();
+    this.loadCustomersFromStorage();
     this.refreshLowStockItems();
     window.addEventListener('buildaq-products-updated', this.productsUpdatedHandler);
   }
@@ -109,6 +123,31 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
 
   private saveOrders(): void {
     localStorage.setItem(this.ordersStorageKey, JSON.stringify(this.orders));
+  }
+
+  private loadCustomersFromStorage(): void {
+    const raw = localStorage.getItem(this.customersStorageKey);
+    if (!raw) {
+      this.customers = [];
+      return;
+    }
+    try {
+      const parsed = JSON.parse(raw) as Customer[];
+      this.customers = parsed
+        .map(item => ({
+          id: Number(item.id),
+          name: String(item.name || '').trim(),
+          phone: item.phone ? String(item.phone).trim() : ''
+        }))
+        .filter(item => item.name);
+    } catch (error) {
+      console.warn('Failed to parse customers', error);
+      this.customers = [];
+    }
+  }
+
+  private saveCustomers(): void {
+    localStorage.setItem(this.customersStorageKey, JSON.stringify(this.customers));
   }
 
   private loadReceiptsFromStorage(): void {
@@ -181,6 +220,15 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
     return this.orderDraft.items.reduce((sum, item) => sum + item.qty * item.price, 0);
   }
 
+  get filteredCustomers(): Customer[] {
+    const term = this.customerSearch.trim().toLowerCase();
+    if (!term) return this.customers;
+    return this.customers.filter(customer =>
+      customer.name.toLowerCase().includes(term) ||
+      (customer.phone || '').toLowerCase().includes(term)
+    );
+  }
+
   get receiptUnits(): number {
     return this.receiptDraft.items.reduce((sum, item) => sum + item.qty, 0);
   }
@@ -214,6 +262,31 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
       customerName: '',
       items: []
     };
+  }
+
+  selectCustomer(customer: Customer): void {
+    this.orderDraft.customerName = customer.name;
+  }
+
+  addCustomer(): void {
+    const name = this.customerDraft.name.trim();
+    if (!name) return;
+    const existing = this.customers.find(customer => customer.name.toLowerCase() === name.toLowerCase());
+    if (existing) {
+      this.orderDraft.customerName = existing.name;
+      this.customerDraft = { name: '', phone: '' };
+      return;
+    }
+    const nextId = this.customers.reduce((max, customer) => Math.max(max, customer.id), 0) + 1;
+    const newCustomer: Customer = {
+      id: nextId,
+      name,
+      phone: this.customerDraft.phone.trim()
+    };
+    this.customers.unshift(newCustomer);
+    this.saveCustomers();
+    this.orderDraft.customerName = newCustomer.name;
+    this.customerDraft = { name: '', phone: '' };
   }
 
   addToReceiptDraft(product: Product): void {
@@ -265,6 +338,16 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
     const customerName = this.orderDraft.customerName.trim();
     if (!customerName || this.orderDraft.items.length === 0) return;
 
+    const knownCustomer = this.customers.find(customer => customer.name.toLowerCase() === customerName.toLowerCase());
+    if (!knownCustomer) {
+      const nextCustomerId = this.customers.reduce((max, customer) => Math.max(max, customer.id), 0) + 1;
+      this.customers.unshift({
+        id: nextCustomerId,
+        name: customerName
+      });
+      this.saveCustomers();
+    }
+
     const nextId = this.orders.reduce((max, order) => Math.max(max, order.id), 0) + 1;
     const date = new Date();
     const dateToken = date.toISOString().slice(0, 10).replace(/-/g, '');
@@ -283,6 +366,13 @@ export class OrderManagementComponent implements OnInit, OnDestroy {
     });
     this.saveOrders();
     this.clearDraft();
+  }
+
+  quickReorder(order: Order): void {
+    this.orderDraft = {
+      customerName: order.customerName,
+      items: order.items.map(item => ({ ...item }))
+    };
   }
 
   receiveStock(): void {
