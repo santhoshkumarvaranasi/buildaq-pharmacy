@@ -149,6 +149,20 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     extra: 0
   };
   auditReport = '';
+  restockOpen = false;
+  restockItems: Array<{
+    id: string;
+    name: string;
+    tag: string;
+    total: number;
+    min: number;
+    max: number;
+    suggested: number;
+  }> = [];
+  restockSummary = {
+    lowBoxes: 0,
+    totalSuggested: 0
+  };
   heatmapEnabled = false;
 
   private animationFrameId: number | null = null;
@@ -1034,6 +1048,22 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.auditOpen = false;
   }
 
+  openRestock(): void {
+    this.restockOpen = true;
+    this.computeRestockList();
+  }
+
+  closeRestock(): void {
+    this.restockOpen = false;
+  }
+
+  focusRestockItem(id: string): void {
+    const mesh = this.boxMeshes.get(id);
+    if (!mesh) return;
+    this.selectMesh(mesh);
+    this.openBoxManager(id);
+  }
+
   toggleHeatmap(): void {
     this.heatmapEnabled = !this.heatmapEnabled;
     if (this.heatmapEnabled) {
@@ -1274,6 +1304,36 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     return '#b91c1c';
   }
 
+  private computeRestockList(): void {
+    const items = this.layoutItems
+      .filter(item => item.type === 'box')
+      .map(item => {
+        const total = this.getTotalQty(item);
+        const min = item.minStock ?? 0;
+        const max = item.maxStock ?? 0;
+        const needsRestock = min > 0 && total < min;
+        const target = max > 0 ? max : min;
+        const suggested = needsRestock ? Math.max(0, target - total) : 0;
+        return {
+          id: item.id,
+          name: item.name || 'Box',
+          tag: item.tag || 'General',
+          total,
+          min,
+          max,
+          suggested
+        };
+      })
+      .filter(item => item.suggested > 0)
+      .sort((a, b) => b.suggested - a.suggested);
+
+    this.restockItems = items;
+    this.restockSummary = {
+      lowBoxes: items.length,
+      totalSuggested: items.reduce((sum, item) => sum + item.suggested, 0)
+    };
+  }
+
   private clearShelfCapacityBadges(): void {
     this.shelfCapacityBadges.forEach(badge => {
       badge.parent?.remove(badge);
@@ -1497,6 +1557,9 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     window.dispatchEvent(new Event('buildaq-layout-updated'));
     if (this.scene) {
       this.updateTagFlags();
+      if (this.restockOpen) {
+        this.computeRestockList();
+      }
       if (this.shelfCapacityEnabled) {
         this.updateShelfCapacityBadges();
       }
@@ -1623,6 +1686,9 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
       this.applyHeatmap();
     }
     this.clearBatchSelection();
+    if (this.restockOpen) {
+      this.computeRestockList();
+    }
     if (this.shelfCapacityEnabled) {
       this.updateShelfCapacityBadges();
     }

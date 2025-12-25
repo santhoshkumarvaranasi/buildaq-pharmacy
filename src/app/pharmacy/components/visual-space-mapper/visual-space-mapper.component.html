@@ -88,6 +88,11 @@
       </button>
     </div>
     <div class="tool-group">
+      <button type="button" mat-stroked-button color="primary" (click)="openRestock()">
+        Restock
+      </button>
+    </div>
+    <div class="tool-group">
       <label class="preset-label">
         Preset
         <select [(ngModel)]="selectedPresetId">
@@ -315,6 +320,36 @@
           <div class="audit-empty" *ngIf="auditResults.length === 0">
             No audit results yet.
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="restock-drawer" *ngIf="restockOpen">
+      <div class="restock-header">
+        <div>
+          <div class="restock-title">Restock Suggestions</div>
+          <div class="restock-subtitle">
+            {{ restockSummary.lowBoxes }} boxes · {{ restockSummary.totalSuggested }} units
+          </div>
+        </div>
+        <button type="button" class="close-btn" (click)="closeRestock()">Close</button>
+      </div>
+      <div class="restock-body">
+        <div
+          class="restock-row"
+          *ngFor="let item of restockItems"
+          (click)="focusRestockItem(item.id)"
+        >
+          <div class="restock-name">{{ item.name }}</div>
+          <div class="restock-meta">{{ item.tag }}</div>
+          <div class="restock-stats">
+            <span>Stock {{ item.total }}</span>
+            <span>Min {{ item.min }}</span>
+            <span *ngIf="item.max">Max {{ item.max }}</span>
+          </div>
+          <div class="restock-suggest">+{{ item.suggested }}</div>
+        </div>
+        <div class="restock-empty" *ngIf="restockItems.length === 0">
+          No low-stock boxes found.
         </div>
       </div>
     </div>
