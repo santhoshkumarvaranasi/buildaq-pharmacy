@@ -64,6 +64,11 @@
       </button>
     </div>
     <div class="tool-group">
+      <button type="button" mat-stroked-button [color]="shelfCapacityEnabled ? 'accent' : ''" (click)="toggleShelfCapacity()">
+        Shelf Capacity
+      </button>
+    </div>
+    <div class="tool-group">
       <button type="button" mat-stroked-button [color]="zonePickerEnabled ? 'accent' : ''" (click)="toggleZonePicker()">
         Zone Picker
       </button>

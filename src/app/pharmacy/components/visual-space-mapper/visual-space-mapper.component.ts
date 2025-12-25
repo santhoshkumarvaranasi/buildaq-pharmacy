@@ -97,6 +97,8 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
   private boxLabels = new Map<string, THREE.Object3D>();
   private tagFlags = new Map<string, THREE.Object3D>();
   private selectedMesh: THREE.Mesh | null = null;
+  private shelfCapacityBadges = new Map<string, THREE.Mesh>();
+  shelfCapacityEnabled = false;
   zonePickerEnabled = false;
   activeZoneTag: string | null = null;
   selectedBoxIds: string[] = [];
@@ -269,6 +271,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.boxMeshes.clear();
     this.boxLabels.clear();
     this.tagFlags.clear();
+    this.clearShelfCapacityBadges();
     this.clearBatchSelection();
     this.activeZoneTag = null;
     this.saveLayout();
@@ -1040,6 +1043,15 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.clearHeatmap();
   }
 
+  toggleShelfCapacity(): void {
+    this.shelfCapacityEnabled = !this.shelfCapacityEnabled;
+    if (this.shelfCapacityEnabled) {
+      this.updateShelfCapacityBadges();
+      return;
+    }
+    this.clearShelfCapacityBadges();
+  }
+
   clearAuditInput(): void {
     this.auditInput = '';
     this.auditResults = [];
@@ -1262,6 +1274,97 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     return '#b91c1c';
   }
 
+  private clearShelfCapacityBadges(): void {
+    this.shelfCapacityBadges.forEach(badge => {
+      badge.parent?.remove(badge);
+      badge.geometry.dispose();
+      const material = badge.material as THREE.Material | THREE.Material[];
+      if (Array.isArray(material)) {
+        material.forEach(mat => mat.dispose());
+      } else {
+        material.dispose();
+      }
+    });
+    this.shelfCapacityBadges.clear();
+  }
+
+  private updateShelfCapacityBadges(): void {
+    if (!this.shelfCapacityEnabled) {
+      this.clearShelfCapacityBadges();
+      return;
+    }
+    this.clearShelfCapacityBadges();
+    const shelves = this.layoutItems.filter(item => item.type === 'shelf');
+    shelves.forEach(shelf => {
+      const mesh = this.shelfMeshes.get(shelf.id);
+      if (!mesh) return;
+      const boxes = this.getBoxesForShelf(shelf);
+      const totalQty = boxes.reduce((sum, box) => sum + this.getTotalQty(box), 0);
+      const totalCapacity = boxes.reduce((sum, box) => sum + (box.capacity ?? 0), 0);
+      const capacity = totalCapacity > 0 ? totalCapacity : boxes.length * 100;
+      const ratio = capacity > 0 ? totalQty / capacity : 0;
+      const percent = Math.round(Math.min(1.5, Math.max(0, ratio)) * 100);
+      const color = this.getHeatmapColor(ratio);
+      const side = this.getShelfLabelSide(shelf);
+      const badge = this.createShelfCapacityBadge(`${percent}%`, color);
+      const offset = shelf.size.z / 2 + 0.08;
+      badge.position.set(0, shelf.size.y / 2 + 0.12, (side === 'front' ? 1 : -1) * offset);
+      if (side === 'back') {
+        badge.rotation.y = Math.PI;
+      }
+      mesh.add(badge);
+      this.shelfCapacityBadges.set(shelf.id, badge);
+    });
+  }
+
+  private getBoxesForShelf(shelf: LayoutItem): LayoutItem[] {
+    const candidates = this.layoutItems.filter(entry => entry.type === 'box');
+    const shelfBounds = {
+      x: shelf.size.x / 2 + 0.6,
+      y: shelf.size.y / 2 + 0.6,
+      z: shelf.size.z / 2 + 1.2
+    };
+    const shelfPos = shelf.position;
+    return candidates.filter(box =>
+      Math.abs(box.position.x - shelfPos.x) <= shelfBounds.x &&
+      Math.abs(box.position.y - shelfPos.y) <= shelfBounds.y &&
+      Math.abs(box.position.z - shelfPos.z) <= shelfBounds.z
+    );
+  }
+
+  private getShelfLabelSide(item: LayoutItem): 'front' | 'back' {
+    const isRightWall = item.position.x > 0.1;
+    const rightFacing = Math.abs((item.rotation.y || 0) - Math.PI / 2) < 0.2;
+    return isRightWall && rightFacing ? 'back' : 'front';
+  }
+
+  private createShelfCapacityBadge(text: string, color: string): THREE.Mesh {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 6;
+      ctx.strokeRect(6, 6, canvas.width - 12, canvas.height - 12);
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = '700 54px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+    }
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+    const geometry = new THREE.PlaneGeometry(0.5, 0.24);
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.renderOrder = 10;
+    return mesh;
+  }
+
   runAudit(): void {
     this.computeAuditResults();
   }
@@ -1394,6 +1497,9 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     window.dispatchEvent(new Event('buildaq-layout-updated'));
     if (this.scene) {
       this.updateTagFlags();
+      if (this.shelfCapacityEnabled) {
+        this.updateShelfCapacityBadges();
+      }
     }
   }
 
@@ -1490,6 +1596,9 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.updateTagFlags();
     this.applyPicklistHighlights();
     this.clearBatchSelection();
+    if (this.shelfCapacityEnabled) {
+      this.updateShelfCapacityBadges();
+    }
   }
 
   private reloadLayoutFromStorage(): void {
@@ -1514,6 +1623,9 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
       this.applyHeatmap();
     }
     this.clearBatchSelection();
+    if (this.shelfCapacityEnabled) {
+      this.updateShelfCapacityBadges();
+    }
   }
 
   private updatePicklistMappings(): void {
