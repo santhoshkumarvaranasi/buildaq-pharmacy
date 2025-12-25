@@ -158,11 +158,13 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     min: number;
     max: number;
     suggested: number;
+    medicines: string[];
   }> = [];
   restockSummary = {
     lowBoxes: 0,
     totalSuggested: 0
   };
+  restockSelections: Record<string, string> = {};
   heatmapEnabled = false;
 
   private animationFrameId: number | null = null;
@@ -1064,6 +1066,41 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.openBoxManager(id);
   }
 
+  applyRestockItem(id: string): void {
+    const item = this.layoutMap.get(id);
+    if (!item || item.type !== 'box') return;
+    const selectedMedicine = this.restockSelections[id];
+    if (!selectedMedicine) {
+      this.snackBar.open('Select a medicine before restocking', 'Close', { duration: 2000 });
+      return;
+    }
+    const total = this.getTotalQty(item);
+    const min = item.minStock ?? 0;
+    const max = item.maxStock ?? 0;
+    const target = max > 0 ? max : min;
+    if (target <= total) return;
+    const delta = target - total;
+    if (!item.medicines) item.medicines = [];
+    const existing = item.medicines.find(entry => entry.name === selectedMedicine);
+    if (existing) {
+      existing.qty += delta;
+    } else {
+      item.medicines.push({ name: selectedMedicine, qty: delta });
+    }
+    this.updateBoxLabel(item.id);
+    this.saveLayout();
+    this.computeRestockList();
+  }
+
+  applyRestockAll(): void {
+    const missing = this.restockItems.filter(item => !this.restockSelections[item.id]);
+    if (missing.length) {
+      this.snackBar.open('Select a medicine for each box before applying', 'Close', { duration: 2500 });
+      return;
+    }
+    this.restockItems.forEach(item => this.applyRestockItem(item.id));
+  }
+
   toggleHeatmap(): void {
     this.heatmapEnabled = !this.heatmapEnabled;
     if (this.heatmapEnabled) {
@@ -1314,6 +1351,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
         const needsRestock = min > 0 && total < min;
         const target = max > 0 ? max : min;
         const suggested = needsRestock ? Math.max(0, target - total) : 0;
+        const medicines = (item.medicines || []).map(entry => entry.name).filter(name => name);
         return {
           id: item.id,
           name: item.name || 'Box',
@@ -1321,13 +1359,26 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
           total,
           min,
           max,
-          suggested
+          suggested,
+          medicines
         };
       })
       .filter(item => item.suggested > 0)
       .sort((a, b) => b.suggested - a.suggested);
 
     this.restockItems = items;
+    const nextSelections: Record<string, string> = {};
+    items.forEach(item => {
+      const existing = this.restockSelections[item.id];
+      if (existing && item.medicines.includes(existing)) {
+        nextSelections[item.id] = existing;
+        return;
+      }
+      if (item.medicines.length) {
+        nextSelections[item.id] = item.medicines[0];
+      }
+    });
+    this.restockSelections = nextSelections;
     this.restockSummary = {
       lowBoxes: items.length,
       totalSuggested: items.reduce((sum, item) => sum + item.suggested, 0)

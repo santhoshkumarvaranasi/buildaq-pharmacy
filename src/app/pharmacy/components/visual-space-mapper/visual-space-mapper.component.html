@@ -331,7 +331,12 @@
             {{ restockSummary.lowBoxes }} boxes · {{ restockSummary.totalSuggested }} units
           </div>
         </div>
-        <button type="button" class="close-btn" (click)="closeRestock()">Close</button>
+        <div class="restock-actions">
+          <button type="button" class="restock-apply" (click)="applyRestockAll()" [disabled]="restockItems.length === 0">
+            Apply All
+          </button>
+          <button type="button" class="close-btn" (click)="closeRestock()">Close</button>
+        </div>
       </div>
       <div class="restock-body">
         <div
@@ -341,12 +346,29 @@
         >
           <div class="restock-name">{{ item.name }}</div>
           <div class="restock-meta">{{ item.tag }}</div>
+          <div class="restock-medicine">
+            <label>
+              Medicine
+              <select [(ngModel)]="restockSelections[item.id]" (click)="$event.stopPropagation()">
+                <option value="" disabled>Select</option>
+                <option *ngFor="let med of item.medicines" [value]="med">{{ med }}</option>
+              </select>
+            </label>
+          </div>
           <div class="restock-stats">
             <span>Stock {{ item.total }}</span>
             <span>Min {{ item.min }}</span>
             <span *ngIf="item.max">Max {{ item.max }}</span>
           </div>
           <div class="restock-suggest">+{{ item.suggested }}</div>
+          <button
+            type="button"
+            class="restock-apply-row"
+            [disabled]="!restockSelections[item.id]"
+            (click)="applyRestockItem(item.id); $event.stopPropagation()"
+          >
+            Apply
+          </button>
         </div>
         <div class="restock-empty" *ngIf="restockItems.length === 0">
           No low-stock boxes found.

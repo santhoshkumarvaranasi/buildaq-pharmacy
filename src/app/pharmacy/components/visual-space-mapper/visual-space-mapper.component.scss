@@ -294,6 +294,12 @@
   margin-bottom: 12px;
 }
 
+.restock-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .restock-title {
   font-weight: 700;
   font-size: 18px;
@@ -320,6 +326,21 @@
   cursor: pointer;
 }
 
+.restock-medicine label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  color: rgba(248, 250, 252, 0.7);
+}
+
+.restock-medicine select {
+  border-radius: 8px;
+  border: 1px solid rgba(248, 250, 252, 0.2);
+  padding: 4px 8px;
+  background: rgba(15, 23, 42, 0.6);
+  color: #f8fafc;
+}
+
 .restock-name {
   font-weight: 600;
   font-size: 14px;
@@ -343,6 +364,35 @@
   font-weight: 700;
   font-size: 14px;
   color: #f59e0b;
+}
+
+.restock-apply {
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  background: rgba(56, 189, 248, 0.2);
+  color: #f8fafc;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.restock-apply:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.restock-apply-row {
+  justify-self: start;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  background: rgba(56, 189, 248, 0.2);
+  color: #f8fafc;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.restock-apply-row:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .restock-empty {
