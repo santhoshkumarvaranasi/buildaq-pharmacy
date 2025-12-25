@@ -64,6 +64,15 @@
       </button>
     </div>
     <div class="tool-group">
+      <button type="button" mat-stroked-button [color]="zonePickerEnabled ? 'accent' : ''" (click)="toggleZonePicker()">
+        Zone Picker
+      </button>
+      <button type="button" mat-stroked-button *ngIf="activeZoneTag" (click)="clearZoneFilter()">
+        Clear Zone
+      </button>
+      <span class="zone-chip" *ngIf="activeZoneTag">{{ activeZoneTag }}</span>
+    </div>
+    <div class="tool-group">
       <button type="button" mat-stroked-button [color]="heatmapEnabled ? 'accent' : ''" (click)="toggleHeatmap()">
         Heatmap
       </button>

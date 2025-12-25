@@ -97,6 +97,8 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
   private boxLabels = new Map<string, THREE.Object3D>();
   private tagFlags = new Map<string, THREE.Object3D>();
   private selectedMesh: THREE.Mesh | null = null;
+  zonePickerEnabled = false;
+  activeZoneTag: string | null = null;
   selectedBoxIds: string[] = [];
   batchLabelOpen = false;
   batchLabelForm = {
@@ -198,6 +200,18 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.detachTransform();
   }
 
+  toggleZonePicker(): void {
+    this.zonePickerEnabled = !this.zonePickerEnabled;
+    if (!this.zonePickerEnabled) {
+      this.clearZoneFilter();
+    }
+  }
+
+  clearZoneFilter(): void {
+    this.activeZoneTag = null;
+    this.applyZoneFilter();
+  }
+
   openBatchLabel(): void {
     if (!this.selectedBoxIds.length) {
       this.snackBar.open('Select boxes first (Shift+Click)', 'Close', { duration: 2000 });
@@ -256,6 +270,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.boxLabels.clear();
     this.tagFlags.clear();
     this.clearBatchSelection();
+    this.activeZoneTag = null;
     this.saveLayout();
     this.snackBar.open('Layout cleared', 'Close', { duration: 2000 });
   }
@@ -372,6 +387,14 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
       if (event.button === 2) {
         this.openContextMenu(event);
         return;
+      }
+      if (this.zonePickerEnabled) {
+        const tag = this.pickZoneTag(event);
+        if (tag) {
+          this.activeZoneTag = this.activeZoneTag === tag ? null : tag;
+          this.applyZoneFilter();
+          return;
+        }
       }
       const hits = this.raycaster.intersectObjects(this.collectMeshes(), true);
       if (!hits.length) {
@@ -2321,6 +2344,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
       this.scene.add(flag);
       this.tagFlags.set(tag, flag);
     });
+    this.applyZoneFilter();
   }
 
   private createTagFlag(text: string): THREE.Object3D {
@@ -2356,7 +2380,52 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     pole.position.set(-0.55, 0.2, 0);
     const group = new THREE.Group();
     group.add(pole, board);
+    group.userData['tag'] = text;
     return group;
+  }
+
+  private pickZoneTag(event: MouseEvent): string | null {
+    this.updatePointer(event as unknown as PointerEvent);
+    this.raycaster.setFromCamera(this.pointer, this.camera);
+    const hits = this.raycaster.intersectObjects([...this.tagFlags.values()], true);
+    if (!hits.length) return null;
+    let current: THREE.Object3D | null = hits[0].object;
+    while (current) {
+      const tag = current.userData?.['tag'] as string | undefined;
+      if (tag) return tag;
+      current = current.parent;
+    }
+    return null;
+  }
+
+  private applyZoneFilter(): void {
+    const active = this.activeZoneTag;
+    this.boxMeshes.forEach(mesh => {
+      const material = mesh.material as THREE.MeshStandardMaterial;
+      if (!material) return;
+      if (!mesh.userData?.['zoneOrigOpacity']) {
+        mesh.userData['zoneOrigOpacity'] = material.opacity;
+        mesh.userData['zoneOrigTransparent'] = material.transparent;
+        mesh.userData['zoneOrigDepthWrite'] = material.depthWrite;
+      }
+      const id = mesh.userData?.['layoutId'] as string | undefined;
+      const item = id ? this.layoutMap.get(id) : undefined;
+      const matches = !active || Boolean(item?.tag && item.tag.trim() === active);
+      if (matches) {
+        material.opacity = mesh.userData['zoneOrigOpacity'] as number;
+        material.transparent = mesh.userData['zoneOrigTransparent'] as boolean;
+        material.depthWrite = mesh.userData['zoneOrigDepthWrite'] as boolean;
+      } else {
+        material.transparent = true;
+        material.opacity = 0.12;
+        material.depthWrite = false;
+      }
+      material.needsUpdate = true;
+      const label = id ? this.boxLabels.get(id) : undefined;
+      if (label) {
+        label.visible = matches;
+      }
+    });
   }
 
   private getActiveColor(forType?: LayoutType): string {
