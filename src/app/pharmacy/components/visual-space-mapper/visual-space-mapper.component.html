@@ -59,6 +59,11 @@
       </button>
     </div>
     <div class="tool-group">
+      <button type="button" mat-stroked-button color="primary" (click)="openBatchLabel()">
+        Batch Label ({{ selectedBoxIds.length }})
+      </button>
+    </div>
+    <div class="tool-group">
       <button type="button" mat-stroked-button [color]="heatmapEnabled ? 'accent' : ''" (click)="toggleHeatmap()">
         Heatmap
       </button>
@@ -102,7 +107,7 @@
       <button type="button" (click)="setCapacityForSelectedBox()">Set Capacity</button>
       <button type="button" (click)="viewMedicinesInSelectedBox()">View Medicines</button>
     </div>
-    <div class="modal-backdrop" *ngIf="medicinePopup.visible" (click)="closeMedicinePopup()"></div>
+    <div class="modal-backdrop" *ngIf="medicinePopup.visible || batchLabelOpen" (click)="closeMedicinePopup(); closeBatchLabel()"></div>
     <div class="medicine-modal" *ngIf="medicinePopup.visible">
       <div class="medicine-modal-header">
         <div class="medicine-modal-title">
@@ -170,6 +175,33 @@
           <span class="medicine-qty" [class.negative]="med.qty < 0">{{ med.qty }}</span>
           <span class="medicine-alert" *ngIf="med.qty < 0">short {{ -med.qty }}</span>
         </div>
+      </div>
+    </div>
+    <div class="batch-label-modal" *ngIf="batchLabelOpen">
+      <div class="batch-label-header">
+        <div>
+          <div class="batch-label-title">Batch Label Boxes</div>
+          <div class="batch-label-subtitle">{{ selectedBoxIds.length }} boxes selected</div>
+        </div>
+        <button type="button" class="close-btn" (click)="closeBatchLabel()">Cancel</button>
+      </div>
+      <div class="batch-label-body">
+        <label>
+          Prefix
+          <input type="text" maxlength="4" [(ngModel)]="batchLabelForm.prefix" />
+        </label>
+        <label>
+          Start #
+          <input type="number" min="1" [(ngModel)]="batchLabelForm.start" />
+        </label>
+        <label>
+          Tag
+          <input type="text" [(ngModel)]="batchLabelForm.tag" />
+        </label>
+      </div>
+      <div class="action-row">
+        <button type="button" (click)="closeBatchLabel()">Cancel</button>
+        <button type="button" class="save-btn" (click)="applyBatchLabel()">Apply</button>
       </div>
     </div>
     <div class="picklist-drawer" *ngIf="picklistOpen">

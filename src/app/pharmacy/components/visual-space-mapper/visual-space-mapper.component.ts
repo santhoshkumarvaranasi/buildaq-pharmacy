@@ -97,6 +97,13 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
   private boxLabels = new Map<string, THREE.Object3D>();
   private tagFlags = new Map<string, THREE.Object3D>();
   private selectedMesh: THREE.Mesh | null = null;
+  selectedBoxIds: string[] = [];
+  batchLabelOpen = false;
+  batchLabelForm = {
+    prefix: 'A',
+    start: 1,
+    tag: ''
+  };
   contextMenu = {
     visible: false,
     x: 0,
@@ -191,6 +198,45 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.detachTransform();
   }
 
+  openBatchLabel(): void {
+    if (!this.selectedBoxIds.length) {
+      this.snackBar.open('Select boxes first (Shift+Click)', 'Close', { duration: 2000 });
+      return;
+    }
+    this.batchLabelOpen = true;
+  }
+
+  closeBatchLabel(): void {
+    this.batchLabelOpen = false;
+  }
+
+  applyBatchLabel(): void {
+    if (!this.selectedBoxIds.length) return;
+    const prefix = (this.batchLabelForm.prefix || 'A').trim().toUpperCase();
+    const start = Number(this.batchLabelForm.start);
+    const startIndex = Number.isFinite(start) && start > 0 ? start : 1;
+    const tag = this.batchLabelForm.tag.trim();
+
+    const selectedItems = this.selectedBoxIds
+      .map(id => this.layoutMap.get(id))
+      .filter((item): item is LayoutItem => item !== undefined && item.type === 'box')
+      .sort((a, b) => {
+        if (a.position.y !== b.position.y) return b.position.y - a.position.y;
+        if (a.position.z !== b.position.z) return a.position.z - b.position.z;
+        return a.position.x - b.position.x;
+      });
+
+    selectedItems.forEach((item, index) => {
+      item.name = `${prefix}${startIndex + index}`;
+      if (tag) {
+        item.tag = tag;
+      }
+      this.updateBoxLabel(item.id);
+    });
+    this.saveLayout();
+    this.batchLabelOpen = false;
+  }
+
   setTransformMode(mode: 'translate' | 'rotate' | 'scale'): void {
     this.transformMode = mode;
     this.transformControls?.setMode(mode);
@@ -209,6 +255,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     this.boxMeshes.clear();
     this.boxLabels.clear();
     this.tagFlags.clear();
+    this.clearBatchSelection();
     this.saveLayout();
     this.snackBar.open('Layout cleared', 'Close', { duration: 2000 });
   }
@@ -329,6 +376,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
       const hits = this.raycaster.intersectObjects(this.collectMeshes(), true);
       if (!hits.length) {
         this.detachTransform();
+        this.clearBatchSelection();
         return;
       }
       const target = hits[0].object as THREE.Mesh;
@@ -338,6 +386,11 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
         return;
       }
       if (id && this.boxMeshes.has(id) && this.mode === 'select') {
+        if (event.shiftKey) {
+          this.toggleBatchSelection(id);
+          return;
+        }
+        this.setSingleSelection(id);
         this.selectMesh(this.boxMeshes.get(id)!);
         this.openBoxManager(id);
         return;
@@ -346,6 +399,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
         this.deleteMesh(target);
         return;
       }
+      this.clearBatchSelection();
       this.selectMesh(target);
       return;
     }
@@ -585,6 +639,53 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
   private detachTransform(): void {
     this.transformControls.detach();
     this.selectedMesh = null;
+  }
+
+  private setSingleSelection(id: string): void {
+    this.selectedBoxIds = [id];
+    this.updateBatchSelectionVisuals();
+  }
+
+  private toggleBatchSelection(id: string): void {
+    if (this.selectedBoxIds.includes(id)) {
+      this.selectedBoxIds = this.selectedBoxIds.filter(existing => existing !== id);
+    } else {
+      this.selectedBoxIds = [...this.selectedBoxIds, id];
+    }
+    this.updateBatchSelectionVisuals();
+  }
+
+  private clearBatchSelection(): void {
+    if (!this.selectedBoxIds.length) return;
+    this.selectedBoxIds = [];
+    this.updateBatchSelectionVisuals();
+  }
+
+  private updateBatchSelectionVisuals(): void {
+    this.boxMeshes.forEach(mesh => {
+      const material = mesh.material as THREE.MeshStandardMaterial;
+      if (!material?.emissive) return;
+      const original = mesh.userData?.['origBatchEmissive'] as THREE.Color | undefined;
+      const intensity = mesh.userData?.['origBatchEmissiveIntensity'] as number | undefined;
+      if (original) {
+        material.emissive.copy(original);
+        material.emissiveIntensity = intensity ?? 0;
+      } else if (!mesh.userData?.['origBatchEmissive']) {
+        mesh.userData['origBatchEmissive'] = material.emissive.clone();
+        mesh.userData['origBatchEmissiveIntensity'] = material.emissiveIntensity;
+      }
+      material.emissive.set('#000000');
+      material.emissiveIntensity = 0;
+    });
+
+    this.selectedBoxIds.forEach(id => {
+      const mesh = this.boxMeshes.get(id);
+      if (!mesh) return;
+      const material = mesh.material as THREE.MeshStandardMaterial;
+      if (!material?.emissive) return;
+      material.emissive.set('#38bdf8');
+      material.emissiveIntensity = 0.6;
+    });
   }
 
   private deleteMesh(mesh: THREE.Mesh): void {
@@ -1365,6 +1466,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     });
     this.updateTagFlags();
     this.applyPicklistHighlights();
+    this.clearBatchSelection();
   }
 
   private reloadLayoutFromStorage(): void {
@@ -1388,6 +1490,7 @@ export class VisualSpaceMapperComponent implements OnInit, AfterViewInit, OnDest
     if (this.heatmapEnabled) {
       this.applyHeatmap();
     }
+    this.clearBatchSelection();
   }
 
   private updatePicklistMappings(): void {
